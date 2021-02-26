@@ -1,0 +1,29 @@
+version: '3.2'
+services:
+  db:
+    image: postgres:12
+    restart: always
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   ports:
+  #     - 4238:3000
+  app:
+    build: .
+    image: "registry.sixtyeightplus.one/partpicker"
+    depends_on:
+      - 'db'
+      # - 'grafana'
+    ports:
+      - "4008:4000"
+      - "4028:4369"
+      - "4228:4228"
+    hostname: "miatapartpicker.gay"
+    environment:
+      DATABASE_URL: "ecto://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/partpicker"
+      RELEASE_DISTRIBUTION: "name"
+      RELEASE_NODE: "partpicker@miatapartpicker.gay"
