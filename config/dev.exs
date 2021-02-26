@@ -1,5 +1,4 @@
 use Mix.Config
-
 # Configure your database
 config :partpicker, Partpicker.Repo,
   username: "postgres",

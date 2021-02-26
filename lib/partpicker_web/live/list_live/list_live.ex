@@ -1,4 +1,4 @@
-defmodule PartpickerWeb.PageLive do
+defmodule PartpickerWeb.ListLive do
   use PartpickerWeb, :live_view
 
   @impl true

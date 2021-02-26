@@ -24,9 +24,25 @@ database_url =
     For example: ecto://USER:PASS@HOST/DATABASE
     """
 
+discord_client_id =
+  System.get_env("DISCORD_CLIENT_ID") ||
+    raise """
+    environment variable DISCORD_CLIENT_ID is missing.
+    """
+
+discord_client_secret =
+  System.get_env("DISCORD_CLIENT_SECRET") ||
+    raise """
+    environment variable DISCORD_CLIENT_SECRET is missing.
+    """
+
 config :partpicker, PartpickerWeb.Endpoint,
-  url: [host: "miatapartpicker.gay", port: 80],
-  http: [:inet6, port: String.to_integer(System.get_env("PORT"))],
+  url: [scheme: "https", host: "miatapartpicker.gay", port: 443],
+  http: [
+    :inet6,
+    port: String.to_integer(System.get_env("PORT") || 4000),
+    transport_options: [socket_opts: [:inet6]]
+  ],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: secret_key_base,
   server: true,
@@ -39,3 +55,8 @@ config :partpicker, Partpicker.Repo,
   ssl: false,
   url: database_url,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+
+config :partpicker, PartpickerWeb.OAuth.Discord,
+  url: "https://miatapartpicker.gay/oauth/discord",
+  client_id: discord_client_id,
+  client_secret: discord_client_secret

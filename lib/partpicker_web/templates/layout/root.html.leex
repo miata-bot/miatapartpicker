@@ -4,27 +4,115 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta property="og:title" content="Miata Part Picker" />
+    <meta property="og:description" content="Feeling daring today are we?" />
+    <meta property="og:image" content="https://media.discordapp.net/attachments/787093174560620566/787858705366122556/ZL9YFVc9mnLT-MjeyI9vQMgbgP9f6yZ1TDxsuZDAmW-JeyBbw6weaUOAJBqb5Pqj8BQDIT829tr4WXNxSaRSzOF-SurHl5kne4OO.png" />
+    <meta property="og:image:type" content="image/png" />
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "Partpicker", suffix: " · Phoenix Framework" %>
+    <%= live_title_tag assigns[:page_title] || "Miata Part Picker" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
+  <body class="bg-gray-800">
+  <nav
+      class="flex items-center justify-between flex-wrap p-6 bg-pink-500"
+      x-data="{ isOpen: false }"
+      @keydown.escape="isOpen = false"
+      :class="{ 'shadow-lg bg-pink-500' : isOpen , 'bg-pink-500' : !isOpen}"
+    >
+      <!--Logo etc-->
+      <div class="flex items-center flex-shrink-0 text-white mr-6">
+        <a
+          class="text-white no-underline hover:text-white hover:no-underline"
+          href="/"
+        >
+          <span class="text-2xl pl-2">Miata Part Picker</span>
         </a>
-      </section>
-    </header>
+      </div>
+
+      <%= unless @current_user do %>
+        <%= link "Login with Discord",
+          to: PartpickerWeb.OAuth.Discord.authorization_url(),
+          class: "block text-sm mx-1 px-1 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-pink-500 hover:bg-white lg:mt-0"
+        %>
+      <% end %>
+
+
+      <!--Toggle button (hidden on large screens)-->
+      <button
+        @click="isOpen = !isOpen"
+        type="button"
+        class="block lg:hidden px-2 text-gray-500 hover:text-white focus:outline-none focus:text-white"
+        :class="{ 'transition transform-180': isOpen }"
+      >
+        <svg
+          class="h-6 w-6 fill-current"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            x-show="isOpen"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"
+          />
+          <path
+            x-show="!isOpen"
+            fill-rule="evenodd"
+            d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
+          />
+        </svg>
+      </button>
+
+      <!--Menu-->
+      <div
+        class="w-full flex-grow lg:flex lg:items-center lg:w-auto"
+        :class="{ 'block shadow-3xl': isOpen, 'hidden': !isOpen }"
+        @click.away="isOpen = false"
+        x-show.transition="true"
+      >
+        <ul
+          class="pt-6 lg:pt-0 list-reset lg:flex justify-end flex-1 items-center"
+        >
+          <li class="mr-3">
+            <a
+              class="<%= if active?(@conn, Routes.page_path(@conn, :index)),
+                do: "inline-block py-2 px-4 text-white no-underline",
+                else: "inline-block text-gray-500 no-underline hover:text-white hover:text-underline py-2 px-4" %>"
+              href="<%= Routes.page_path(@conn, :index) %>"
+              @click="isOpen = false"
+              >Dashboard
+            </a>
+          </li>
+          <%= if @current_user do %>
+            <li class="mr-3">
+              <a
+                class="<%= if active?(@conn, Routes.list_path(@conn, :index)),
+                  do: "inline-block py-2 px-4 text-white no-underline",
+                  else: "inline-block text-gray-500 no-underline hover:text-white hover:text-underline py-2 px-4" %>"
+                href="<%= Routes.list_path(@conn, :index) %>"
+                @click="isOpen = false"
+                >Car Builder
+              </a>
+            </li>
+
+            <%= if @current_user.admin do %>
+              <li class="mr-3">
+                <a
+                  class="<%= if active?(@conn, Routes.live_dashboard_path(@conn, :home)),
+                    do: "inline-block py-2 px-4 text-white no-underline",
+                    else: "inline-block text-gray-500 no-underline hover:text-white hover:text-underline py-2 px-4" %>"
+                  href="<%= Routes.live_dashboard_path(@conn, :home) %>"
+                  @click="isOpen = false"
+                  >Admin Dashboard
+                </a>
+              </li>
+            <% end %>
+          <% end %>
+
+        </ul>
+      </div>
+    </nav>
     <%= @inner_content %>
   </body>
 </html>
