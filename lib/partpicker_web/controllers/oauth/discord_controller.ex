@@ -7,7 +7,7 @@ defmodule PartpickerWeb.OAuth.DiscordController do
     PartpickerWeb.UserAuth.log_out_user(conn)
   end
 
-  def oauth(conn, %{"code" => code} = params) do
+  def oauth(conn, %{"code" => code, "state" => _return_to} = params) do
     Logger.info("Discord Oauth: #{inspect(params)}")
     client = OAuth.exchange_code(code)
 
@@ -26,7 +26,7 @@ defmodule PartpickerWeb.OAuth.DiscordController do
           Logger.info("Logged in #{inspect(user)}")
 
           conn
-          |> put_session(:user_return_to, Routes.page_path(conn, :index))
+          # |> put_session(:user_return_to, return_to)
           |> PartpickerWeb.UserAuth.log_in_user(user, me)
       end
     end

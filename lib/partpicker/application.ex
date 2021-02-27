@@ -6,6 +6,8 @@ defmodule Partpicker.Application do
   use Application
 
   def start(_type, _args) do
+    :partpicker_lists = :ets.new(:partpicker_lists, [:public, :named_table, :set])
+
     children = [
       # Start the Ecto repository
       Partpicker.Repo,

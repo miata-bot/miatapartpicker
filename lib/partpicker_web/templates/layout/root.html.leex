@@ -32,7 +32,7 @@
 
       <%= unless @current_user do %>
         <%= link "Login with Discord",
-          to: PartpickerWeb.OAuth.Discord.authorization_url(),
+          to: PartpickerWeb.OAuth.Discord.authorization_url(Phoenix.Controller.current_path(@conn)),
           class: "block text-sm mx-1 px-1 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-pink-500 hover:bg-white lg:mt-0"
         %>
       <% end %>

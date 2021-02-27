@@ -27,6 +27,7 @@ defmodule PartpickerWeb.UserAuth do
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
+    IO.inspect(user_return_to, label: "user_return_to")
 
     conn
     |> renew_session()
