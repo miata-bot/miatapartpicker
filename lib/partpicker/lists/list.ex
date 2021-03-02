@@ -15,6 +15,7 @@ defmodule Partpicker.List do
     |> cast(attrs, [])
     |> validate_required([])
     |> generate_tag()
+    |> cast_assoc(:parts, with: &Partpicker.List.Part.changeset/2, on_replace: :nilify)
   end
 
   def generate_tag(changeset) do

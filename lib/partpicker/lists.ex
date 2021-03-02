@@ -43,4 +43,8 @@ defmodule Partpicker.Lists do
   def selection_for_tag(tag) do
     Repo.all(from s in Selection, where: ^tag in s.tags)
   end
+
+  def change_part(part, attrs \\ %{}) do
+    Part.changeset(part, attrs)
+  end
 end

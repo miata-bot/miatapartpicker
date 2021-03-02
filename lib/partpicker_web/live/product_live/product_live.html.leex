@@ -7,7 +7,7 @@
   <% else %>
     <%= for result <- @results do %>
       <div class="">
-        <%=  link result.title, to: result.where %>
+        <%=  link result.title, to: Routes.list_path(@socket, :index, %{tag: @list_tag, product_tag: @tag, product_id: result.id}) %>
       </div>
     <% end %>
   <% end %>

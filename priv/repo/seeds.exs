@@ -18,7 +18,7 @@ selection =
     promo: "",
     shipping: 69.0,
     tax: 0.7,
-    where: "https://urmom.gay",
+    where: "https://google.com",
     tags: ["ECU"]
   })
   |> Repo.insert!()

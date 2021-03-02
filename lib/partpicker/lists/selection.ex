@@ -15,20 +15,6 @@ defmodule Partpicker.List.Selection do
   end
 
   def changeset(selection, attrs) do
-    attrs =
-      Map.update(attrs, "tags", nil, fn
-        nil ->
-          nil
-
-        value when is_binary(value) ->
-          value
-          |> String.split(",")
-          |> Enum.map(&String.trim/1)
-
-        data ->
-          data
-      end)
-
     selection
     |> cast(attrs, [:title, :base, :promo, :shipping, :tax, :where, :tags])
     |> validate_required([:base, :shipping, :tax, :where, :tags])

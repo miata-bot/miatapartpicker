@@ -8,50 +8,42 @@ defmodule PartpickerWeb.ListLive do
   }
 
   @impl true
-  def mount(%{"tag" => tag}, _session, socket) do
+  def mount(%{"tag" => tag} = params, _session, socket) do
     case find_list(tag) do
       %List{} = list ->
         {:ok,
          socket
          |> assign(:list, list)
-         |> assign(:parts, list.parts)
-         |> assign(:changeset, Lists.change_list(list))}
+         |> assign(:changeset, Lists.change_list(list))
+         |> apply_selection(params)}
 
       %Ecto.Changeset{} = changeset ->
         {:ok,
          socket
          |> assign(:list, Ecto.Changeset.apply_changes(changeset))
-         |> assign(:parts, default_parts())
          |> assign(:changeset, changeset)
-         |> cache()}
+         |> cache()
+         |> apply_selection(params)}
 
       nil ->
         {:ok,
          socket
-         |> assign(:list, %List{})
-         |> assign(:parts, default_parts())
-         |> assign(:changeset, Lists.change_list(%List{}))
-         |> cache()}
+         |> assign(:list, %List{
+           parts: [%Part{name: "ECU"}]
+         })
+         |> assign(:changeset, Lists.change_list(%List{parts: [%Part{name: "ECU"}]}))
+         |> cache()
+         |> apply_selection(params)}
     end
   end
 
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:list, %List{})
-     |> assign(:parts, default_parts())
-     |> assign(:changeset, Lists.change_list(%List{}))
+     |> assign(:list, %List{parts: [%Part{name: "ECU"}]})
+     |> assign(:changeset, Lists.change_list(%List{parts: [%Part{name: "ECU"}]}))
      |> cache()}
   end
-
-  def default_parts,
-    do: [
-      %Part{name: "ECU"},
-      %Part{name: "Injectors"},
-      %Part{name: "Wideband"},
-      %Part{name: "Wheels"},
-      %Part{name: "Tires"}
-    ]
 
   def find_list(tag) do
     Lists.find_list_by_tag(tag) || Lists.find_cached_list(tag)
@@ -59,6 +51,15 @@ defmodule PartpickerWeb.ListLive do
 
   def cache(socket) do
     Lists.cache_list(socket.assigns.changeset)
+    socket
+  end
+
+  def apply_selection(socket, %{"product_tag" => product_tag, "selection_id" => selection_id}) do
+    # Lists.change_list(socket.assigns.changeset, %{"parts"})
+    socket
+  end
+
+  def apply_selection(socket, %{}) do
     socket
   end
 end
