@@ -9,20 +9,27 @@ defmodule PartpickerWeb.PartLive.Import do
   @import_limit 1000
 
   @impl true
-  def mount(%{"build" => build_id}, _session, socket) do
-    build = Builds.get_build!(build_id)
+  def mount(%{"build" => build_id}, %{"user_token" => token}, socket) do
+    case Partpicker.Accounts.get_user_by_session_token(token) do
+      nil ->
+        {:error, socket}
 
-    {:ok,
-     socket
-     |> assign(:build, build)
-     |> assign(:changeset, Builds.change_build(build, %{}))
-     |> assign(:results, [])
-     |> allow_upload(:csv,
-       accept: ~w(.csv .txt),
-       max_entries: 1,
-       auto_upload: true,
-       progress: &handle_progress/3
-     )}
+      user ->
+        build = Builds.get_build!(user, build_id)
+
+        {:ok,
+         socket
+         |> assign(:user, user)
+         |> assign(:build, build)
+         |> assign(:changeset, Builds.change_build(build, %{}))
+         |> assign(:results, [])
+         |> allow_upload(:csv,
+           accept: ~w(.csv .txt),
+           max_entries: 1,
+           auto_upload: true,
+           progress: &handle_progress/3
+         )}
+    end
   end
 
   @impl true
