@@ -87,10 +87,10 @@
           <%= if @current_user do %>
             <li class="mr-3">
               <a
-                class="<%= if active?(@conn, Routes.list_path(@conn, :index)),
+                class="<%= if active?(@conn, Routes.page_path(@conn, :index)),
                   do: "inline-block py-2 px-4 text-white no-underline",
                   else: "inline-block text-gray-500 no-underline hover:text-white hover:text-underline py-2 px-4" %>"
-                href="<%= Routes.list_path(@conn, :index) %>"
+                href="<%= Routes.page_path(@conn, :index) %>"
                 @click="isOpen = false"
                 >Car Builder
               </a>

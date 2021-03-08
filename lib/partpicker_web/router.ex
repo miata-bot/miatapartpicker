@@ -48,10 +48,10 @@ defmodule PartpickerWeb.Router do
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
     live_dashboard "/dashboard", metrics: PartpickerWeb.Telemetry
 
-    live "/list", ListLive, :index
-    live "/list/:tag", ListLive, :index
-    live "/products", ProductLive, :index
-    live "/products/manage", ProductManageLive, :index
+    # live "/list", ListLive, :index
+    # live "/list/:tag", ListLive, :index
+    # live "/products", ProductLive, :index
+    # live "/products/manage", ProductManageLive, :index
   end
 
   scope "/", PartpickerWeb do
