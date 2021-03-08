@@ -46,12 +46,18 @@ defmodule PartpickerWeb.Router do
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
-    live_dashboard "/dashboard", metrics: PartpickerWeb.Telemetry
 
-    # live "/list", ListLive, :index
-    # live "/list/:tag", ListLive, :index
-    # live "/products", ProductLive, :index
-    # live "/products/manage", ProductManageLive, :index
+    live "/builds", BuildLive.Index, :index
+    live "/builds/new", BuildLive.Index, :new
+    live "/builds/:id/edit", BuildLive.Index, :edit
+
+    live "/builds/:id", BuildLive.Show, :show
+    live "/builds/:id/show/edit", BuildLive.Show, :edit
+
+    live "/parts/import", PartLive.Import, :import
+    live "/parts/import/:import_job", PartLive.ImportStatus, :import_status
+
+    live_dashboard "/dashboard", metrics: PartpickerWeb.Telemetry
   end
 
   scope "/", PartpickerWeb do

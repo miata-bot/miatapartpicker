@@ -1,0 +1,40 @@
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, PartpickerWeb.BuildLive.FormComponent,
+    id: @build.id,
+    title: @page_title,
+    action: @live_action,
+    build: @build,
+    return_to: Routes.build_show_path(@socket, :show, @build) %>
+<% end %>
+
+<div class="p-4 m-4 bg-gray-600 rounded">
+  <h1>Show Build</h1>
+  <ul>
+
+    <li>
+      <strong>Make:</strong>
+      <%= @build.make %>
+    </li>
+
+    <li>
+      <strong>Model:</strong>
+      <%= @build.model %>
+    </li>
+
+    <li>
+      <strong>Year:</strong>
+      <%= @build.year %>
+    </li>
+
+    <li>
+      <strong>Color:</strong>
+      <%= @build.color %>
+    </li>
+
+  </ul>
+
+  <span><%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build), class: "button" %></span>
+  <span><%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build}) %></span>
+  <span><%= live_redirect "Back", to: Routes.build_index_path(@socket, :index) %></span>
+</div>

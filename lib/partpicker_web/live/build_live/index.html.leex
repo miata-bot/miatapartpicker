@@ -1,0 +1,42 @@
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, PartpickerWeb.BuildLive.FormComponent,
+    id: @build.id || :new,
+    title: @page_title,
+    action: @live_action,
+    build: @build,
+    return_to: Routes.build_index_path(@socket, :index) %>
+<% end %>
+
+<div class="p-4 m-4 bg-gray-600 rounded">
+  <h1>Listing Builds</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Color</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="builds">
+      <%= for build <- @builds do %>
+        <tr id="build-<%= build.id %>">
+          <td><%= build.make %></td>
+          <td><%= build.model %></td>
+          <td><%= build.year %></td>
+          <td><%= build.color %></td>
+
+          <td>
+            <span><%= live_redirect "Show", to: Routes.build_show_path(@socket, :show, build) %></span>
+            <span><%= live_patch "Edit", to: Routes.build_index_path(@socket, :edit, build) %></span>
+            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: build.id, data: [confirm: "Are you sure?"] %></span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <span><%= live_patch "New Build", to: Routes.build_index_path(@socket, :new) %></span>
+</div>

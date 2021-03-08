@@ -88,12 +88,10 @@
 
                 <li class="mr-3 border rounded-full">
                   <a
-                    class="<%= if active?(@conn, Routes.page_path(@conn, :index)),
-                      do: "inline-block py-2 px-4 text-white no-underline",
-                      else: "inline-block text-gray-500 no-underline hover:text-white hover:text-underline py-2 px-4" %>"
-                    href="<%= Routes.page_path(@conn, :index) %>"
+                    class="<%= if active?(@conn, Routes.build_index_path(@conn, :index)), do: active_class(), else: unactive_class() %>"
+                    href="<%= Routes.build_index_path(@conn, :index) %>"
                     @click="isOpen = false"
-                    >Dashboard
+                    >Builds
                   </a>
                 </li>
               </div>

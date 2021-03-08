@@ -6,9 +6,13 @@ defmodule PartpickerWeb.LayoutView do
       conn.private[:phoenix_controller] == PartpickerWeb.PageLive
   end
 
-  def active?(conn, "/list" <> _) do
-    match?({PartpickerWeb.ListLive, _}, conn.private[:phoenix_live_view]) ||
-      conn.private[:phoenix_controller] == PartpickerWeb.ListLive
+  def active?(conn, "/builds" <> _) do
+    match?({PartpickerWeb.BuildLive.Index, _}, conn.private[:phoenix_live_view]) ||
+      match?({PartpickerWeb.BuildLive.Show, _}, conn.private[:phoenix_live_view])
+  end
+
+  def active?(conn, "/parts" <> _) do
+    match?({PartpickerWeb.PartsLive.Import, _}, conn.private[:phoenix_live_view])
   end
 
   def active?(_conn, _link) do
