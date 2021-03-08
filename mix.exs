@@ -62,6 +62,8 @@ defmodule Partpicker.MixProject do
       {:ring_logger, "~> 0.8.1"},
       {:phx_gen_auth, "~> 0.6.0", only: :dev},
       {:tesla, "~> 1.4"},
+      {:nimble_csv, "~> 1.1"},
+      {:timex, "~> 3.6"},
       {:nerves_reactor, path: "/home/connor/workspace/reactor/nerves_reactor", only: :reactor}
     ]
   end

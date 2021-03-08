@@ -91,6 +91,7 @@ defmodule PartpickerWeb do
       import PartpickerWeb.ErrorHelpers
       import PartpickerWeb.Gettext
       alias PartpickerWeb.Router.Helpers, as: Routes
+      import Enum, only: [count: 1]
     end
   end
 

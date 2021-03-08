@@ -35,7 +35,7 @@ defmodule Partpicker.Builds do
       ** (Ecto.NoResultsError)
 
   """
-  def get_build!(id), do: Repo.get!(Build, id)
+  def get_build!(id), do: Repo.get!(Build, id) |> Repo.preload([:parts])
 
   @doc """
   Creates a build.
@@ -106,7 +106,40 @@ defmodule Partpicker.Builds do
     Part
   }
 
-  def change_part_import(%Part.ImportJob{} = import_job, attrs \\ %{}) do
-    Part.ImportJob.changeset(import_job, attrs)
+  def parse_part(%Part{} = part, line) do
+    [
+      name,
+      link,
+      _category,
+      price,
+      quantity,
+      _purchased,
+      _total_cost,
+      _total_paid,
+      installed_timestamp,
+      installed_mileage
+    ] = line
+
+    Part.changeset(part, %{
+      name: name,
+      link: link,
+      paid: format_price(price),
+      quantity: quantity,
+      installed_at_timestamp: decode_timestamp(installed_timestamp),
+      installed_mileage: installed_mileage
+    })
+  end
+
+  def decode_timestamp(timestamp) do
+    case Timex.parse(timestamp, "{M}/{D}/{YYYY}") do
+      {:ok, ndt} -> NaiveDateTime.to_date(ndt)
+      _ -> nil
+    end
+  end
+
+  def format_price(price) do
+    price
+    |> String.replace("$", "")
+    |> String.replace(",", "")
   end
 end

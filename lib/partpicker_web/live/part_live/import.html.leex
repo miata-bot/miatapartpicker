@@ -1,15 +1,64 @@
-<%= if @changeset do %>
-<div>
-  <%= for entry <- @uploads.csv.entries do %>
-    <%= entry.client_name %> - <%= entry.progress %>%
-  <% end %>
+<div class="lg:p-4 lg:m-4 bg-gray-600 rounded shadow-lg">
+  <span><%= live_patch "Back", to: Routes.build_show_path(@socket, :show, @build) %></span>
+<%= if count(@results) == 0 do %>
   <%= _f = form_for @changeset, "#",
     id: "build-form",
     phx_change: "validate",
+    phx_drop_target: @uploads.csv.ref,
     phx_submit: "save" %>
-    <%= live_file_input @uploads.csv %>
 
-    <%= submit "Save", phx_disable_with: "Saving..." %>
+    <div class="bg-gray-700 text-md rounded border border-black">
+      <%= for entry <- @uploads.csv.entries do %>
+        <div class="p-2 text-white"> <%= entry.client_name %> - <%= entry.progress %>% </div>
+      <% end %>
+    </div>
+
+    <div class="p-2">
+      <div class="flex w-full items-center justify-center bg-grey-lighter">
+        <label class="w-64 flex flex-col items-center px-2 py-4 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-blue-900">
+          <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" /></svg>
+          <span class="mt-2 text-base leading-normal">Select a file</span>
+          <%= live_file_input @uploads.csv, class: "hidden" %>
+        </label>
+      </div>
+    </div>
   </form>
-</div>
+<% else %>
+  <table class="min-w-max w-full table-auto relative">
+    <thead class="sticky top-0 rounded">
+      <tr class="bg-gray-500 text-gray-900 uppercase text-sm leading-normal font-bold rounded-lg shadow-lg">
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left">Line</th>
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left">Name</th>
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed At</th>
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed Mileage</th>
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">
+          <button type="button" phx-click="import_all" class="font-bold border bg-green-500 lg:p-2 rounded">
+            <svg class="w-4 h-4 text-green-900 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            Import
+          </button>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="text-sm text-black">
+      <%= for {line, changeset} <- @results, part = Ecto.Changeset.apply_changes(changeset) do %>
+        <tr class="border-b border-gray-200 hover:bg-gray-300">
+          <td class="text-left pl-1"> <%= line %> </td>
+          <td class="text-left"> <%= part.name %> </td>
+          <td class="text-center"> <%= part.installed_at_timestamp %> </td>
+          <td class="text-center"> <%= part.installed_at_mileage %> </td>
+          <td class="text-center">
+            <button type="button" phx-click="delete" phx-value-line="<%= line %>">
+              <svg class="w-6 h-6 text-red-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            </button>
+            <button type="button" phx-click="import_single" phx-value-line="<%= line %>">
+              <svg class="w-6 h-6 text-green-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            </button>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
 <% end %>
+</div>

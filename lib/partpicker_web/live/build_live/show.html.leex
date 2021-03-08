@@ -8,7 +8,7 @@
     return_to: Routes.build_show_path(@socket, :show, @build) %>
 <% end %>
 
-<div class="p-4 m-4 bg-gray-600 rounded">
+<div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
   <h1>Show Build</h1>
   <ul>
 
@@ -34,7 +34,34 @@
 
   </ul>
 
-  <span><%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build), class: "button" %></span>
+  <span><%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build) %></span>
   <span><%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build}) %></span>
   <span><%= live_redirect "Back", to: Routes.build_index_path(@socket, :index) %></span>
+
+  <table class="min-w-max w-full table-auto relative">
+    <thead class="sticky top-0 rounded">
+      <tr class="bg-gray-500 text-gray-900 uppercase text-sm leading-normal font-bold rounded-lg shadow-lg">
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left">Name</th>
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed At</th>
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed Mileage</th>
+        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Actions </th>
+      </tr>
+    </thead>
+
+    <tbody class="text-sm text-black">
+      <%= for part <- @build.parts do %>
+        <tr class="border-b border-gray-200 hover:bg-gray-300">
+          <td class="text-left"> <%= part.name %> </td>
+          <td class="text-center"> <%= part.installed_at_timestamp %> </td>
+          <td class="text-center"> <%= part.installed_at_mileage %> </td>
+          <td class="text-center">
+            <button type="button" phx-click="delete" phx-value-id="<%= part.id %>">
+              <svg class="w-6 h-6 text-red-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            </button>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
 </div>

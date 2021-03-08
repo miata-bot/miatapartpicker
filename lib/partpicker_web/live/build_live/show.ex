@@ -16,6 +16,13 @@ defmodule PartpickerWeb.BuildLive.Show do
      |> assign(:build, Builds.get_build!(id))}
   end
 
+  @impl true
+  def handle_event("delete", %{"id" => _part_id}, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:error, "this doesn't work yet")}
+  end
+
   defp page_title(:show), do: "Show Build"
   defp page_title(:edit), do: "Edit Build"
 end
