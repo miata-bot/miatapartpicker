@@ -1,5 +1,7 @@
-<div class="p-4 m-4">
-  <%= form_for @email_changeset, Routes.user_settings_path(@conn, :update), [class: "bg-gray-600 p-4 rounded border border-black shadow-md"], fn f -> %>
+<div class="lg:p-4 lg:m-4">
+  <%= link "Log Out", to: Routes.user_session_path(@conn, :delete), method: :delete %>
+
+  <%= form_for @email_changeset, Routes.user_settings_path(@conn, :update), [class: "bg-gray-600 rounded border border-black shadow-md"], fn f -> %>
     <h3>Change email</h3>
     <%= if @email_changeset.action do %>
       <div class="alert alert-danger">
