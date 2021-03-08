@@ -5,8 +5,8 @@ defmodule Partpicker.List.Selection do
   schema "selections" do
     field :title, :string
     field :base, :float
-    field :promo, :string
     field :tax, :float
+    field :promo, :string
     field :shipping, :float
     field :where, :string
     field :tags, {:array, :string}
@@ -17,7 +17,7 @@ defmodule Partpicker.List.Selection do
   def changeset(selection, attrs) do
     selection
     |> cast(attrs, [:title, :base, :promo, :shipping, :tax, :where, :tags])
-    |> validate_required([:base, :shipping, :tax, :where, :tags])
+    |> validate_required([:base, :shipping, :where, :tags])
     |> validate_url(:where)
     |> put_title()
   end

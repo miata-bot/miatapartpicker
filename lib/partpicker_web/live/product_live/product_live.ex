@@ -2,9 +2,9 @@ defmodule PartpickerWeb.ProductLive do
   use PartpickerWeb, :live_view
 
   alias Partpicker.{
-    Lists,
-    List,
-    List.Part
+    Lists
+    # List,
+    # List.Part
   }
 
   @impl true

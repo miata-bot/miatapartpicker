@@ -12,7 +12,7 @@ defmodule Partpicker.Repo.Migrations.CreatePartsTable do
       add :title, :string, null: false
       add :base, :float, null: false
       add :promo, :string
-      add :tax, :float, null: false
+      add :tax, :float
       add :shipping, :float, null: false
       add :where, :string, null: false
       timestamps()

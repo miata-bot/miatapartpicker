@@ -17,7 +17,6 @@ selection =
     base: 420.69,
     promo: "",
     shipping: 69.0,
-    tax: 0.7,
     where: "https://google.com",
     tags: ["ECU"]
   })
@@ -28,7 +27,7 @@ list =
   |> List.changeset(%{})
   |> Repo.insert!()
 
-part =
+_part =
   %Part{list_id: list.id, selection_id: selection.id}
   |> Part.changeset(%{name: "ECU"})
   |> Repo.insert!()

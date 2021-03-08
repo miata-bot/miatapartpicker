@@ -54,7 +54,7 @@ defmodule PartpickerWeb.ListLive do
     socket
   end
 
-  def apply_selection(socket, %{"product_tag" => product_tag, "selection_id" => selection_id}) do
+  def apply_selection(socket, %{"product_tag" => _product_tag, "selection_id" => _selection_id}) do
     # Lists.change_list(socket.assigns.changeset, %{"parts"})
     socket
   end
