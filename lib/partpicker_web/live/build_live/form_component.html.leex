@@ -1,18 +1,70 @@
-<h2><%= @title %></h2>
+<div>
 
-<%= f = form_for @changeset, "#",
-  id: "build-form",
-  phx_target: @myself,
-  phx_change: "validate",
-  phx_submit: "save" %>
+  <h2 class="text-lg font-bold pb-4"><%= @title %></h2>
 
-  <%= label f, :year %>
-  <%= number_input f, :year %>
-  <%= error_tag f, :year %>
+  <%= f = form_for @changeset, "#",
+    id: "build-form",
+    class: "rounded",
+    autocomplete: "off",
+    phx_target: @myself,
+    phx_change: "validate",
+    phx_submit: "save" %>
 
-  <%= label f, :color %>
-  <%= text_input f, :color %>
-  <%= error_tag f, :color %>
+    <div class="m-2">
+      <%= error_tag f, :year, class: "font-bold" %>
+      <%= label f, :year, class: "font-bold pr-2" %>
+      <%= number_input f, :year, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
 
-  <%= submit "Save", phx_disable_with: "Saving..." %>
-</form>
+    <div
+      class="autocomplete m-2"
+      x-data="autocomplete()"
+      @click.away="close"
+    >
+      <%= error_tag f, :color, class: "font-bold" %>
+      <%= label f, :color, class: "font-bold pr-2" %>
+      <%= if @selected do %>
+        <div>
+          <%= text_input f, :color, class: "rounded p-2 focus:ring-2 focus:ring-blue-600",
+            value: if @selected.id != "0", do: @selected.name
+          %>
+          <button type="button" class="text-lg" phx-click="clear" phx-target="<%= @myself %>"> &times;</button>
+        </div>
+      <% else %>
+        <input
+          id="search-input"
+          name="search"
+          type="text"
+          x-on:focus="open"
+          phx-debounce="300"
+          placeholder="Search for a color..."
+          class="rounded p-2 focus:ring-2 focus:ring-blue-600"
+        />
+        <div class="suggestions">
+          <ul
+            id="autocomplete-suggestions"
+            x-show="isOpen"
+            x-ref="suggestions"
+            class="p-2 list-none"
+          >
+            <div class="bg-gray-800 rounded lg:flex lg:flex-wrap">
+              <%= for {item, index} <- Enum.with_index(@suggestions) do %>
+                <li
+                  id="item-<%= index %>"
+                  x-ref="item-<%= index %>"
+                  phx-click="select"
+                  phx-value-id="<%= item.id %>"
+                  phx-target="<%= @myself %>"
+                  class="border border-gray-900 rounded-full m-1 <%= item[:color] %>"
+                >
+                  <button type="button" class="text-md p-2"> <%= item.name %> </button>
+                </li>
+              <% end %>
+            </div>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+  </form>
+</div>

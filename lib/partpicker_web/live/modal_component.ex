@@ -11,7 +11,7 @@ defmodule PartpickerWeb.ModalComponent do
       phx-target="#<%= @id %>"
       phx-page-loading>
 
-      <div class="phx-modal-content">
+      <div class="phx-modal-content bg-gray-600 rounded shadow-xl border border-gray-900">
         <%= live_patch raw("&times;"), to: @return_to, class: "phx-modal-close" %>
         <%= live_component @socket, @component, @opts %>
       </div>

@@ -1,4 +1,15 @@
-
+<script>
+  // we add a global autocomplete function
+  // which will handle our client-side logic.
+  // we extend this later on...
+  function autocomplete() {
+    return {
+      isOpen: false,
+      open() { this.isOpen = true; },
+      close() { this.isOpen = false; }
+    }
+  }
+</script>
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, PartpickerWeb.BuildLive.FormComponent,
     id: @build.id || :new,
