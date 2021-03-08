@@ -4,8 +4,16 @@ defmodule PartpickerWeb.BuildLive.Show do
   alias Partpicker.Builds
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(_params, %{"user_token" => token}, socket) do
+    case Partpicker.Accounts.get_user_by_session_token(token) do
+      nil ->
+        {:error, socket}
+
+      user ->
+        {:ok,
+         socket
+         |> assign(:user, user)}
+    end
   end
 
   @impl true
@@ -13,7 +21,7 @@ defmodule PartpickerWeb.BuildLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:build, Builds.get_build!(id))}
+     |> assign(:build, Builds.get_build!(socket.assigns.user, id))}
   end
 
   @impl true

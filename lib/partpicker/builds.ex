@@ -35,7 +35,10 @@ defmodule Partpicker.Builds do
       ** (Ecto.NoResultsError)
 
   """
-  def get_build!(id), do: Repo.get!(Build, id) |> Repo.preload([:parts])
+  def get_build!(user, id),
+    do:
+      Repo.one!(from b in Build, where: b.id == ^id and b.user_id == ^user.id)
+      |> Repo.preload([:parts])
 
   @doc """
   Creates a build.
@@ -49,8 +52,8 @@ defmodule Partpicker.Builds do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_build(attrs \\ %{}) do
-    %Build{}
+  def create_build(user, attrs \\ %{}) do
+    %Build{user_id: user.id}
     |> Build.changeset(attrs)
     |> Repo.insert()
   end

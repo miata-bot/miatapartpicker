@@ -11,6 +11,8 @@ services:
   app:
     build: .
     image: "registry.sixtyeightplus.one/partpicker"
+    volumes:
+      - ./photos:/photos
     depends_on:
       - 'db'
     ports:

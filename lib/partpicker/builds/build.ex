@@ -3,12 +3,13 @@ defmodule Partpicker.Builds.Build do
   import Ecto.Changeset
 
   schema "builds" do
+    belongs_to :user, Partpicker.Accounts.User
     field :color, :string
     field :make, :string, default: "Mazda"
     field :model, :string, default: "Miata"
     field :year, :integer
-    field :user_id, :id
     has_many :parts, Partpicker.Builds.Part
+    has_many :photos, Partpicker.Builds.Photo
 
     timestamps()
   end

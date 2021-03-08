@@ -10,6 +10,8 @@ defmodule Partpicker.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :admin, :boolean, default: false
     field :discord_user_id, Snowflake
+
+    has_many :builds, Partpicker.Builds.Build
     timestamps()
   end
 

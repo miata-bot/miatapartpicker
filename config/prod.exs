@@ -60,3 +60,5 @@ config :partpicker, PartpickerWeb.OAuth.Discord,
   url: "https://miatapartpicker.gay/oauth/discord",
   client_id: discord_client_id,
   client_secret: discord_client_secret
+
+config :partpicker, Partpicker.Builds.Photo, root_path: "/photos"

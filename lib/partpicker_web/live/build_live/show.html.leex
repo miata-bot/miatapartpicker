@@ -35,6 +35,7 @@
   </ul>
 
   <span><%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build) %></span>
+  <span><%= live_patch "Photos", to: Routes.build_photo_upload_path(@socket, :upload, @build) %></span>
   <span><%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build}) %></span>
   <span><%= live_redirect "Back", to: Routes.build_index_path(@socket, :index) %></span>
 

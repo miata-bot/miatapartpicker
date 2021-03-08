@@ -5,8 +5,17 @@ defmodule PartpickerWeb.BuildLive.Index do
   alias Partpicker.Builds.Build
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :builds, list_builds())}
+  def mount(_, %{"user_token" => token}, socket) do
+    case Partpicker.Accounts.get_user_by_session_token(token) do
+      nil ->
+        {:error, socket}
+
+      user ->
+        {:ok,
+         socket
+         |> assign(:builds, list_builds())
+         |> assign(:user, user)}
+    end
   end
 
   @impl true
@@ -17,13 +26,13 @@ defmodule PartpickerWeb.BuildLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Build")
-    |> assign(:build, Builds.get_build!(id))
+    |> assign(:build, Builds.get_build!(socket.assigns.user, id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Build")
-    |> assign(:build, %Build{})
+    |> assign(:build, %Build{user_id: socket.assigns.user.id})
   end
 
   defp apply_action(socket, :index, _params) do
@@ -34,7 +43,7 @@ defmodule PartpickerWeb.BuildLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    build = Builds.get_build!(id)
+    build = Builds.get_build!(socket.assigns.user, id)
     {:ok, _} = Builds.delete_build(build)
 
     {:noreply, assign(socket, :builds, list_builds())}

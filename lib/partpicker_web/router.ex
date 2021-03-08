@@ -54,6 +54,8 @@ defmodule PartpickerWeb.Router do
     live "/builds/:id", BuildLive.Show, :show
     live "/builds/:id/show/edit", BuildLive.Show, :edit
 
+    live "/builds/:id/photos/upload", BuildLive.PhotoUpload, :upload
+
     live "/parts/import", PartLive.Import, :import
     live "/parts/import/:import_job", PartLive.ImportStatus, :import_status
 
@@ -67,5 +69,7 @@ defmodule PartpickerWeb.Router do
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
+
+    get "/media/:uuid", MediaController, :show
   end
 end

@@ -85,7 +85,7 @@ defmodule PartpickerWeb.BuildLive.FormComponent do
   end
 
   defp save_build(socket, :new, build_params) do
-    case Builds.create_build(build_params) do
+    case Builds.create_build(socket.assigns.user, build_params) do
       {:ok, _build} ->
         {:noreply,
          socket
