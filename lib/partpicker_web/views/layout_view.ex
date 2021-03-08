@@ -14,4 +14,10 @@ defmodule PartpickerWeb.LayoutView do
   def active?(_conn, _link) do
     false
   end
+
+  def active_class,
+    do: "inline-block py-2 px-4 text-gray-900 no-underline bg-gray-600 border rounded-full"
+
+  def unactive_class,
+    do: "inline-block text-gray-500 no-underline hover:text-white hover:text-underline py-2 px-4"
 end

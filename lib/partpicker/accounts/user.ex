@@ -9,7 +9,7 @@ defmodule Partpicker.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
     field :admin, :boolean, default: false
-
+    field :discord_user_id, Snowflake
     timestamps()
   end
 
@@ -39,7 +39,8 @@ defmodule Partpicker.Accounts.User do
 
   def oauth_registration_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email])
+    |> cast(attrs, [:email, :discord_user_id])
+    |> validate_required([:email, :discord_user_id])
     |> validate_email()
   end
 
