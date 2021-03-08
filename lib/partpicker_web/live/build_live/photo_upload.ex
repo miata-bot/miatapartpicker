@@ -39,7 +39,11 @@ defmodule PartpickerWeb.BuildLive.PhotoUpload do
       })
 
     Partpicker.Repo.insert!(changeset)
-    {:noreply, socket}
+    build = Builds.get_build!(socket.assigns.user, socket.assigns.build.id)
+
+    {:noreply,
+     socket
+     |> assign(:build, build)}
   end
 
   @impl true
@@ -56,6 +60,17 @@ defmodule PartpickerWeb.BuildLive.PhotoUpload do
       _ ->
         {:noreply, socket}
     end
+  end
+
+  def handle_event("delete", %{"id" => id}, socket) do
+    photo = Partpicker.Repo.get!(Photo, id)
+    Partpicker.Repo.delete!(photo)
+
+    build = Builds.get_build!(socket.assigns.user, socket.assigns.build.id)
+
+    {:noreply,
+     socket
+     |> assign(:build, build)}
   end
 
   defp handle_progress(:photos, entry, socket) do

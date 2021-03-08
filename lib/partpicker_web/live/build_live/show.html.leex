@@ -39,6 +39,12 @@
   <span><%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build}) %></span>
   <span><%= live_redirect "Back", to: Routes.build_index_path(@socket, :index) %></span>
 
+  <div class="flex justify-center overflow overflow-scroll">
+    <%= for photo <- @build.photos do %>
+      <img class="object-scale-down h-48 rounded-t" src="/media/<%= photo.id %>">
+    <% end %>
+  </div>
+
   <table class="min-w-max w-full table-auto relative">
     <thead class="sticky top-0 rounded">
       <tr class="bg-gray-500 text-gray-900 uppercase text-sm leading-normal font-bold rounded-lg shadow-lg">

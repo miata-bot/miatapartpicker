@@ -38,7 +38,7 @@ defmodule Partpicker.Builds do
   def get_build!(user, id),
     do:
       Repo.one!(from b in Build, where: b.id == ^id and b.user_id == ^user.id)
-      |> Repo.preload([:parts])
+      |> Repo.preload([:parts, :photos])
 
   @doc """
   Creates a build.

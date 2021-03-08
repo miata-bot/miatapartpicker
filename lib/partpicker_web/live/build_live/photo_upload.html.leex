@@ -1,5 +1,12 @@
 <div class="lg:p-4 lg:m-4 bg-gray-600 rounded shadow-lg">
   <span><%= live_patch "Back", to: Routes.build_show_path(@socket, :show, @build) %></span>
+
+  <div class="flex justify-center overflow overflow-scroll">
+    <%= for photo <- @build.photos do %>
+      <img phx-click="delete" phx-value-id="<%= photo.id %>" class="object-scale-down h-48 rounded-t" src="/media/<%= photo.id %>">
+    <% end %>
+  </div>
+
   <%= _f = form_for @changeset, "#",
     id: "build-form",
     phx_change: "validate",
