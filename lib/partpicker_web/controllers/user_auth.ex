@@ -48,7 +48,6 @@ defmodule PartpickerWeb.UserAuth do
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
-    IO.inspect(user_return_to, label: "user_return_to")
 
     conn
     |> renew_session()
@@ -154,9 +153,9 @@ defmodule PartpickerWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      # |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(external: PartpickerWeb.OAuth.Discord.authorization_url())
       |> halt()
     end
   end

@@ -7,14 +7,12 @@ defmodule PartpickerWeb.OAuth.DiscordController do
     PartpickerWeb.UserAuth.log_out_user(conn)
   end
 
-  def oauth(conn, %{"code" => code, "state" => _return_to} = params) do
+  def oauth(conn, %{"code" => code} = params) do
     Logger.info("Discord Oauth: #{inspect(params)}")
     client = OAuth.exchange_code(code)
 
     with {:ok, me} <- OAuth.me(client),
          _ <- Logger.warn("oauth result: #{inspect(me)}") do
-      IO.inspect(me, label: "ME")
-
       case Partpicker.Accounts.get_user_by_discord_id(me["id"]) do
         nil ->
           {:ok, user} = Partpicker.Accounts.register_user_with_oauth_discord(me)

@@ -1,14 +1,19 @@
 <div>
-
   <h2 class="text-lg font-bold pb-4"><%= @title %></h2>
-
   <%= f = form_for @changeset, "#",
     id: "build-form",
     class: "rounded",
     autocomplete: "off",
     phx_target: @myself,
     phx_change: "validate",
-    phx_submit: "save" %>
+    phx_submit: "save",
+    x_data: "{
+      isOpen: false,
+      banner_photo_id: '#{@build.banner_photo_id}',
+      open() { this.isOpen = true; },
+      close() { this.isOpen = false; },
+    }"
+    %>
 
     <div class="m-2">
       <%= error_tag f, :description, class: "font-bold" %>
@@ -17,20 +22,24 @@
     </div>
 
     <div class="m-2">
-      <%= error_tag f, :banner_photo_id, class: "font-bold" %>
-      <%= label f, :banner_photo_id, class: "font-bold pr-2" %>
-      <%= text_input f, :banner_photo_id, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
-    </div>
-
-    <div class="m-2">
       <%= error_tag f, :year, class: "font-bold" %>
       <%= label f, :year, class: "font-bold pr-2" %>
       <%= number_input f, :year, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
     </div>
 
+    <%= hidden_input f, :banner_photo_id, x_model: "banner_photo_id", class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+
+    <%= for photo <- @build.photos do %>
+      <img class="object-scale-down h-48 rounded-t" src="/media/<%= photo.id %>">
+      <%= if photo.id == @build.banner_photo_id do %>
+        <button type="button" class="rounded p-2 bg-red-700"   x-bind:class="{ 'hidden': banner_photo_id == '' }" @click="banner_photo_id = ''"> Remove Banner Photo </button>
+      <% else %>
+        <button type="button" class="rounded p-2 bg-green-700" x-bind:class="{ 'hidden': banner_photo_id == '<%= photo.id %>' }" @click="banner_photo_id = '<%= photo.id %>'"> Make Banner Photo </button>
+      <% end %>
+    <% end %>
+
     <div
       class="autocomplete m-2"
-      x-data="autocomplete()"
       @click.away="close"
     >
       <%= error_tag f, :color, class: "font-bold" %>
@@ -77,6 +86,7 @@
         </div>
       <% end %>
     </div>
+
     <%= submit "Save", phx_disable_with: "Saving..." %>
   </form>
 </div>

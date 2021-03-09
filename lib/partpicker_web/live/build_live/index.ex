@@ -32,7 +32,7 @@ defmodule PartpickerWeb.BuildLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Build")
-    |> assign(:build, %Build{user_id: socket.assigns.user.id})
+    |> assign(:build, %Build{user_id: socket.assigns.user.id, photos: []})
   end
 
   defp apply_action(socket, :index, _params) do
