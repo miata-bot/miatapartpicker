@@ -22,6 +22,11 @@ defmodule Partpicker.Accounts.User do
     timestamps()
   end
 
+  def api_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:instagram_handle])
+  end
+
   @doc """
   A user changeset for registration.
 

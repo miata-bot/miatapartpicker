@@ -344,6 +344,11 @@ defmodule Partpicker.Accounts do
     end
   end
 
+  def api_change_user(user, attrs) do
+    User.api_changeset(user, attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Resets the user password.
 

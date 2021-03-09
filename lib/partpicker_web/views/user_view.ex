@@ -7,4 +7,11 @@ defmodule PartpickerWeb.UserView do
       instagram_handle: user.instagram_handle
     }
   end
+
+  def render("error.json", %{error: changeset}) do
+    %{
+      status: "failure",
+      errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
+    }
+  end
 end

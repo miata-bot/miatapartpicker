@@ -4,6 +4,7 @@
   <div class="flex justify-center overflow overflow-scroll">
     <%= for photo <- @build.photos do %>
       <img phx-click="delete" phx-value-id="<%= photo.id %>" class="object-scale-down h-48 rounded-t" src="/media/<%= photo.id %>">
+      <span> <%= photo.id %> %> </span>
     <% end %>
   </div>
 

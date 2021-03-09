@@ -38,12 +38,18 @@ defmodule PartpickerWeb.BuildLive.PhotoUpload do
         filename: entry.client_name
       })
 
-    Partpicker.Repo.insert!(changeset)
-    build = Builds.get_build!(socket.assigns.user, socket.assigns.build.id)
+    photo = Partpicker.Repo.insert!(changeset)
+
+    build =
+      Partpicker.Builds.change_build(socket.assigns.build, %{banner_photo_id: photo.id})
+      |> Partpicker.Repo.update!()
+      |> Partpicker.Repo.reload!()
+      |> Partpicker.Repo.preload([:photos])
 
     {:noreply,
      socket
-     |> assign(:build, build)}
+     |> assign(:build, build)
+     |> assign(:changeset, Builds.change_build(build))}
   end
 
   @impl true
@@ -65,12 +71,23 @@ defmodule PartpickerWeb.BuildLive.PhotoUpload do
   def handle_event("delete", %{"id" => id}, socket) do
     photo = Partpicker.Repo.get!(Photo, id)
     Partpicker.Repo.delete!(photo)
+    _ = File.rm(photo.path)
 
     build = Builds.get_build!(socket.assigns.user, socket.assigns.build.id)
 
+    build =
+      if build.banner_photo_id == photo.id,
+        do:
+          Partpicker.Builds.change_build(socket.assigns.build, %{banner_photo_id: nil})
+          |> Partpicker.Repo.update!()
+          |> Partpicker.Repo.reload!()
+          |> Partpicker.Repo.preload([:photos]),
+        else: build
+
     {:noreply,
      socket
-     |> assign(:build, build)}
+     |> assign(:build, build)
+     |> assign(:changeset, Builds.change_build(build))}
   end
 
   defp handle_progress(:photos, entry, socket) do
