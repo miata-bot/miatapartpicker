@@ -17,8 +17,8 @@ defmodule Partpicker.Builds do
       [%Build{}, ...]
 
   """
-  def list_builds do
-    Repo.all(Build)
+  def list_builds(user) do
+    Repo.all(from b in Build, where: b.user_id == ^user.id)
   end
 
   @doc """

@@ -15,7 +15,7 @@ defmodule PartpickerWeb.OAuth.DiscordController do
          _ <- Logger.warn("oauth result: #{inspect(me)}") do
       IO.inspect(me, label: "ME")
 
-      case Partpicker.Accounts.get_user_by_email(me["email"]) do
+      case Partpicker.Accounts.get_user_by_discord_id(me["id"]) do
         nil ->
           {:ok, user} = Partpicker.Accounts.register_user_with_oauth_discord(me)
           Logger.info("Created user from discord: #{inspect(user)}")

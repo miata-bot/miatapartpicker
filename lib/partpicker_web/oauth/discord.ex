@@ -22,7 +22,7 @@ defmodule PartpickerWeb.OAuth.Discord do
         "prompt" => "consent",
         "redirect_uri" => @url,
         "response_type" => "code",
-        "scope" => "identify email guilds",
+        "scope" => "identify email",
         "state" => state
       })
 

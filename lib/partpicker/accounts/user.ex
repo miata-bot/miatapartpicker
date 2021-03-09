@@ -10,6 +10,7 @@ defmodule Partpicker.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :admin, :boolean, default: false
     field :discord_user_id, Snowflake
+    field :instagram_handle, :string
 
     embeds_one :discord_oauth_info, DiscordInfo do
       field :username, :string
@@ -45,12 +46,21 @@ defmodule Partpicker.Accounts.User do
     |> validate_password(opts)
   end
 
+  def import_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:discord_user_id, :instagram_handle])
+    |> validate_required([:discord_user_id])
+    |> unique_constraint(:discord_user_id)
+  end
+
   def oauth_registration_changeset(user, attrs) do
     user
     |> cast(attrs, [:email, :discord_user_id])
-    |> validate_required([:email, :discord_user_id])
+    |> validate_required([:discord_user_id])
     |> cast_embed(:discord_oauth_info, required: true, with: &child_changeset/2)
-    |> validate_email()
+    |> unique_constraint(:discord_user_id)
+
+    # |> validate_email()
   end
 
   def child_changeset(discord_oauth_info, attrs) do

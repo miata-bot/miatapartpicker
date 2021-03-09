@@ -8,6 +8,8 @@ defmodule Partpicker.Builds.Build do
     field :color, :string
     field :make, :string, default: "Mazda"
     field :model, :string, default: "Miata"
+    field :wheels, :string
+    field :tires, :string
     field :year, :integer
     field :description, :string
     has_many :parts, Partpicker.Builds.Part
@@ -19,8 +21,8 @@ defmodule Partpicker.Builds.Build do
   @doc false
   def changeset(build, attrs) do
     build
-    |> cast(attrs, [:year, :color, :description])
-    |> validate_required([:make, :model, :year, :color])
+    |> cast(attrs, [:year, :color, :description, :wheels, :tires])
+    |> validate_required([:make, :model])
     |> generate_uid()
   end
 

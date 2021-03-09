@@ -25,6 +25,10 @@ defmodule Partpicker.Accounts do
     Repo.get_by(User, email: email)
   end
 
+  def get_user_by_discord_id(discord_id) do
+    Repo.get_by(User, discord_user_id: discord_id)
+  end
+
   @doc """
   Gets a user by email and password.
 

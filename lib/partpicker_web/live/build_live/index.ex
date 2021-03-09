@@ -13,7 +13,7 @@ defmodule PartpickerWeb.BuildLive.Index do
       user ->
         {:ok,
          socket
-         |> assign(:builds, list_builds())
+         |> assign(:builds, list_builds(user))
          |> assign(:user, user)}
     end
   end
@@ -46,10 +46,10 @@ defmodule PartpickerWeb.BuildLive.Index do
     build = Builds.get_build!(socket.assigns.user, id)
     {:ok, _} = Builds.delete_build(build)
 
-    {:noreply, assign(socket, :builds, list_builds())}
+    {:noreply, assign(socket, :builds, list_builds(socket.assigns.user))}
   end
 
-  defp list_builds do
-    Builds.list_builds()
+  defp list_builds(user) do
+    Builds.list_builds(user)
   end
 end
