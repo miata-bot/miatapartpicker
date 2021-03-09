@@ -12,7 +12,7 @@ defmodule Partpicker.Accounts.User do
     field :discord_user_id, Snowflake
     field :instagram_handle, :string
 
-    embeds_one :discord_oauth_info, DiscordInfo do
+    embeds_one :discord_oauth_info, DiscordInfo, on_replace: :delete do
       field :username, :string
       field :avatar, :string
       field :discriminator, :string
