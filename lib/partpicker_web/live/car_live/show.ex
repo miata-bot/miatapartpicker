@@ -4,13 +4,26 @@ defmodule PartpickerWeb.CarLive.Show do
   alias Partpicker.Builds
 
   @impl true
-  def mount(%{"uid" => uid}, _session, socket) do
+  def mount(%{"uid" => uid}, session, socket) do
     build = Builds.get_build_by_uid!(uid)
 
     {:ok,
      socket
      |> assign(:build, build)
-     |> assign_meta()}
+     |> assign_meta()
+     |> assign_session(session)}
+  end
+
+  def assign_session(socket, %{"user_token" => user_token}) do
+    user = Partpicker.Accounts.get_user_by_session_token(user_token)
+
+    socket
+    |> assign(:user, user)
+  end
+
+  def assign_session(socket, _session) do
+    socket
+    |> assign(:user, nil)
   end
 
   def assign_meta(
@@ -20,7 +33,8 @@ defmodule PartpickerWeb.CarLive.Show do
           }
         } = socket
       ) do
-    banner_photo = Partpicker.Repo.get!(Partpicker.Builds.Photo, banner_photo_id)
+    banner_photo =
+      if banner_photo_id, do: Partpicker.Repo.get!(Partpicker.Builds.Photo, banner_photo_id)
 
     socket
     |> assign(:meta_description, build.description || "")

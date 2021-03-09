@@ -1,11 +1,14 @@
 <div class="lg:p-4 lg:m-4 bg-gray-600 rounded shadow-lg">
-  <span><%= live_patch "Back", to: Routes.build_show_path(@socket, :show, @build) %></span>
-
-  <div class="flex justify-center overflow overflow-scroll">
-    <%= for photo <- @build.photos do %>
-      <img phx-click="delete" phx-value-id="<%= photo.id %>" class="object-scale-down h-48 rounded-t" src="/media/<%= photo.id %>">
-      <span> <%= photo.id %> %> </span>
-    <% end %>
+  <div class="flex justify-center rounded-lg lg:text-lg pt-2">
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build)%>
+    </button>
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build})%>
+    </button>
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_redirect "Back", to: Routes.build_show_path(@socket, :show, @build)%>
+    </button>
   </div>
 
   <%= _f = form_for @changeset, "#",
@@ -14,7 +17,7 @@
     phx_drop_target: @uploads.photos.ref,
     phx_submit: "save" %>
 
-    <div class="bg-gray-700 text-md rounded border border-black">
+    <div class="text-md rounded">
       <%= for entry <- @uploads.photos.entries do %>
         <div class="p-2 text-white"> <%= entry.client_name %> - <%= entry.progress %>% </div>
       <% end %>
@@ -22,12 +25,41 @@
 
     <div class="p-2">
       <div class="flex w-full items-center justify-center bg-grey-lighter">
-        <label class="w-64 flex flex-col items-center px-2 py-4 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-blue-900">
+        <label class="flex flex-col items-center px-2 py-4 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-blue hover:text-blue-900">
           <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" /></svg>
-          <span class="mt-2 text-base leading-normal">Select a file</span>
+          <span class="mt-2 text-base leading-normal">Drag or select an Image for Upload</span>
           <%= live_file_input @uploads.photos, class: "hidden" %>
         </label>
       </div>
     </div>
   </form>
+
+  <div class="h-full flex flex-col justify-center items-center">
+    <div class="max-w-4xl mx-auto relative" x-data="{ activeSlide: 0 }" >
+      <!-- Slides -->
+      <%= for {photo, index} <- Enum.with_index(@build.photos, 0) do %>
+        <div x-show="activeSlide === <%= index %>" class="p-24 font-bold text-5xl h-48 flex items-center bg-gray-800 text-white rounded-lg">
+          <img phx-click="delete" phx-value-id="<%= photo.id %>" class="object-scale-down h-40 rounded" src="/media/<%= photo.id %>">
+        </div>
+      <% end %>
+
+      <!-- Prev/Next Arrows -->
+      <div class="absolute inset-0 flex">
+        <div class="flex items-center justify-start w-1/2">
+          <button
+            class="bg-white text-gray-900 hover:text-orange-500 font-bold hover:shadow-lg rounded-full w-12 h-12 -ml-6"
+            x-on:click="activeSlide = activeSlide-1">
+            &#8592;
+          </button>
+        </div>
+        <div class="flex items-center justify-end w-1/2">
+          <button
+            class="bg-white text-gray-900 hover:text-orange-500 font-bold hover:shadow rounded-full w-12 h-12 -mr-6"
+            x-on:click="activeSlide = activeSlide + 1">
+            &#8594;
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

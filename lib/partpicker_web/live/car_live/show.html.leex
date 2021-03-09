@@ -1,13 +1,39 @@
 <div class="lg:p-4 lg:m-4 bg-gray-600 rounded shadow-lg">
   <%= @build.uid %>
-  <div class="flex justify-center overflow overflow-scroll">
-    <%= for photo <- @build.photos do %>
-      <img phx-click="delete" phx-value-id="<%= photo.id %>" class="object-scale-down h-64 rounded-t" src="/media/<%= photo.id %>">
-    <% end %>
+
+  <div class="h-full flex flex-col justify-center items-center">
+    <div class="max-w-4xl mx-auto relative" x-data="{ activeSlide: 0 }" >
+      <!-- Slides -->
+      <%= for {photo, index} <- Enum.with_index(@build.photos, 0) do %>
+        <div
+          x-show="activeSlide === <%= index %>"
+          class="p-24 font-bold text-5xl h-48 flex items-center bg-gray-800 text-white rounded-lg">
+          <img class="object-scale-down h-40 rounded" src="/media/<%= photo.id %>">
+        </div>
+      <% end %>
+
+      <!-- Prev/Next Arrows -->
+      <div class="absolute inset-0 flex">
+        <div class="flex items-center justify-start w-1/2">
+          <button
+            class="bg-white text-gray-900 hover:text-orange-500 font-bold hover:shadow-lg rounded-full w-12 h-12 -ml-6"
+            x-on:click="activeSlide = activeSlide-1">
+            &#8592;
+          </button>
+        </div>
+        <div class="flex items-center justify-end w-1/2">
+          <button
+            class="bg-white text-gray-900 hover:text-orange-500 font-bold hover:shadow rounded-full w-12 h-12 -mr-6"
+            x-on:click="activeSlide = activeSlide + 1">
+            &#8594;
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <%= if info = @build.user.discord_oauth_info do %>
-    <span class="font-bold"> OWNER: </span>
+    <span class="font-bold"> Owner: </span>
     @<%= info.username %>#<%= info.discriminator %>
   <% end %>
 
@@ -39,6 +65,10 @@
       <%= @build.color %>
     </li>
 
+    <%= if @user do %>
+      <%= if @user.discord_user_id == @build.user.discord_user_id do %>
+        <%= link "Edit this page", to: Routes.build_index_path(@socket, :edit, @build) %>
+      <% end %>
+    <% end %>
   </ul>
-
 </div>

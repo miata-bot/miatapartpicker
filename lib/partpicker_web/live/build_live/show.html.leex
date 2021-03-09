@@ -9,9 +9,22 @@
 <% end %>
 
 <div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
-  <h1>Show Build</h1>
-  <ul>
+  <div class="flex justify-center rounded-lg lg:text-lg pt-2">
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build)%>
+    </button>
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_patch "Photos", to: Routes.build_photo_upload_path(@socket, :upload, @build)%>
+    </button>
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build})%>
+    </button>
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_redirect "Back", to: Routes.build_index_path(@socket, :index)%>
+    </button>
+  </div>
 
+  <ul class="px-1">
     <li>
       <strong>Make:</strong>
       <%= @build.make %>
@@ -37,44 +50,64 @@
       <strong>Color:</strong>
       <%= @build.color %>
     </li>
-
   </ul>
 
-  <span><%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build) %></span>
-  <span><%= live_patch "Photos", to: Routes.build_photo_upload_path(@socket, :upload, @build) %></span>
-  <span><%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build}) %></span>
-  <span><%= live_redirect "Back", to: Routes.build_index_path(@socket, :index) %></span>
+  <div class="h-full flex flex-col justify-center items-center">
+    <div class="max-w-4xl mx-auto relative" x-data="{ activeSlide: 0 }" >
+      <!-- Slides -->
+      <%= for {photo, index} <- Enum.with_index(@build.photos, 0) do %>
+        <div
+          x-show="activeSlide === <%= index %>"
+          class="p-24 font-bold text-5xl h-48 flex items-center bg-gray-800 text-white rounded-lg">
+          <img class="object-scale-down h-40 rounded" src="/media/<%= photo.id %>">
+        </div>
+      <% end %>
 
-  <div class="flex justify-center overflow overflow-scroll">
-    <%= for photo <- @build.photos do %>
-      <img class="object-scale-down h-48 rounded-t" src="/media/<%= photo.id %>">
-    <% end %>
+      <!-- Prev/Next Arrows -->
+      <div class="absolute inset-0 flex">
+        <div class="flex items-center justify-start w-1/2">
+          <button
+            class="bg-white text-gray-900 hover:text-orange-500 font-bold hover:shadow-lg rounded-full w-12 h-12 -ml-6"
+            x-on:click="activeSlide = activeSlide-1">
+            &#8592;
+          </button>
+        </div>
+        <div class="flex items-center justify-end w-1/2">
+          <button
+            class="bg-white text-gray-900 hover:text-orange-500 font-bold hover:shadow rounded-full w-12 h-12 -mr-6"
+            x-on:click="activeSlide = activeSlide + 1">
+            &#8594;
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <table class="min-w-max w-full table-auto relative">
-    <thead class="sticky top-0 rounded">
-      <tr class="bg-gray-500 text-gray-900 uppercase text-sm leading-normal font-bold rounded-lg shadow-lg">
-        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left">Name</th>
-        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed At</th>
-        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed Mileage</th>
-        <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Actions </th>
-      </tr>
-    </thead>
-
-    <tbody class="text-sm text-black">
-      <%= for part <- @build.parts do %>
-        <tr class="border-b border-gray-200 hover:bg-gray-300">
-          <td class="text-left"> <%= part.name %> </td>
-          <td class="text-center"> <%= part.installed_at_timestamp %> </td>
-          <td class="text-center"> <%= part.installed_at_mileage %> </td>
-          <td class="text-center">
-            <button type="button" phx-click="delete" phx-value-id="<%= part.id %>">
-              <svg class="w-6 h-6 text-red-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            </button>
-          </td>
+  <div class="sm:mt-4">
+    <table class="w-full table-auto relative">
+      <thead class="sticky top-0 rounded">
+        <tr class="bg-gray-500 text-gray-900 uppercase text-sm leading-normal font-bold rounded-lg shadow-lg">
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left">Name</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed At</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Installed Mileage</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Actions </th>
         </tr>
-      <% end %>
-    </tbody>
+      </thead>
 
-  </table>
+      <tbody class="text-sm text-black">
+        <%= for part <- @build.parts do %>
+          <tr class="border-b border-gray-200 hover:bg-gray-300">
+            <td class="text-left"> <%= part.name %> </td>
+            <td class="text-center"> <%= part.installed_at_timestamp %> </td>
+            <td class="text-center"> <%= part.installed_at_mileage %> </td>
+            <td class="text-center">
+              <button type="button" phx-click="delete" phx-value-id="<%= part.id %>">
+                <svg class="w-6 h-6 text-red-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              </button>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
