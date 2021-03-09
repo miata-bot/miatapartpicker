@@ -12,6 +12,27 @@ defmodule PartpickerWeb.UserAuth do
   @remember_me_cookie "_partpicker_web_user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
 
+  def check_api_token(conn, _opts) do
+    case get_req_header(conn, "authorization") do
+      [] ->
+        conn
+        |> send_resp(401, "{\"error\": \"not authorized\"}")
+
+      ["bearer " <> token] ->
+        {:ok, q} = Partpicker.Accounts.APIToken.verify_api_token_query(token)
+
+        case Partpicker.Repo.one(q) do
+          nil ->
+            conn
+            |> send_resp(401, "{\"error\": \"not authorized\"}")
+
+          token ->
+            conn
+            |> assign(:api_token, token)
+        end
+    end
+  end
+
   @doc """
   Logs the user in.
 
@@ -136,6 +157,18 @@ defmodule PartpickerWeb.UserAuth do
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
       |> redirect(to: Routes.user_session_path(conn, :new))
+      |> halt()
+    end
+  end
+
+  def require_admin_user(conn, _opts) do
+    if conn.assigns[:current_user] && conn.assigns[:current_user].admin do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must be an admin to access this page.")
+      |> maybe_store_return_to()
+      |> redirect(to: Routes.page_path(conn, :index))
       |> halt()
     end
   end

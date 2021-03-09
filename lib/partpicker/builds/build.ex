@@ -21,7 +21,7 @@ defmodule Partpicker.Builds.Build do
   @doc false
   def changeset(build, attrs) do
     build
-    |> cast(attrs, [:year, :color, :description, :wheels, :tires])
+    |> cast(attrs, [:year, :color, :description, :wheels, :tires, :banner_photo_id])
     |> validate_required([:make, :model])
     |> generate_uid()
   end

@@ -13,6 +13,7 @@ import "../css/app.css"
 //     import socket from "./socket"
 //
 import "phoenix_html"
+import "@ryangjchandler/alpine-clipboard/src/index.ie11.js"
 import 'alpinejs'
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
@@ -23,6 +24,25 @@ let Hooks = {}
 Hooks.PushEvent = {
   mounted() {
     window.pushEventHook = this
+  }
+}
+Hooks.ClipboardHook = {
+  mounted() {
+    window.clipboardHook = this
+  },
+  clipboard() {
+    console.dir(document.getElementById("token").innerHTML);
+    var copyText = document.getElementById("token")
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+
+    /* Alert the copied text */
+    alert("Copied the text: " + copyText.value);
   }
 }
 let liveSocket = new LiveSocket('/live', Socket, {

@@ -17,6 +17,12 @@
     </div>
 
     <div class="m-2">
+      <%= error_tag f, :banner_photo_id, class: "font-bold" %>
+      <%= label f, :banner_photo_id, class: "font-bold pr-2" %>
+      <%= text_input f, :banner_photo_id, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
       <%= error_tag f, :year, class: "font-bold" %>
       <%= label f, :year, class: "font-bold pr-2" %>
       <%= number_input f, :year, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>

@@ -16,6 +16,14 @@ defmodule PartpickerWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :check_api_token
+  end
+
+  scope "/api", PartpickerWeb do
+    pipe_through :api
+    get "/builds/:discord_user_id/", BuildController, :index
+    get "/builds/:discord_user_id/:uid", BuildController, :show
+    post "/builds/:discord_user_id/:uid", BuildController, :update
   end
 
   scope "/", PartpickerWeb do
@@ -58,8 +66,12 @@ defmodule PartpickerWeb.Router do
 
     live "/parts/import", PartLive.Import, :import
     live "/parts/import/:import_job", PartLive.ImportStatus, :import_status
+  end
 
+  scope "/", PartpickerWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_admin_user]
     live_dashboard "/dashboard", metrics: PartpickerWeb.Telemetry
+    live "/api_tokens", APITokenLive.Index, :index
   end
 
   scope "/", PartpickerWeb do
