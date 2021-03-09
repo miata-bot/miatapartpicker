@@ -42,6 +42,7 @@ defmodule Partpicker.Builds do
 
   def get_build_by_uid!(uid) do
     Repo.get_by!(Build, uid: uid)
+    |> Repo.preload([:parts, :photos, :user])
   end
 
   @doc """

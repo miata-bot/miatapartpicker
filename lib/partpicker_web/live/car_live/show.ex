@@ -9,6 +9,27 @@ defmodule PartpickerWeb.CarLive.Show do
 
     {:ok,
      socket
-     |> assign(:build, build)}
+     |> assign(:build, build)
+     |> assign_meta()}
+  end
+
+  def assign_meta(
+        %{
+          assigns: %{
+            build: build = %{banner_photo_id: banner_photo_id, user: %{discord_oauth_info: info}}
+          }
+        } = socket
+      ) do
+    banner_photo = Partpicker.Repo.get!(Partpicker.Builds.Photo, banner_photo_id)
+
+    socket
+    |> assign(:meta_title, "@#{info.username}#{info.discriminator}")
+    |> assign(:meta_description, build.description || "")
+    |> assign(:meta_image, Routes.media_url(socket, :show, banner_photo_id))
+    |> assign(:meta_image_type, banner_photo.mime)
+  end
+
+  def assign_meta(socket) do
+    socket
   end
 end

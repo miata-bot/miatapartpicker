@@ -11,6 +11,12 @@
     phx_submit: "save" %>
 
     <div class="m-2">
+      <%= error_tag f, :description, class: "font-bold" %>
+      <%= label f, :description, class: "font-bold pr-2" %>
+      <%= text_input f, :description, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
       <%= error_tag f, :year, class: "font-bold" %>
       <%= label f, :year, class: "font-bold pr-2" %>
       <%= number_input f, :year, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>

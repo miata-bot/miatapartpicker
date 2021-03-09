@@ -26,6 +26,7 @@ defmodule PartpickerWeb.OAuth.DiscordController do
 
         user ->
           Logger.info("Logged in #{inspect(user)}")
+          {:ok, user} = Partpicker.Accounts.update_discord_oauth_info(user, me)
 
           conn
           # |> put_session(:user_return_to, return_to)

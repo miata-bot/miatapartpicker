@@ -11,6 +11,12 @@ defmodule Partpicker.Accounts.User do
     field :admin, :boolean, default: false
     field :discord_user_id, Snowflake
 
+    embeds_one :discord_oauth_info, DiscordInfo do
+      field :username, :string
+      field :avatar, :string
+      field :discriminator, :string
+    end
+
     has_many :builds, Partpicker.Builds.Build
     timestamps()
   end
@@ -43,7 +49,14 @@ defmodule Partpicker.Accounts.User do
     user
     |> cast(attrs, [:email, :discord_user_id])
     |> validate_required([:email, :discord_user_id])
+    |> cast_embed(:discord_oauth_info, required: true, with: &child_changeset/2)
     |> validate_email()
+  end
+
+  def child_changeset(discord_oauth_info, attrs) do
+    discord_oauth_info
+    |> cast(attrs, [:username, :avatar, :discriminator])
+    |> validate_required([])
   end
 
   defp validate_email(changeset) do

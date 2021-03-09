@@ -9,16 +9,17 @@ defmodule Partpicker.Builds.Build do
     field :make, :string, default: "Mazda"
     field :model, :string, default: "Miata"
     field :year, :integer
+    field :description, :string
     has_many :parts, Partpicker.Builds.Part
     has_many :photos, Partpicker.Builds.Photo
-
+    field :banner_photo_id, :binary_id
     timestamps()
   end
 
   @doc false
   def changeset(build, attrs) do
     build
-    |> cast(attrs, [:year, :color])
+    |> cast(attrs, [:year, :color, :description])
     |> validate_required([:make, :model, :year, :color])
     |> generate_uid()
   end

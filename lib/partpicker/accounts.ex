@@ -79,10 +79,20 @@ defmodule Partpicker.Accounts do
     |> Repo.insert()
   end
 
-  def register_user_with_oauth_discord(%{"id" => discord_user_id, "email" => email} = _me) do
+  def register_user_with_oauth_discord(%{"id" => discord_user_id, "email" => email} = me) do
     %User{}
-    |> User.oauth_registration_changeset(%{discord_user_id: discord_user_id, email: email})
+    |> User.oauth_registration_changeset(%{
+      discord_user_id: discord_user_id,
+      email: email,
+      discord_oauth_info: me
+    })
     |> Repo.insert()
+  end
+
+  def update_discord_oauth_info(user, me) do
+    user
+    |> User.oauth_registration_changeset(%{discord_oauth_info: me})
+    |> Repo.update()
   end
 
   @doc """

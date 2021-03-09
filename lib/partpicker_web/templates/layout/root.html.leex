@@ -4,10 +4,10 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta property="og:title" content="Miata Part Picker" />
-    <meta property="og:description" content="Feeling daring today are we?" />
-    <meta property="og:image" content="https://media.discordapp.net/attachments/787093174560620566/787858705366122556/ZL9YFVc9mnLT-MjeyI9vQMgbgP9f6yZ1TDxsuZDAmW-JeyBbw6weaUOAJBqb5Pqj8BQDIT829tr4WXNxSaRSzOF-SurHl5kne4OO.png" />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:title" content="<%= assigns[:meta_title] || "Miata Part Picker" %>" />
+    <meta property="og:description" content="<%= assigns[:meta_description] || "Feeling daring today are we?" %>" />
+    <meta property="og:image" content="<%= assigns[:meta_image] || "https://media.discordapp.net/attachments/787093174560620566/787858705366122556/ZL9YFVc9mnLT-MjeyI9vQMgbgP9f6yZ1TDxsuZDAmW-JeyBbw6weaUOAJBqb5Pqj8BQDIT829tr4WXNxSaRSzOF-SurHl5kne4OO.png" %>" />
+    <meta property="og:image:type" content="<%= assigns[:meta_image_type] || "image/png" %>" />
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "Miata Part Picker" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
