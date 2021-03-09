@@ -5,4 +5,40 @@
       <img phx-click="delete" phx-value-id="<%= photo.id %>" class="object-scale-down h-64 rounded-t" src="/media/<%= photo.id %>">
     <% end %>
   </div>
+
+  <%= if info = @build.user.discord_oauth_info do %>
+    <span class="font-bold"> OWNER: </span>
+    @<%= info.username %>#<%= info.discriminator %>
+  <% end %>
+
+  <ul>
+
+    <li>
+      <strong>Make:</strong>
+      <%= @build.make %>
+    </li>
+
+    <li>
+      <strong>Model:</strong>
+      <%= @build.model %>
+    </li>
+
+    <li>
+      <strong>UID:</strong>
+      <%= @build.uid %>
+    </li>
+
+
+    <li>
+      <strong>Year:</strong>
+      <%= @build.year %>
+    </li>
+
+    <li>
+      <strong>Color:</strong>
+      <%= @build.color %>
+    </li>
+
+  </ul>
+
 </div>
