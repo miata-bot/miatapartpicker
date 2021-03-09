@@ -4,6 +4,7 @@ defmodule Partpicker.Builds.Build do
 
   schema "builds" do
     belongs_to :user, Partpicker.Accounts.User
+    field :uid, :string
     field :color, :string
     field :make, :string, default: "Mazda"
     field :model, :string, default: "Miata"
@@ -19,6 +20,18 @@ defmodule Partpicker.Builds.Build do
     build
     |> cast(attrs, [:year, :color])
     |> validate_required([:make, :model, :year, :color])
+    |> generate_uid()
+  end
+
+  def generate_uid(%{valid?: false} = changeset), do: changeset
+
+  def generate_uid(changeset) do
+    if get_field(changeset, :uid) do
+      changeset
+    else
+      <<rand::64>> = :crypto.strong_rand_bytes(8)
+      put_change(changeset, :uid, Base62.encode(rand))
+    end
   end
 
   def color_by_id(build, id) do

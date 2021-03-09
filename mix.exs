@@ -64,6 +64,7 @@ defmodule Partpicker.MixProject do
       {:tesla, "~> 1.4"},
       {:nimble_csv, "~> 1.1"},
       {:timex, "~> 3.6"},
+      {:base62, "~> 1.2"},
       {:nerves_reactor, path: "/home/connor/workspace/reactor/nerves_reactor", only: :reactor}
     ]
   end
