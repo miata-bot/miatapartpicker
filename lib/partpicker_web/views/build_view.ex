@@ -14,6 +14,7 @@ defmodule PartpickerWeb.BuildView do
       year: build.year,
       wheels: build.wheels,
       tires: build.tires,
+      vin: build.vin,
       description: build.description,
       photos: render_many(build.photos, PartpickerWeb.PhotoView, "show.json"),
       user: render_one(build.user, PartpickerWeb.UserView, "show.json"),
