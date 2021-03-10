@@ -14,6 +14,31 @@ defmodule PartpickerWeb.BuildController do
     end
   end
 
+  def create(conn, %{"discord_user_id" => discord_user_id, "build" => attrs}) do
+    user = Partpicker.Accounts.get_user_by_discord_id(discord_user_id)
+
+    # what coudl go wrong lmao
+    {:ok, user} =
+      if user,
+        do: {:ok, user},
+        else:
+          Partpicker.Accounts.register_user_with_oauth_discord(%{
+            "id" => discord_user_id,
+            "email" => nil
+          })
+
+    case Partpicker.Builds.create_build(user, attrs) do
+      {:ok, build} ->
+        build = Partpicker.Repo.preload(build, [:photos])
+        render(conn, "show.json", %{build: %{build | user: user}})
+
+      {:error, changeset} ->
+        conn
+        |> put_status(422)
+        |> render("error.json", %{error: changeset})
+    end
+  end
+
   def show(conn, %{"discord_user_id" => discord_user_id, "uid" => build_uid}) do
     user = Partpicker.Accounts.get_user_by_discord_id(discord_user_id)
 

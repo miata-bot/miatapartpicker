@@ -5,26 +5,42 @@ defmodule PartpickerWeb.BuildLiveTest do
 
   alias Partpicker.Builds
 
-  @create_attrs %{color: "some color", make: "some make", model: "some model", year: 42}
+  @create_attrs %{color: "some color", year: 42}
   @update_attrs %{
     color: "some updated color",
-    make: "some updated make",
-    model: "some updated model",
     year: 43
   }
-  @invalid_attrs %{color: nil, make: nil, model: nil, year: nil}
+  @invalid_attrs %{color: 1, make: nil, model: nil, year: nil}
 
-  defp fixture(:build) do
+  defp fixture(user, :build) do
     {:ok, build} = Builds.create_build(@create_attrs)
     build
   end
 
-  defp create_build(_) do
-    build = fixture(:build)
+  def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      Partpicker.Accounts.register_user_with_oauth_discord(
+        Enum.into(attrs, %{
+          "id" => System.unique_integer([:positive]),
+          "email" => nil
+        })
+      )
+
+    user
+  end
+
+  defp create_build(context) do
+    build = fixture(context.user, :build)
     %{build: build}
   end
 
+  defp create_user(context) do
+    user = user_fixture()
+    %{context | user: user}
+  end
+
   describe "Index" do
+    setup [:create_user]
     setup [:create_build]
 
     test "lists all builds", %{conn: conn, build: build} do
