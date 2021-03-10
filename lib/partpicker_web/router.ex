@@ -25,6 +25,7 @@ defmodule PartpickerWeb.Router do
     get "/builds/:discord_user_id/:uid", BuildController, :show
     post "/builds/:discord_user_id/", BuildController, :create
     post "/builds/:discord_user_id/:uid", BuildController, :update
+    post "/builds/:discord_user_id/:uid/banner", BuildController, :banner
     post "/users/:discord_user_id/", UserController, :update
   end
 
