@@ -28,6 +28,12 @@
     </div>
 
     <div class="m-2">
+      <%= error_tag f, :mileage, class: "font-bold" %>
+      <%= label f, :mileage, class: "font-bold pr-2" %>
+      <%= number_input f, :mileage, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
       <%= error_tag f, :year, class: "font-bold" %>
       <%= label f, :year, class: "font-bold pr-2" %>
       <%= number_input f, :year, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>

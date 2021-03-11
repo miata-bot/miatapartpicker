@@ -29,12 +29,23 @@ defmodule PartpickerWeb.CarLive.Show do
   def assign_meta(
         %{
           assigns: %{
+            build: build = %{banner_photo_id: nil, user: %{discord_oauth_info: info}}
+          }
+        } = socket
+      ) do
+    socket
+    |> assign(:meta_description, build.description || "")
+    |> assign_discord_oauth_info(info)
+  end
+
+  def assign_meta(
+        %{
+          assigns: %{
             build: build = %{banner_photo_id: banner_photo_id, user: %{discord_oauth_info: info}}
           }
         } = socket
       ) do
-    banner_photo =
-      if banner_photo_id, do: Partpicker.Repo.get!(Partpicker.Builds.Photo, banner_photo_id)
+    banner_photo = Partpicker.Repo.get!(Partpicker.Builds.Photo, banner_photo_id)
 
     socket
     |> assign(:meta_description, build.description || "")
