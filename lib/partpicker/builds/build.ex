@@ -80,6 +80,7 @@ defmodule Partpicker.Builds.Build do
     case km do
       {km, ""} -> {:ok, round(km / @km_per_mile)}
       {_, _extra} -> {:error, "is invalid"}
+      :error -> {:error, "is invalid"}
     end
   end
 
@@ -94,6 +95,7 @@ defmodule Partpicker.Builds.Build do
     case mileage do
       {mileage, ""} -> {:ok, mileage}
       {_, _extra} -> {:error, "is invalid"}
+      :error -> {:error, "is invalid"}
     end
   end
 

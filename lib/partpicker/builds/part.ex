@@ -11,6 +11,7 @@ defmodule Partpicker.Builds.Part do
     field :installed_at_timestamp, :date
     field :installed_at_mileage, :integer
     field :purchased_at_timestamp, :date
+    field :currency, Ecto.Enum, values: [:USD, :NOK], default: :NOK
     timestamps()
   end
 
@@ -23,7 +24,8 @@ defmodule Partpicker.Builds.Part do
       :quantity,
       :installed_at_timestamp,
       :installed_at_mileage,
-      :purchased_at_timestamp
+      :purchased_at_timestamp,
+      :currency
     ])
     |> validate_required([:name])
     |> unique_constraint([:build_id, :name])

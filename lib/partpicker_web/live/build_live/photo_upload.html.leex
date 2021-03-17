@@ -4,7 +4,7 @@
       <%= live_patch "Edit", to: Routes.build_show_path(@socket, :edit, @build)%>
     </button>
     <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-2 py-2 mx-0 outline-none focus:shadow-outline">
-      <%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build})%>
+      <%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, @build)%>
     </button>
     <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
       <%= live_redirect "Back", to: Routes.build_show_path(@socket, :show, @build)%>

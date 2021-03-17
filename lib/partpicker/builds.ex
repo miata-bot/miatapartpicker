@@ -141,6 +141,28 @@ defmodule Partpicker.Builds do
   end
 
   def parse_part(%Part{} = part, [
+        name,
+        link,
+        paid,
+        quantity,
+        installed_at_timestamp,
+        installed_at_mileage,
+        purchased_at_timestamp,
+        currency
+      ]) do
+    Part.changeset(part, %{
+      name: name,
+      link: link,
+      paid: format_price(paid, currency),
+      quantity: quantity,
+      installed_at_timestamp: decode_timestamp(installed_at_timestamp),
+      installed_mileage: installed_at_mileage,
+      purchased_at_timestamp: decode_timestamp(purchased_at_timestamp),
+      currency: currency
+    })
+  end
+
+  def parse_part(%Part{} = part, [
         order_date,
         _order_id,
         name,
@@ -175,17 +197,18 @@ defmodule Partpicker.Builds do
         _tax_exemption_type,
         _exemption_opt_out,
         _buyer_name,
-        _currency,
+        currency,
         _group_name
       ]) do
     Part.changeset(part, %{
       name: name,
       link: "https://amazon.com/gp/product/#{asin}",
-      paid: format_price(price),
+      paid: format_price(price, currency),
       quantity: quantity,
       installed_at_timestamp: nil,
       installed_mileage: nil,
-      purchased_at_timestamp: decode_timestamp(order_date)
+      purchased_at_timestamp: decode_timestamp(order_date),
+      currency: currency
     })
   end
 
@@ -196,10 +219,22 @@ defmodule Partpicker.Builds do
     end
   end
 
-  def format_price(price) do
+  def format_price(price, currency \\ "USD")
+
+  def format_price(price, "") do
+    format_price(price, "USD")
+  end
+
+  def format_price(price, "USD") do
     price
     |> String.replace("$", "")
     |> String.replace(",", "")
+  end
+
+  def format_price(price, "NOK") do
+    price
+    |> String.replace("kr", "")
+    |> String.replace(",", ".")
   end
 
   def change_part(part, attrs \\ %{}) do
@@ -216,5 +251,13 @@ defmodule Partpicker.Builds do
     %Part{build_id: build.id}
     |> Part.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def get_part(build, part_id) do
+    Repo.one(from p in Part, where: p.build_id == ^build.id and p.id == ^part_id)
+  end
+
+  def delete_part(part) do
+    Repo.delete(part)
   end
 end

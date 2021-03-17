@@ -25,10 +25,19 @@ defmodule PartpickerWeb.BuildLive.Show do
   end
 
   @impl true
-  def handle_event("delete", %{"id" => _part_id}, socket) do
-    {:noreply,
-     socket
-     |> put_flash(:error, "this doesn't work yet")}
+  def handle_event("delete", %{"id" => part_id}, socket) do
+    with %Builds.Part{} = part <- Builds.get_part(socket.assigns.build, part_id),
+         {:ok, %Builds.Part{} = _part} <- Builds.delete_part(part) do
+      {:noreply,
+       socket
+       |> put_flash(:info, "Deleted part")
+       |> assign(:build, Builds.get_build!(socket.assigns.user, socket.assigns.build.id))}
+    else
+      {:error, _changeset} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Failed to delete part")}
+    end
   end
 
   defp page_title(:show), do: "Show Build"
