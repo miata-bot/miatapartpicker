@@ -6,7 +6,8 @@ defmodule PartpickerWeb.BuildController do
 
     if user do
       user = Partpicker.Repo.preload(user, builds: [:photos, :user])
-      render(conn, "index.json", %{builds: user.builds, user: user})
+      builds = Enum.map(user.builds, &Partpicker.Builds.Build.calculate_mileage/1)
+      render(conn, "index.json", %{builds: builds, user: user})
     else
       conn
       |> put_status(404)

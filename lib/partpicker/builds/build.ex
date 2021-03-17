@@ -33,11 +33,67 @@ defmodule Partpicker.Builds.Build do
       :wheels,
       :tires,
       :banner_photo_id,
-      :vin,
-      :mileage
+      :vin
     ])
+    |> validate_mileage(attrs[:mileage] || attrs["mileage"])
     |> validate_required([:make, :model])
     |> generate_uid()
+  end
+
+  def validate_mileage(changeset, nil) do
+    changeset
+  end
+
+  def validate_mileage(changeset, mileage) do
+    case normalize_mileage(mileage) do
+      {:ok, mileage} -> Ecto.Changeset.put_change(changeset, :mileage, mileage)
+      {:error, reason} -> Ecto.Changeset.add_error(changeset, :mileage, reason)
+    end
+  end
+
+  def normalize_mileage(mileage) when is_binary(mileage) do
+    case String.split(mileage, "km", parts: 2) do
+      [km, ""] ->
+        normalize_km(km)
+
+      [mileage] ->
+        normalize_miles(mileage)
+
+      _ ->
+        {:error, "could not decode mileage"}
+    end
+  end
+
+  def normalize_mileage(mileage) when is_number(mileage) do
+    {:ok, mileage}
+  end
+
+  def normalize_km(km) do
+    km =
+      km
+      |> String.trim()
+      |> String.replace(",", "")
+      |> String.replace("k", "000")
+      |> Integer.parse()
+
+    case km do
+      {km, ""} -> {:ok, round(km / 1.609)}
+      {_, _extra} -> {:error, "is invalid"}
+    end
+  end
+
+  def normalize_miles(mileage) do
+    mileage =
+      mileage
+      |> String.trim()
+      |> String.replace(",", "")
+      |> String.replace("k", "000")
+      |> Integer.parse()
+
+    case mileage do
+      {mileage, ""} -> {:ok, mileage}
+      {_, _extra} -> {:error, "is invalid"}
+    end
   end
 
   def calculate_spent_to_date(build) do
@@ -47,6 +103,10 @@ defmodule Partpicker.Builds.Build do
       )
 
     %Build{build | spent_to_date: spent_to_date}
+  end
+
+  def calculate_mileage(%Build{mileage: nil} = build) do
+    build
   end
 
   def calculate_mileage(%Build{user: %Ecto.Association.NotLoaded{}} = build) do
