@@ -114,20 +114,18 @@ defmodule Partpicker.Builds do
     Part
   }
 
-  def parse_part(%Part{} = part, line) do
-    [
-      name,
-      link,
-      _category,
-      price,
-      quantity,
-      _purchased,
-      _total_cost,
-      _total_paid,
-      installed_timestamp,
-      installed_mileage
-    ] = line
-
+  def parse_part(%Part{} = part, [
+        name,
+        link,
+        _category,
+        price,
+        quantity,
+        _purchased,
+        _total_cost,
+        _total_paid,
+        installed_timestamp,
+        installed_mileage
+      ]) do
     Part.changeset(part, %{
       name: name,
       link: link,
@@ -135,6 +133,55 @@ defmodule Partpicker.Builds do
       quantity: quantity,
       installed_at_timestamp: decode_timestamp(installed_timestamp),
       installed_mileage: installed_mileage
+    })
+  end
+
+  def parse_part(%Part{} = part, [
+        order_date,
+        _order_id,
+        name,
+        _category,
+        asin,
+        _UNSPSC,
+        _website,
+        _release_date,
+        _condition,
+        _seller,
+        _seller_credentials,
+        _list_price,
+        price,
+        quantity,
+        _payment_type,
+        _po_number,
+        _po_line_number,
+        _order_email,
+        _shipment_date,
+        _shipping_name,
+        _shipping_address_street_1,
+        _shipping_address_street_2,
+        _shipping_address_city,
+        _shipping_address_state,
+        _shipping_address_zip,
+        _order_status,
+        _carrier_and_tracking,
+        _item_subtotal,
+        _item_subtotal_tax,
+        _item_total,
+        _tax_exemption_applied,
+        _tax_exemption_type,
+        _exemption_opt_out,
+        _buyer_name,
+        _currency,
+        _group_name
+      ]) do
+    Part.changeset(part, %{
+      name: name,
+      link: "https://amazon.com/gp/product/#{asin}",
+      paid: format_price(price),
+      quantity: quantity,
+      installed_at_timestamp: nil,
+      installed_mileage: nil,
+      purchased_at_timestamp: decode_timestamp(order_date)
     })
   end
 

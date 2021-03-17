@@ -10,6 +10,7 @@ defmodule Partpicker.Builds.Part do
     field :quantity, :integer
     field :installed_at_timestamp, :date
     field :installed_at_mileage, :integer
+    field :purchased_at_timestamp, :date
     timestamps()
   end
 
@@ -21,7 +22,8 @@ defmodule Partpicker.Builds.Part do
       :paid,
       :quantity,
       :installed_at_timestamp,
-      :installed_at_mileage
+      :installed_at_mileage,
+      :purchased_at_timestamp
     ])
     |> validate_required([:name])
     |> unique_constraint([:build_id, :name])
