@@ -1,7 +1,7 @@
 defmodule PartpickerWeb.PartLive.FormComponent do
   use PartpickerWeb, :live_component
 
-  alias Partpicker.{Builds, Builds.Build, Builds.Part}
+  alias Partpicker.{Builds, Builds.Part}
 
   @impl true
   def update(%{build: build} = assigns, socket) do
@@ -20,17 +20,6 @@ defmodule PartpickerWeb.PartLive.FormComponent do
         %{"part" => part_params},
         socket
       ) do
-    changeset =
-      socket.assigns.part
-      |> Builds.change_part(part_params)
-      |> Map.put(:action, :validate)
-
-    {:noreply,
-     socket
-     |> assign(:changeset, changeset)}
-  end
-
-  def handle_event("validate", %{"part" => part_params}, socket) do
     changeset =
       socket.assigns.part
       |> Builds.change_part(part_params)

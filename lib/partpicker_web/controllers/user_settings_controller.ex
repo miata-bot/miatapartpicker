@@ -50,6 +50,20 @@ defmodule PartpickerWeb.UserSettingsController do
     end
   end
 
+  def update(conn, %{"action" => "update_settings", "user" => settings}) do
+    user = conn.assigns.current_user
+
+    case Accounts.update_settings(user, settings) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Settings updated")
+        |> render("edit.html", settings_changeset: Accounts.change_settings(user))
+
+      {:error, changeset} ->
+        render(conn, "edit.html", settings_changeset: changeset)
+    end
+  end
+
   def confirm_email(conn, %{"token" => token}) do
     case Accounts.update_user_email(conn.assigns.current_user, token) do
       :ok ->
@@ -70,5 +84,6 @@ defmodule PartpickerWeb.UserSettingsController do
     conn
     |> assign(:email_changeset, Accounts.change_user_email(user))
     |> assign(:password_changeset, Accounts.change_user_password(user))
+    |> assign(:settings_changeset, Accounts.change_settings(user))
   end
 end

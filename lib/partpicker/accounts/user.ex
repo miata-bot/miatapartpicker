@@ -11,6 +11,7 @@ defmodule Partpicker.Accounts.User do
     field :admin, :boolean, default: false
     field :discord_user_id, Snowflake
     field :instagram_handle, :string
+    field :prefered_unit, Ecto.Enum, values: [:km, :miles], default: :miles
 
     embeds_one :discord_oauth_info, DiscordInfo, on_replace: :delete do
       field :username, :string
@@ -24,7 +25,12 @@ defmodule Partpicker.Accounts.User do
 
   def api_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle])
+    |> cast(attrs, [:instagram_handle, :prefered_unit])
+  end
+
+  def settings_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:instagram_handle, :prefered_unit])
   end
 
   @doc """

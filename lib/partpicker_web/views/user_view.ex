@@ -4,7 +4,8 @@ defmodule PartpickerWeb.UserView do
   def render("show.json", %{user: user}) do
     %{
       discord_user_id: user.discord_user_id,
-      instagram_handle: user.instagram_handle
+      instagram_handle: user.instagram_handle,
+      prefered_unit: user.prefered_unit
     }
   end
 

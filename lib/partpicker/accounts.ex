@@ -127,6 +127,15 @@ defmodule Partpicker.Accounts do
     User.email_changeset(user, attrs)
   end
 
+  def change_settings(user, attrs \\ %{}) do
+    User.settings_changeset(user, attrs)
+  end
+
+  def update_settings(user, attrs \\ %{}) do
+    User.settings_changeset(user, attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Emulates that the email will change without actually changing
   it in the database.

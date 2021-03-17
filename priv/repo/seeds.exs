@@ -21,5 +21,5 @@ alias Partpicker.{
     "verified" => true
   })
 
-Ecto.Changeset.change(user, %{admin: true})
+Ecto.Changeset.change(user, %{admin: true, prefered_unit: :miles})
 |> Repo.update!()
