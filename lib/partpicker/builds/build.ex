@@ -49,6 +49,22 @@ defmodule Partpicker.Builds.Build do
     %Build{build | spent_to_date: spent_to_date}
   end
 
+  def calculate_mileage(%Build{user: %Ecto.Association.NotLoaded{}} = build) do
+    Partpicker.Repo.preload(build, [:user])
+    |> calculate_mileage()
+  end
+
+  def calculate_mileage(%Build{user: %Partpicker.Accounts.User{prefered_unit: :miles}} = build) do
+    build
+  end
+
+  def calculate_mileage(
+        %Build{user: %Partpicker.Accounts.User{prefered_unit: :km}, mileage: mileage} = build
+      )
+      when is_number(mileage) do
+    %Build{build | mileage: round(mileage * 1.60934)}
+  end
+
   def generate_uid(%{valid?: false} = changeset), do: changeset
 
   def generate_uid(changeset) do
