@@ -3,6 +3,7 @@ defmodule Partpicker.Builds.Build do
   import Ecto.Changeset
   import Ecto.Query
   alias Partpicker.Builds.Build
+  @km_per_mile 1.609344
 
   schema "builds" do
     belongs_to :user, Partpicker.Accounts.User
@@ -77,7 +78,7 @@ defmodule Partpicker.Builds.Build do
       |> Integer.parse()
 
     case km do
-      {km, ""} -> {:ok, round(km / 1.609)}
+      {km, ""} -> {:ok, round(km / @km_per_mile)}
       {_, _extra} -> {:error, "is invalid"}
     end
   end
@@ -122,7 +123,7 @@ defmodule Partpicker.Builds.Build do
         %Build{user: %Partpicker.Accounts.User{prefered_unit: :km}, mileage: mileage} = build
       )
       when is_number(mileage) do
-    %Build{build | mileage: round(mileage * 1.60934)}
+    %Build{build | mileage: round(mileage * @km_per_mile)}
   end
 
   def generate_uid(%{valid?: false} = changeset), do: changeset
