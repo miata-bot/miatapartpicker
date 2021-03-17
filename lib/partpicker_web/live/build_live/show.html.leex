@@ -61,7 +61,14 @@
       <strong>Color:</strong>
       <%= @build.color %>
     </li>
-  </ul>
+
+    <%= if @build.spent_to_date do %>
+      <li>
+        <strong>Grand Total:</strong>
+        $<%= @build.spent_to_date  %>
+      </li>
+      </ul>
+    <% end %>
 
   <div class="h-full flex flex-col justify-center items-center">
     <div class="max-w-4xl mx-auto relative" x-data="{ activeSlide: 0 }" >

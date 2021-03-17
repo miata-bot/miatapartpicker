@@ -1,6 +1,8 @@
 defmodule Partpicker.Builds.Build do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
+  alias Partpicker.Builds.Build
 
   schema "builds" do
     belongs_to :user, Partpicker.Accounts.User
@@ -17,6 +19,7 @@ defmodule Partpicker.Builds.Build do
     has_many :parts, Partpicker.Builds.Part
     has_many :photos, Partpicker.Builds.Photo
     field :banner_photo_id, :binary_id
+    field :spent_to_date, :float, virtual: true
     timestamps()
   end
 
@@ -35,6 +38,15 @@ defmodule Partpicker.Builds.Build do
     ])
     |> validate_required([:make, :model])
     |> generate_uid()
+  end
+
+  def calculate_spent_to_date(build) do
+    spent_to_date =
+      Partpicker.Repo.one(
+        from p in Partpicker.Builds.Part, where: p.build_id == ^build.id, select: sum(p.paid)
+      )
+
+    %Build{build | spent_to_date: spent_to_date}
   end
 
   def generate_uid(%{valid?: false} = changeset), do: changeset
