@@ -33,4 +33,5 @@ defmodule PartpickerWeb.BuildLive.Show do
 
   defp page_title(:show), do: "Show Build"
   defp page_title(:edit), do: "Edit Build"
+  defp page_title(:new_part), do: "New Part"
 end

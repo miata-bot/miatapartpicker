@@ -41,6 +41,12 @@ defmodule PartpickerWeb.BuildLive.Index do
     |> assign(:build, nil)
   end
 
+  defp apply_action(socket, :new_part, %{"id" => id}) do
+    socket
+    |> assign(:page_title, "New Part")
+    |> assign(:build, Builds.get_build!(socket.assigns.user, id))
+  end
+
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     build = Builds.get_build!(socket.assigns.user, id)

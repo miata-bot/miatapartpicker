@@ -64,11 +64,12 @@ defmodule PartpickerWeb.Router do
 
     live "/builds/:id", BuildLive.Show, :show
     live "/builds/:id/show/edit", BuildLive.Show, :edit
+    live "/builds/:id/show/new_part", BuildLive.Show, :new_part
+
+    live "/builds/:build_id/parts/import", PartLive.Import, :import
+    live "/builds/:build_id/parts/import/:import_job", PartLive.ImportStatus, :import_status
 
     live "/builds/:id/photos/upload", BuildLive.PhotoUpload, :upload
-
-    live "/parts/import", PartLive.Import, :import
-    live "/parts/import/:import_job", PartLive.ImportStatus, :import_status
   end
 
   scope "/", PartpickerWeb do

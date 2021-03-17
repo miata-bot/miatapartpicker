@@ -9,7 +9,7 @@ defmodule PartpickerWeb.PartLive.Import do
   @import_limit 1000
 
   @impl true
-  def mount(%{"build" => build_id}, %{"user_token" => token}, socket) do
+  def mount(%{"build_id" => build_id}, %{"user_token" => token}, socket) do
     case Partpicker.Accounts.get_user_by_session_token(token) do
       nil ->
         {:error, socket}

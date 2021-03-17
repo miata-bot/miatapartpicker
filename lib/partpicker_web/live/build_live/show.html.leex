@@ -1,6 +1,14 @@
-
 <%= if @live_action in [:edit] do %>
   <%= live_modal @socket, PartpickerWeb.BuildLive.FormComponent,
+    id: @build.id,
+    title: @page_title,
+    action: @live_action,
+    build: @build,
+    return_to: Routes.build_show_path(@socket, :show, @build) %>
+<% end %>
+
+<%= if @live_action in [:new_part] do %>
+  <%= live_modal @socket, PartpickerWeb.PartLive.FormComponent,
     id: @build.id,
     title: @page_title,
     action: @live_action,
@@ -17,7 +25,10 @@
       <%= live_patch "Photos", to: Routes.build_photo_upload_path(@socket, :upload, @build)%>
     </button>
     <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-2 py-2 mx-0 outline-none focus:shadow-outline">
-      <%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, %{build: @build})%>
+      <%= live_redirect "Import Parts", to: Routes.part_import_path(@socket, :import, @build)%>
+    </button>
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-blue-500  px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_patch "Add Part", to: Routes.build_show_path(@socket, :new_part, @build)%>
     </button>
     <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
       <%= live_redirect "Back", to: Routes.build_index_path(@socket, :index)%>

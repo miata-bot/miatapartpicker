@@ -150,4 +150,20 @@ defmodule Partpicker.Builds do
     |> String.replace("$", "")
     |> String.replace(",", "")
   end
+
+  def change_part(part, attrs \\ %{}) do
+    Part.changeset(part, attrs)
+  end
+
+  def update_part(part, attrs) do
+    part
+    |> Part.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def create_part(build, attrs) do
+    %Part{build_id: build.id}
+    |> Part.changeset(attrs)
+    |> Repo.insert()
+  end
 end
