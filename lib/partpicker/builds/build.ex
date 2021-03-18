@@ -17,8 +17,8 @@ defmodule Partpicker.Builds.Build do
     field :description, :string
     field :vin, :string
     field :mileage, :integer
-    has_many :parts, Partpicker.Builds.Part
-    has_many :photos, Partpicker.Builds.Photo
+    has_many :parts, Partpicker.Builds.Part, on_delete: :delete_all
+    has_many :photos, Partpicker.Builds.Photo, on_delete: :delete_all
     field :banner_photo_id, :binary_id
     field :spent_to_date, :float, virtual: true
     timestamps()
