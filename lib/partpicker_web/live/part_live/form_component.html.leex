@@ -45,6 +45,12 @@
       <%= number_input f, :installed_at_mileage, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
     </div>
 
+    <div class="m-2">
+      <%= error_tag f, :notes, class: "font-bold" %>
+      <%= label f, :notes, class: "font-bold pr-2" %>
+      <%= text_input f, :notes, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
     <%= submit "Save", phx_disable_with: "Saving..." %>
   </form>
 </div>
