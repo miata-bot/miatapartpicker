@@ -6,7 +6,7 @@ defmodule Partpicker.Builds do
   import Ecto.Query, warn: false
   alias Partpicker.Repo
 
-  alias Partpicker.Builds.Build
+  alias Partpicker.Builds.{Build, FeaturedBuild}
 
   @doc """
   Returns the list of builds.
@@ -44,6 +44,13 @@ defmodule Partpicker.Builds do
 
   def get_build_by_uid!(uid) do
     Repo.get_by!(Build, uid: uid)
+    |> Repo.preload([:parts, :photos, :user])
+    |> Build.calculate_spent_to_date()
+    |> Build.calculate_mileage()
+  end
+
+  def get_build_by_uid!(user, uid) do
+    Repo.one!(from b in Build, where: b.user_id == ^user.id and b.uid == ^uid)
     |> Repo.preload([:parts, :photos, :user])
     |> Build.calculate_spent_to_date()
     |> Build.calculate_mileage()
@@ -112,6 +119,14 @@ defmodule Partpicker.Builds do
   """
   def change_build(%Build{} = build, attrs \\ %{}) do
     Build.changeset(build, attrs)
+  end
+
+  def create_featured_build!(%Partpicker.Accounts.User{} = user, %Build{} = build) do
+    user = Repo.preload(user, :featured_build)
+    if user.featured_build, do: Repo.delete!(user.featured_build)
+
+    %FeaturedBuild{build_id: build.id, user_id: user.id}
+    |> Repo.insert!()
   end
 
   alias Partpicker.Builds.{

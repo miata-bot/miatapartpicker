@@ -29,6 +29,12 @@ defmodule Partpicker.Accounts.User do
     |> cast(attrs, [:instagram_handle, :prefered_unit])
   end
 
+  def api_register_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:instagram_handle, :prefered_unit, :email, :discord_user_id, :prefered_unit])
+    |> validate_required([:discord_user_id])
+  end
+
   def settings_changeset(user, attrs) do
     user
     |> cast(attrs, [:instagram_handle, :prefered_unit])

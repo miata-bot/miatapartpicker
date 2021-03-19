@@ -22,14 +22,12 @@ defmodule PartpickerWeb.Router do
   scope "/api", PartpickerWeb do
     pipe_through :api
 
-    resources "/users", UserController, only: [:index, :show, :update] do
-      get "/builds/:discord_user_id/", BuildController, :index
-      get "/builds/:discord_user_id/:uid", BuildController, :show
-      post "/builds/:discord_user_id/", BuildController, :create
-      post "/builds/:discord_user_id/:uid", BuildController, :update
-      post "/builds/:discord_user_id/:uid/banner", BuildController, :banner
+    resources "/users", UserController, only: [:index, :show, :update, :create] do
+      put "/featured_build", UserController, :featured_build
 
-      post "/users/:discord_user_id/", UserController, :update
+      resources "/builds", BuildController, only: [:index, :show, :create, :update] do
+        post "/banner", BuildController, :banner
+      end
     end
   end
 

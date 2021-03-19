@@ -28,5 +28,8 @@ defmodule Partpicker.Builds.Photo do
     Path.join(dir, uuid)
   end
 
-  def root_path, do: Application.get_env(:partpicker, __MODULE__)[:root_path]
+  def root_path,
+    do:
+      Application.get_env(:partpicker, __MODULE__)[:root_path] ||
+        raise("root_path unconfigured for photo uploads")
 end

@@ -29,6 +29,10 @@ defmodule Partpicker.Accounts do
     Repo.get_by(User, discord_user_id: discord_id)
   end
 
+  def get_user_by_discord_id!(discord_id) do
+    Repo.one!(from u in User, where: u.discord_user_id == ^discord_id)
+  end
+
   @doc """
   Gets a user by email and password.
 
@@ -83,13 +87,19 @@ defmodule Partpicker.Accounts do
     |> Repo.insert()
   end
 
-  def register_user_with_oauth_discord(%{"id" => discord_user_id, "email" => email} = me) do
+  def oauth_discord_register_user(%{"id" => discord_user_id, "email" => email} = me) do
     %User{}
     |> User.oauth_registration_changeset(%{
       discord_user_id: discord_user_id,
       email: email,
       discord_oauth_info: me
     })
+    |> Repo.insert()
+  end
+
+  def api_register_user(attrs \\ %{}) do
+    %User{}
+    |> User.api_register_changeset(attrs)
     |> Repo.insert()
   end
 

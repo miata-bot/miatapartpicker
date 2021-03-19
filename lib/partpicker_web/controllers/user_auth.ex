@@ -18,7 +18,7 @@ defmodule PartpickerWeb.UserAuth do
         conn
         |> send_resp(401, "{\"error\": \"not authorized\"}")
 
-      ["bearer " <> token] ->
+      ["Bearer " <> token] ->
         {:ok, q} = Partpicker.Accounts.APIToken.verify_api_token_query(token)
 
         case Partpicker.Repo.one(q) do

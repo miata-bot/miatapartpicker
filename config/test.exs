@@ -23,3 +23,5 @@ config :partpicker, PartpickerWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :partpicker, Partpicker.Builds.Photo, root_path: "/tmp/partpicker_test/photos"

@@ -9,6 +9,6 @@ defmodule Partpicker.Repo.Migrations.AddFeaturedBuilds do
     end
 
     create unique_index(:featured_builds, :user_id)
-    create unique_index(:featured_builds, :build_)
+    create unique_index(:featured_builds, :build_id)
   end
 end

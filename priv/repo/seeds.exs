@@ -8,7 +8,7 @@ alias Partpicker.{
       warn: false
 
 {:ok, user} =
-  Accounts.register_user_with_oauth_discord(%{
+  Accounts.oauth_discord_register_user(%{
     "avatar" => "3d5654e70fd35668094636812cabc222",
     "discriminator" => "0690",
     "email" => "konnorrigby@gmail.com",
