@@ -55,6 +55,16 @@ defmodule PartpickerWeb.BuildLive.Index do
     {:noreply, assign(socket, :builds, list_builds(socket.assigns.user))}
   end
 
+  def handle_event("make_featured_build", %{"id" => build_id}, socket) do
+    build = Partpicker.Builds.get_build!(socket.assigns.user, build_id)
+    _ = Partpicker.Builds.create_featured_build!(socket.assigns.user, build)
+
+    user =
+      Partpicker.Repo.reload!(socket.assigns.user) |> Partpicker.Repo.preload(:featured_build)
+
+    {:noreply, assign(socket, :user, user)}
+  end
+
   defp list_builds(user) do
     Builds.list_builds(user)
   end

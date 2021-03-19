@@ -12,6 +12,7 @@ defmodule Partpicker.Accounts.User do
     field :discord_user_id, Snowflake
     field :instagram_handle, :string
     field :prefered_unit, Ecto.Enum, values: [:km, :miles], default: :miles
+    field :hand_size, :float
 
     embeds_one :discord_oauth_info, DiscordInfo, on_replace: :delete do
       field :username, :string
@@ -31,13 +32,21 @@ defmodule Partpicker.Accounts.User do
 
   def api_register_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle, :prefered_unit, :email, :discord_user_id, :prefered_unit])
+    |> cast(attrs, [
+      :instagram_handle,
+      :prefered_unit,
+      :email,
+      :discord_user_id,
+      :prefered_unit,
+      :hand_size
+    ])
     |> validate_required([:discord_user_id])
   end
 
   def settings_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle, :prefered_unit])
+    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size])
+    |> validate_required([])
   end
 
   @doc """

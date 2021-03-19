@@ -35,7 +35,20 @@
     <tbody id="builds">
       <%= for build <- @builds do %>
         <tr id="build-<%= build.id %>">
-          <td><%= build.make %></td>
+          <td>
+
+            <%= if @user.featured_build do %>
+              <%= if build.id == @user.featured_build.build_id do %>
+                <span class="font-bold border border-green-900"> Featured Build </span>
+              <% else %>
+                <button phx-click="make_featured_build" phx-value-id="<%= build.id %>" class="font-bold border border-red-900"> make featured </button>
+              <% end %>
+            <% else %>
+                <button phx-click="make_featured_build" phx-value-id="<%= build.id %>" class="font-bold border border-red-900"> make featured </button>
+            <% end %>
+
+          <%= build.make %>
+          </td>
           <td><%= build.model %></td>
           <td><%= build.year %></td>
           <td><%= build.color %></td>

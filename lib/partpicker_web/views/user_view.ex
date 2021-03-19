@@ -6,6 +6,7 @@ defmodule PartpickerWeb.UserView do
       discord_user_id: user.discord_user_id,
       instagram_handle: user.instagram_handle,
       prefered_unit: user.prefered_unit,
+      hand_size: user.hand_size,
       featured_build: render_one(featured_build, PartpickerWeb.BuildView, "show.json"),
       builds: render_many(user.builds, PartpickerWeb.BuildView, "show.json")
     }
@@ -17,6 +18,7 @@ defmodule PartpickerWeb.UserView do
       instagram_handle: user.instagram_handle,
       prefered_unit: user.prefered_unit,
       featured_build: nil,
+      hand_size: user.hand_size,
       builds: render_many(user.builds, PartpickerWeb.BuildView, "show.json")
     }
   end
