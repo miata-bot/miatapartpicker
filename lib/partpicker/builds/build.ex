@@ -7,6 +7,7 @@ defmodule Partpicker.Builds.Build do
 
   schema "builds" do
     belongs_to :user, Partpicker.Accounts.User
+    has_one :featured_build, Partpicker.Builds.FeaturedBuild
     field :uid, :string
     field :color, :string
     field :make, :string, default: "Mazda"

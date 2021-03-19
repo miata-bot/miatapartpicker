@@ -20,6 +20,7 @@ defmodule Partpicker.Accounts.User do
     end
 
     has_many :builds, Partpicker.Builds.Build
+    has_one :featured_build, Partpicker.Builds.FeaturedBuild
     timestamps()
   end
 

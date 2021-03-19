@@ -2,7 +2,8 @@ require Logger
 
 alias Partpicker.{
         Repo,
-        Accounts
+        Accounts,
+        Builds
       },
       warn: false
 
@@ -21,5 +22,16 @@ alias Partpicker.{
     "verified" => true
   })
 
-Ecto.Changeset.change(user, %{admin: true, prefered_unit: :miles})
-|> Repo.update!()
+{:ok, build} = Builds.create_build(user)
+
+%Builds.FeaturedBuild{build_id: build.id, user_id: user.id}
+|> Repo.insert!()
+
+user =
+  Ecto.Changeset.change(user, %{admin: true, prefered_unit: :miles})
+  |> Repo.update!()
+
+{token, data} = Partpicker.Accounts.APIToken.build_api_token()
+_ = Partpicker.Repo.insert!(data)
+
+IO.inspect(token, label: "TOKEN")

@@ -5,7 +5,7 @@ defmodule PartpickerWeb.BuildController do
     user = Partpicker.Accounts.get_user_by_discord_id(discord_user_id)
 
     if user do
-      user = Partpicker.Repo.preload(user, builds: [:photos, :user])
+      user = Partpicker.Repo.preload(user, builds: [:photos, :user], featured_build: [:build])
       builds = Enum.map(user.builds, &Partpicker.Builds.Build.calculate_mileage/1)
       render(conn, "index.json", %{builds: builds, user: user})
     else
