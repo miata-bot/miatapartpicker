@@ -1,15 +1,3 @@
-<script>
-  // we add a global autocomplete function
-  // which will handle our client-side logic.
-  // we extend this later on...
-  function autocomplete() {
-    return {
-      isOpen: false,
-      open() { this.isOpen = true; },
-      close() { this.isOpen = false; }
-    }
-  }
-</script>
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, PartpickerWeb.BuildLive.FormComponent,
     id: @build.id || :new,
@@ -20,48 +8,36 @@
     return_to: Routes.build_index_path(@socket, :index) %>
 <% end %>
 
-<div class="p-4 m-4 bg-gray-600 rounded">
-  <h1>Listing Builds</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Make</th>
-        <th>Model</th>
-        <th>Year</th>
-        <th>Color</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="builds">
-      <%= for build <- @builds do %>
-        <tr id="build-<%= build.id %>">
-          <td>
+<div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
+  <div class="w-full flex flex-wrap justify-center gap-3 py-5 bg-gray-600">
+    <%= for build <- @builds do %>
+      <div class="md:w-1/4 bg-white bg-opacity-10 rounded p-3 text-white border border-gray-300 shadow-lg bg-gray-800 relative">
+        <!-- header -->
+        <div class="w-full mb-3 pb-3 border-b border-1 border-white flex justify-between">
+          <h3 class="text-xl text-shadow text-blue-100"> <%= build.year %> <%= build.color %> <%= build.make %> <%= build.model %> </h3>
+          <%= link build.uid, to: Routes.car_show_path(@socket, :show, build.uid), class: "text-shawow text-blue-100" %>
+        </div>
+        <!-- body -->
+        <div class="">
+          <div class="mb-8">
+            <img class="w-full h-48 object-cover mb-2" alt="Select a banner photo for this build" src="/media/<%= build.banner_photo_id %>">
+            <%= content_tag :p, build.description, class: "mb-3 tracking-wide text-base text-shadow min-h-full" %>
+          </div>
+          <div class="absolute bottom-0 left-0 pl-2 pb-1">
+            <button class="bg-white bg-opacity-0 border border-white px-3 py-1.5 rounded focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 hover:bg-opacity-10 text-lg">
+              <%= live_redirect "Show", to: Routes.build_show_path(@socket, :show, build) %>
+            </button>
 
-            <%= if @user.featured_build do %>
-              <%= if build.id == @user.featured_build.build_id do %>
-                <span class="font-bold border border-green-900"> Featured Build </span>
-              <% else %>
-                <button phx-click="make_featured_build" phx-value-id="<%= build.id %>" class="font-bold border border-red-900"> make featured </button>
-              <% end %>
-            <% else %>
-                <button phx-click="make_featured_build" phx-value-id="<%= build.id %>" class="font-bold border border-red-900"> make featured </button>
-            <% end %>
+            <button class="bg-white bg-opacity-0 border border-white px-3 py-1.5 rounded focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 hover:bg-opacity-10 text-lg">
+              <%= live_patch "Edit", to: Routes.build_index_path(@socket, :edit, build) %>
+            </button>
 
-          <%= build.make %>
-          </td>
-          <td><%= build.model %></td>
-          <td><%= build.year %></td>
-          <td><%= build.color %></td>
-
-          <td>
-            <span><%= live_redirect "Show", to: Routes.build_show_path(@socket, :show, build) %></span>
-            <span><%= live_patch "Edit", to: Routes.build_index_path(@socket, :edit, build) %></span>
-            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: build.id, data: [confirm: "Are you sure?"] %></span>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <span><%= live_patch "New Build", to: Routes.build_index_path(@socket, :new) %></span>
+            <button class="bg-red-900 bg-opacity-50 border border-red-9000 px-3 py-1.5 rounded focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-40 hover:bg-opacity-10 text-lg">
+              <%= link "Delete", to: "#", phx_click: "delete", phx_value_id: build.id, data: [confirm: "Are you sure?"] %>
+            </button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
