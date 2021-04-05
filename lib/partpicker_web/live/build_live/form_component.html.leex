@@ -34,6 +34,24 @@
     </div>
 
     <div class="m-2">
+      <%= error_tag f, :wheels, class: "font-bold" %>
+      <%= label f, :wheels, class: "font-bold pr-2" %>
+      <%= text_input f, :wheels, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
+      <%= error_tag f, :tires, class: "font-bold" %>
+      <%= label f, :tires, class: "font-bold pr-2" %>
+      <%= text_input f, :tires, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
+      <%= error_tag f, :coilovers, class: "font-bold" %>
+      <%= label f, :coilovers, class: "font-bold pr-2" %>
+      <%= text_input f, :coilovers, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
       <%= error_tag f, :year, class: "font-bold" %>
       <%= label f, :year, class: "font-bold pr-2" %>
       <%= number_input f, :year, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>

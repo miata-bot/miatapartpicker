@@ -18,7 +18,8 @@ defmodule PartpickerWeb.BuildView do
       description: build.description,
       mileage: build.mileage,
       photos: render_many(build.photos, PartpickerWeb.PhotoView, "show.json"),
-      banner_photo_id: build.banner_photo_id
+      banner_photo_id: build.banner_photo_id,
+      coilovers: build.coilovers
     }
   end
 

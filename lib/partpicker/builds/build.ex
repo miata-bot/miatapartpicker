@@ -22,6 +22,7 @@ defmodule Partpicker.Builds.Build do
     has_many :photos, Partpicker.Builds.Photo, on_delete: :delete_all
     field :banner_photo_id, :binary_id
     field :spent_to_date, :float, virtual: true
+    field :coilovers, :string
     timestamps()
   end
 
@@ -35,7 +36,8 @@ defmodule Partpicker.Builds.Build do
       :wheels,
       :tires,
       :banner_photo_id,
-      :vin
+      :vin,
+      :coilovers
     ])
     |> validate_mileage(attrs[:mileage] || attrs["mileage"])
     |> validate_required([:make, :model])
