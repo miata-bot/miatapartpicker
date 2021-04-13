@@ -1,0 +1,42 @@
+<h1>Listing Connectors</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, PartpickerWeb.ConnectorLive.FormComponent,
+    id: @connector.id || :new,
+    title: @page_title,
+    action: @live_action,
+    connector: @connector,
+    return_to: Routes.connector_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Links</th>
+      <th>Manufacturer</th>
+      <th>Pn</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="connectors">
+    <%= for connector <- @connectors do %>
+      <tr id="connector-<%= connector.id %>">
+        <td><%= connector.name %></td>
+        <td><%= connector.description %></td>
+        <td><%= connector.manufacturer %></td>
+        <td><%= connector.pn %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.connector_show_path(@socket, :show, connector) %></span>
+          <span><%= live_patch "Edit", to: Routes.connector_index_path(@socket, :edit, connector) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: connector.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Connector", to: Routes.connector_index_path(@socket, :new) %></span>

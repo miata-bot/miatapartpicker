@@ -1,0 +1,45 @@
+<div>
+  <h2 class="text-lg font-bold pb-4"><%= @title %></h2>
+  <%= f = form_for @changeset, "#",
+    id: "connector-form",
+    phx_target: @myself,
+    phx_change: "validate",
+    phx_submit: "save",
+    class: "rounded",
+    autocomplete: "off" %>
+
+    <div class="m-2">
+      <%= error_tag f, :name, class: "font-bold" %>
+      <%= label f, :name, class: "font-bold pr-2" %>
+      <%= text_input f, :name, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
+      <%= error_tag f, :description, class: "font-bold" %>
+      <%= label f, :description, class: "font-bold pr-2" %>
+      <%= text_input f, :description %>
+    </div>
+
+    <div class="m-2">
+      <%= error_tag f, :manufacturer, class: "font-bold" %>
+      <%= label f, :manufacturer, class: "font-bold pr-2" %>
+      <%= text_input f, :manufacturer, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
+      <%= error_tag f, :pn, class: "font-bold" %>
+      <%= label f, :pn, class: "font-bold pr-2" %>
+      <%= text_input f, :pn, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
+    <div class="m-2">
+      <%= label f, :links, class: "font-bold pr-2" %>
+      <%= inputs_for f, :links, fn fp -> %>
+        <%= text_input fp, :url, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+        <%= error_tag fp, :url, class: "font-bold" %>
+      <% end %>
+    </div>
+
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+  </form>
+</div>
