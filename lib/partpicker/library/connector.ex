@@ -5,7 +5,7 @@ defmodule Partpicker.Library.Connector do
   schema "connectors" do
     field :description, :string
 
-    embeds_many :links, Link do
+    embeds_many :links, Link, on_replace: :delete do
       field :url, :string
     end
 
@@ -21,7 +21,7 @@ defmodule Partpicker.Library.Connector do
     connector
     |> cast(attrs, [:name, :description, :manufacturer, :pn])
     |> validate_required([:name, :description, :manufacturer, :pn])
-    |> cast_embed(:links, required: true, with: &link_changeset/2)
+    |> cast_embed(:links, with: &link_changeset/2)
   end
 
   def link_changeset(link, attrs \\ %{}) do

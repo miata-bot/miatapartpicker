@@ -4,8 +4,16 @@ defmodule PartpickerWeb.ConnectorLive.Show do
   alias Partpicker.Library
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(_, %{"user_token" => token}, socket) do
+    case Partpicker.Accounts.get_user_by_session_token(token) do
+      nil ->
+        {:error, socket}
+
+      user ->
+        {:ok,
+         socket
+         |> assign(:user, user)}
+    end
   end
 
   @impl true

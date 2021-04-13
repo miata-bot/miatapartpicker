@@ -5,8 +5,17 @@ defmodule PartpickerWeb.ConnectorLive.Index do
   alias Partpicker.Library.Connector
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :connectors, list_connectors())}
+  def mount(_, %{"user_token" => token}, socket) do
+    case Partpicker.Accounts.get_user_by_session_token(token) do
+      nil ->
+        {:error, socket}
+
+      user ->
+        {:ok,
+         socket
+         |> assign(:connectors, list_connectors())
+         |> assign(:user, user)}
+    end
   end
 
   @impl true
