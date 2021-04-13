@@ -7,38 +7,59 @@
     return_to: Routes.connector_index_path(@socket, :index) %>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Links</th>
-      <th>Manufacturer</th>
-      <th>Pn</th>
+<div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
+  <div class="sm:mt-4">
+    <table class="w-full table-auto relative">
+      <thead class="sticky top-0 rounded">
+        <tr class="bg-gray-500 text-gray-900 uppercase text-sm leading-normal font-bold rounded-lg shadow-lg">
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left">Name</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Description</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Manufacturer</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Part Number </th>
+          <th></th>
+        </tr>
+      </thead>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="connectors">
-    <%= for connector <- @connectors do %>
-      <tr id="connector-<%= connector.id %>">
-        <td><%= connector.name %></td>
-        <td><%= connector.description %></td>
-        <td><%= connector.manufacturer %></td>
-        <td><%= connector.pn %></td>
+      <tbody class="text-sm text-black">
+        <tr class="border-b border-gray-200 hover:bg-gray-300">
+            <td class="text-left">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by name" />
+            </td>
+            <td class="text-center">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by description" />
+            </td>
+            <td class="text-center">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by manufacturer" />
+            </td>
+            <td class="text-center">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by part number" />
+            </td>
+            <td> <span class="text-red-900"> <- Sorry that doesn't work yet </span> </td>
+        </tr>
+        <%= for connector <- @connectors do %>
+          <tr class="border-b border-gray-200 hover:bg-gray-300">
+            <td class="text-left"> <%= connector.name %> </td>
+            <td class="text-center"> <%= connector.description %> </td>
+            <td class="text-center"> <%= connector.manufacturer %> </td>
+            <td class="text-center"> <%= connector.pn %> </td>
+            <td class="text-center">
+              <span><%= live_redirect "Show", to: Routes.connector_show_path(@socket, :show, connector) %></span>
+              <%= if @user do %>
+                <%= if @user.admin do %>
+                  <span><%= live_patch "Edit", to: Routes.connector_index_path(@socket, :edit, connector) %></span>
+                  <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: connector.id, data: [confirm: "Are you sure?"] %></span>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
-        <td>
-          <span><%= live_redirect "Show", to: Routes.connector_show_path(@socket, :show, connector) %></span>
-          <%= if @user.admin do %>
-            <span><%= live_patch "Edit", to: Routes.connector_index_path(@socket, :edit, connector) %></span>
-            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: connector.id, data: [confirm: "Are you sure?"] %></span>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= if @user.admin do %>
-<span><%= live_patch "New Connector", to: Routes.connector_index_path(@socket, :new) %></span>
+<%= if @user do %>
+  <%= if @user.admin do %>
+    <span><%= live_patch "New Connector", to: Routes.connector_index_path(@socket, :new) %></span>
+  <% end %>
 <% end %>
+</div>

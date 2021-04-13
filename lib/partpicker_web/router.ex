@@ -36,6 +36,8 @@ defmodule PartpickerWeb.Router do
 
     live "/", PageLive, :index
     get "/oauth/discord", OAuth.DiscordController, :oauth
+    live "/connectors", ConnectorLive.Index, :index
+    live "/connectors/:id", ConnectorLive.Show, :show
   end
 
   ## Authentication routes
@@ -73,11 +75,8 @@ defmodule PartpickerWeb.Router do
 
     live "/builds/:id/photos/upload", BuildLive.PhotoUpload, :upload
 
-    live "/connectors", ConnectorLive.Index, :index
     live "/connectors/new", ConnectorLive.Index, :new
     live "/connectors/:id/edit", ConnectorLive.Index, :edit
-
-    live "/connectors/:id", ConnectorLive.Show, :show
     live "/connectors/:id/show/edit", ConnectorLive.Show, :edit
   end
 

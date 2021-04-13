@@ -14,8 +14,17 @@ defmodule PartpickerWeb.ConnectorLive.Index do
         {:ok,
          socket
          |> assign(:connectors, list_connectors())
-         |> assign(:user, user)}
+         |> assign(:user, user)
+         |> assign_meta()}
     end
+  end
+
+  def mount(_, _, socket) do
+    {:ok,
+     socket
+     |> assign(:connectors, list_connectors())
+     |> assign(:user, nil)
+     |> assign_meta()}
   end
 
   @impl true
@@ -51,5 +60,10 @@ defmodule PartpickerWeb.ConnectorLive.Index do
 
   defp list_connectors do
     Library.list_connectors()
+  end
+
+  defp assign_meta(socket) do
+    socket
+    |> assign(:meta_description, "Electrical Connector Database for NA Miata")
   end
 end

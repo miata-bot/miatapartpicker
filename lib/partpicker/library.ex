@@ -18,7 +18,7 @@ defmodule Partpicker.Library do
 
   """
   def list_connectors do
-    Repo.all(Connector)
+    Repo.all(from c in Connector, order_by: {:asc, :name})
   end
 
   @doc """
