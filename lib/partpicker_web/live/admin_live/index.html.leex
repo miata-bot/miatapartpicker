@@ -1,0 +1,57 @@
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, PartpickerWeb.AdminLive.FormComponent,
+    id: @user.id || :new,
+    title: @page_title,
+    action: @live_action,
+    user: @user,
+    return_to: Routes.admin_index_path(@socket, :index) %>
+<% end %>
+
+<div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
+  <div class="sm:mt-4">
+    <table class="w-full table-auto relative">
+      <thead class="sticky top-0 rounded">
+        <tr class="bg-gray-500 text-gray-900 uppercase text-sm leading-normal font-bold rounded-lg shadow-lg">
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left pl-2">ID</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-left pl-2">Discord ID</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Username</th>
+          <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Roles</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody class="text-sm text-black">
+        <tr class="border-b border-gray-200 hover:bg-gray-300">
+            <td class="text-left">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by id" />
+            </td>
+            <td class="text-center">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by Discord ID" />
+            </td>
+            <td class="text-center">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by username" />
+            </td>
+            <td class="text-center">
+              <input class="p-1 bg-gray-400 w-full placeholder-opacity-100 placeholder-black" placeholder="filter by roles" />
+            </td>
+            <td> <span class="text-red-900"> <- Sorry that doesn't work yet </span> </td>
+        </tr>
+        <%= for user <- @users do %>
+          <tr class="border-b border-gray-200 hover:bg-gray-300">
+            <td class="text-left pl-2"> <%= user.id %> </td>
+            <td class="text-center">
+              <%= if user.discord_oauth_info, do: user.discord_oauth_info.username %>
+            </td>
+            <td class="text-center"> <%= user.discord_user_id %> </td>
+            <td class="text-center"> <%= Enum.join(user.roles, ", ") %> </td>
+            <td class="text-center">
+              <span><%= live_redirect "Show", to: Routes.admin_show_path(@socket, :show, user) %></span>
+              <span><%= live_patch "Edit", to: Routes.admin_index_path(@socket, :edit, user) %></span>
+              <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

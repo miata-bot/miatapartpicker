@@ -31,15 +31,6 @@ defmodule PartpickerWeb.Router do
     end
   end
 
-  scope "/", PartpickerWeb do
-    pipe_through :browser
-
-    live "/", PageLive, :index
-    get "/oauth/discord", OAuth.DiscordController, :oauth
-    live "/connectors", ConnectorLive.Index, :index
-    live "/connectors/:id", ConnectorLive.Show, :show
-  end
-
   ## Authentication routes
 
   scope "/", PartpickerWeb do
@@ -84,6 +75,10 @@ defmodule PartpickerWeb.Router do
     pipe_through [:browser, :require_authenticated_user, :require_admin_user]
     live_dashboard "/dashboard", metrics: PartpickerWeb.Telemetry
     live "/api_tokens", APITokenLive.Index, :index
+    live "/admin", AdminLive.Index, :index
+    live "/admin/:id/edit", AdminLive.Index, :edit
+    live "/admin/:id", AdminLive.Show, :show
+    live "/admin/:id/show/edit", AdminLive.Show, :edit
   end
 
   scope "/", PartpickerWeb do
@@ -95,5 +90,10 @@ defmodule PartpickerWeb.Router do
     get "/users/confirm/:token", UserConfirmationController, :confirm
     get "/media/:uuid", MediaController, :show
     live "/car/:uid", CarLive.Show, :show
+
+    live "/", PageLive, :index
+    get "/oauth/discord", OAuth.DiscordController, :oauth
+    live "/connectors", ConnectorLive.Index, :index
+    live "/connectors/:id", ConnectorLive.Show, :show
   end
 end

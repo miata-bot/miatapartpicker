@@ -45,7 +45,7 @@
             <td class="text-center">
               <span><%= live_redirect "Show", to: Routes.connector_show_path(@socket, :show, connector) %></span>
               <%= if @user do %>
-                <%= if @user.admin do %>
+                <%= if :library in @user.roles do %>
                   <span><%= live_patch "Edit", to: Routes.connector_index_path(@socket, :edit, connector) %></span>
                   <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: connector.id, data: [confirm: "Are you sure?"] %></span>
                 <% end %>
@@ -57,9 +57,9 @@
     </table>
   </div>
 
-<%= if @user do %>
-  <%= if @user.admin do %>
-    <span><%= live_patch "New Connector", to: Routes.connector_index_path(@socket, :new) %></span>
+  <%= if @user do %>
+    <%= if :library in @user.roles do %>
+      <span><%= live_patch "New Connector", to: Routes.connector_index_path(@socket, :new) %></span>
+    <% end %>
   <% end %>
-<% end %>
 </div>

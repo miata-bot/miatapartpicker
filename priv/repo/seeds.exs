@@ -27,9 +27,10 @@ alias Partpicker.{
 %Builds.FeaturedBuild{build_id: build.id, user_id: user.id}
 |> Repo.insert!()
 
-user =
-  Ecto.Changeset.change(user, %{admin: true, prefered_unit: :miles})
-  |> Repo.update!()
+Ecto.Changeset.change(user, %{prefered_unit: :miles})
+|> Repo.update!()
+|> Accounts.add_role(:admin)
+|> Accounts.add_role(:library)
 
 {token, data} = Partpicker.Accounts.APIToken.build_api_token()
 _ = Partpicker.Repo.insert!(data)

@@ -9,6 +9,10 @@ defmodule Partpicker.Accounts do
 
   ## Database getters
 
+  def list_users do
+    Repo.all(User)
+  end
+
   @doc """
   Gets a user by email.
 
@@ -393,8 +397,28 @@ defmodule Partpicker.Accounts do
     end
   end
 
-  def make_admin(user) do
-    Ecto.Changeset.cast(user, %{admin: true}, [:admin])
-    |> Repo.update!()
+  @valid_roles Ecto.Enum.values(User, :roles)
+  def add_role(%{roles: roles} = user, role) when role in @valid_roles do
+    if role not in roles do
+      Ecto.Changeset.cast(user, %{roles: [role | roles]}, [:roles])
+      |> Repo.update!()
+    else
+      user
+    end
+  end
+
+  def delete_user(user) do
+    Repo.delete(user)
+  end
+
+  def change_user(user, attrs \\ %{}) do
+    user
+    |> User.admin_changeset(attrs)
+  end
+
+  def update_user(user, attrs) do
+    user
+    |> change_user(attrs)
+    |> Repo.update()
   end
 end

@@ -2,17 +2,18 @@ defmodule Partpicker.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Inspect, except: [:password]}
+  @derive {Inspect, except: [:password, :hashed_password]}
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
-    field :admin, :boolean, default: false
     field :discord_user_id, Snowflake
     field :instagram_handle, :string
     field :prefered_unit, Ecto.Enum, values: [:km, :miles], default: :miles
     field :hand_size, :float
+
+    field :roles, {:array, Ecto.Enum}, values: [:admin, :library], default: []
 
     embeds_one :discord_oauth_info, DiscordInfo, on_replace: :delete do
       field :username, :string
@@ -23,6 +24,11 @@ defmodule Partpicker.Accounts.User do
     has_many :builds, Partpicker.Builds.Build
     has_one :featured_build, Partpicker.Builds.FeaturedBuild
     timestamps()
+  end
+
+  def admin_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size, :roles])
   end
 
   def api_changeset(user, attrs) do

@@ -10,7 +10,7 @@
 <div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
   <div class="flex justify-center rounded-lg lg:text-lg pt-2">
     <%= if @user do %>
-      <%= if @user.admin do %>
+      <%= if :library in @user.roles do %>
         <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
           <%= live_patch "Edit", to: Routes.connector_show_path(@socket, :edit, @connector) %>
         </button>

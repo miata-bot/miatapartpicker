@@ -161,7 +161,7 @@ defmodule PartpickerWeb.UserAuth do
   end
 
   def require_admin_user(conn, _opts) do
-    if conn.assigns[:current_user] && conn.assigns[:current_user].admin do
+    if conn.assigns[:current_user] && :admin in conn.assigns[:current_user].roles do
       conn
     else
       conn

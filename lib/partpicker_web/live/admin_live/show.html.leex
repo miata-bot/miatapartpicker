@@ -1,0 +1,27 @@
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, PartpickerWeb.AdminLive.FormComponent,
+    id: @user.id,
+    title: @page_title,
+    action: @live_action,
+    user: @user,
+    return_to: Routes.admin_show_path(@socket, :show, @user) %>
+<% end %>
+
+<div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
+  <div class="flex justify-center rounded-lg lg:text-lg pt-2">
+    <%= if @user do %>
+      <%= if :admin in @user.roles do %>
+        <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
+          <%= live_patch "Edit", to: Routes.admin_show_path(@socket, :edit, @user) %>
+        </button>
+      <% end %>
+    <% end %>
+    <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
+      <%= live_redirect "Back", to: Routes.admin_index_path(@socket, :index) %>
+    </button>
+  </div>
+
+  <ul class="px-1">
+
+  </ul>
+</div>
