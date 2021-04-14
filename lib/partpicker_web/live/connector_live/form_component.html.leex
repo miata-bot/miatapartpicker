@@ -35,7 +35,7 @@
     <div class="m-2">
       <%= label f, :links, class: "font-bold pr-2" %>
       <%= inputs_for f, :links, fn fp -> %>
-        <%= text_input fp, :url, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+        <%= url_input fp, :url, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
         <%= error_tag fp, :url, class: "font-bold" %>
       <% end %>
     </div>

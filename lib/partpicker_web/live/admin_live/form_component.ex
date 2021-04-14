@@ -39,17 +39,4 @@ defmodule PartpickerWeb.AdminLive.FormComponent do
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
-
-  defp save_user(socket, :new, user_params) do
-    case Accounts.create_user(user_params) do
-      {:ok, _user} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "User created successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
-  end
 end

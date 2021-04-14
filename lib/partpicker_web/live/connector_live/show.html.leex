@@ -46,7 +46,9 @@
 
     <li>
       <strong>Link:</strong>
-      <%= link hd(@connector.links).url, to: hd(@connector.links).url %>
+      <%= for link <- @connector.links do %>
+      <%= link link.url, to: link.url %>
+      <% end %>
     </li>
   </ul>
 </div>

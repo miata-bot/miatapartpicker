@@ -16,7 +16,15 @@
           <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Description</th>
           <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Manufacturer</th>
           <th class="lg:py-3 lg:px-6 md:py-1 md:px-3 text-center">Part Number </th>
-          <th></th>
+          <th class="lg:py-3 lg:px-4 md:py-1 md:px-3 text-center text-xs">
+            <%= if @user do %>
+              <%= if :library in @user.roles do %>
+                <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg rounded-r-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
+                  <%= live_patch "Add New Connector", to: Routes.connector_index_path(@socket, :new) %>
+                </button>
+              <% end %>
+            <% end %>
+          </th>
         </tr>
       </thead>
 
@@ -56,10 +64,4 @@
       </tbody>
     </table>
   </div>
-
-  <%= if @user do %>
-    <%= if :library in @user.roles do %>
-      <span><%= live_patch "New Connector", to: Routes.connector_index_path(@socket, :new) %></span>
-    <% end %>
-  <% end %>
 </div>
