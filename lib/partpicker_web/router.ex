@@ -94,6 +94,7 @@ defmodule PartpickerWeb.Router do
     live "/", PageLive, :index
     get "/oauth/discord", OAuth.DiscordController, :oauth
     live "/connectors", ConnectorLive.Index, :index
+    get "/connectors/export", ConnectorExportController, :export
     live "/connectors/:id", ConnectorLive.Show, :show
   end
 end
