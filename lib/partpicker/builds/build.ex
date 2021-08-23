@@ -23,6 +23,7 @@ defmodule Partpicker.Builds.Build do
     field :banner_photo_id, :binary_id
     field :spent_to_date, :float, virtual: true
     field :coilovers, :string
+    field :ride_height, :float
     timestamps()
   end
 
@@ -37,7 +38,8 @@ defmodule Partpicker.Builds.Build do
       :tires,
       :banner_photo_id,
       :vin,
-      :coilovers
+      :coilovers,
+      :ride_height
     ])
     |> validate_mileage(attrs[:mileage] || attrs["mileage"])
     |> validate_required([:make, :model])
