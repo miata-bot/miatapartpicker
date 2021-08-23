@@ -1,7 +1,7 @@
 // We need to import the CSS so that webpack will load it.
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
-import "../css/app.css"
+import "../css/app.scss"
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -13,55 +13,17 @@ import "../css/app.css"
 //     import socket from "./socket"
 //
 import "phoenix_html"
-import "@ryangjchandler/alpine-clipboard/src/index.ie11.js"
-import 'alpinejs'
 import {Socket} from "phoenix"
-import NProgress from "nprogress"
+import topbar from "topbar"
 import {LiveSocket} from "phoenix_live_view"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let Hooks = {}
-Hooks.PushEvent = {
-  mounted() {
-    window.pushEventHook = this
-  }
-}
-Hooks.ClipboardHook = {
-  mounted() {
-    window.clipboardHook = this
-  },
-  clipboard() {
-    console.dir(document.getElementById("token").innerHTML);
-    var copyText = document.getElementById("token")
-
-    /* Select the text field */
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-    /* Copy the text inside the text field */
-    document.execCommand("copy");
-
-    /* Alert the copied text */
-    alert("Copied the text: " + copyText.value);
-  }
-}
-let liveSocket = new LiveSocket('/live', Socket, {
-  dom: {
-    onBeforeElUpdated(from, to) {
-      if (from.__x) {
-        window.Alpine.clone(from.__x, to)
-      }
-    }
-  },
-  params: {
-    _csrf_token: csrfToken
-  },
-  hooks: Hooks
-})
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
 
 // Show progress bar on live navigation and form submits
-window.addEventListener("phx:page-loading-start", info => NProgress.start())
-window.addEventListener("phx:page-loading-stop", info => NProgress.done())
+topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+window.addEventListener("phx:page-loading-start", info => topbar.show())
+window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

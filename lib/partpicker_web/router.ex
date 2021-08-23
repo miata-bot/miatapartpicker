@@ -3,6 +3,12 @@ defmodule PartpickerWeb.Router do
 
   import PartpickerWeb.UserAuth
   import Phoenix.LiveDashboard.Router
+  require Logger
+
+  def log_ip(conn, _) do
+    Logger.info("Client ip: #{inspect(conn)}")
+    conn
+  end
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -12,6 +18,7 @@ defmodule PartpickerWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :log_ip
   end
 
   pipeline :api do

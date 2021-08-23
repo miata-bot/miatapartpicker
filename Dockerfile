@@ -1,11 +1,11 @@
-FROM alpine:latest AS app_base
+FROM alpine:3.14 AS app_base
 WORKDIR /app
 RUN apk add --no-cache openssl ncurses-libs bash chromium-chromedriver chromium python3 py3-pip
 RUN pip3 install -U selenium
 RUN pip3 install -U erlang-py
 
-FROM erlang:23.2.7-alpine as build
-ENV ELIXIR_VERSION="v1.11.1-otp-23"
+FROM erlang:24.0.3-alpine as build
+ENV ELIXIR_VERSION="v1.12.2-otp-24"
 
 # # install elixir
 RUN wget https://repo.hex.pm/builds/elixir/$ELIXIR_VERSION.zip && \
@@ -69,4 +69,5 @@ RUN chown nobody:nobody /app
 
 USER nobody:nobody
 ENV HOME=/app
-ENTRYPOINT ["bin/partpicker", "start"]
+ENTRYPOINT ["bin/partpicker"]
+CMD ["start"]

@@ -44,28 +44,29 @@ defmodule Partpicker.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:base62, "~> 1.2"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:phoenix, "~> 1.5.7"},
-      {:phoenix_ecto, "~> 4.1"},
+      {:cowlib, "~> 2.10", override: true},
       {:ecto_sql, "~> 3.4"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.15.0"},
       {:floki, ">= 0.27.0", only: :test},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: [:dev, :reactor]},
-      {:phoenix_live_dashboard, "~> 0.4"},
+      {:gettext, "~> 0.11"},
+      {:gun, "~> 1.3", override: true},
+      {:jason, "~> 1.0"},
+      {:nimble_csv, "~> 1.1"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:phoenix_html, "~> 3.0"},
+      {:phoenix_live_dashboard, "~> 0.5"},
+      {:phoenix_live_reload, "~> 1.3", only: :dev},
+      {:phoenix_live_view, "~> 0.16"},
+      {:phoenix, "~> 1.5"},
+      {:phx_gen_auth, "~> 0.7", only: :dev},
+      {:plug_cowboy, "~> 2.1"},
+      {:postgrex, ">= 0.0.0"},
+      {:ring_logger, "~> 0.8"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
-      {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:ring_logger, "~> 0.8.1"},
-      {:phx_gen_auth, "~> 0.6.0", only: :dev},
       {:tesla, "~> 1.4"},
-      {:nimble_csv, "~> 1.1"},
-      {:timex, "~> 3.6"},
-      {:base62, "~> 1.2"},
-      {:nerves_reactor, path: "/home/connor/workspace/reactor/nerves_reactor", only: :reactor}
+      {:timex, "~> 3.6"}
     ]
   end
 

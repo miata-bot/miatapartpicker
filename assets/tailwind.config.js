@@ -1,6 +1,11 @@
 module.exports = {
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
+  purge: [],
+  darkMode: 'media', // or 'media' or 'class'
+  theme: {
+    extend: {},
   },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
 }

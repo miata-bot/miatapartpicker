@@ -1,9 +1,54 @@
-/* This file is for your main application css. */
-@import "../node_modules/nprogress/nprogress.css";
-/* This file is for your main application css. */
 @tailwind base;
-
 @tailwind components;
+@tailwind utilities;
+
+.form-nav {
+  @apply rounded;
+  @apply py-2;
+  @apply px-2;
+  @apply shadow;
+  @apply bg-green-500;
+  @apply text-white;
+  @apply font-bold;
+}
+
+.form-nav:hover {
+  @apply bg-green-400;
+}
+
+.form-nav:focus {
+  @apply outline-none;
+}
+
+.form-label {
+  @apply block;
+  @apply uppercase;
+  @apply tracking-wide;
+  @apply text-gray-700;
+  @apply text-xs;
+  @apply font-bold;
+}
+
+.form-text-input {
+  @apply appearance-none;
+  @apply block;
+  @apply w-full;
+  @apply bg-gray-200;
+  @apply text-gray-700;
+  @apply border;
+  @apply border-gray-200;
+  @apply rounded;
+  @apply py-3;
+  @apply px-4;
+  @apply mb-4;
+  @apply leading-tight;
+}
+
+.form-text-input:focus {
+  @apply outline-none;
+  @apply bg-white;
+  @apply border-gray-500;
+}
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
@@ -90,13 +135,5 @@
 .invalid-feedback {
   color: #a94442;
   display: block;
+  margin: -1rem 0 2rem;
 }
-
-.inset-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-@tailwind utilities;
