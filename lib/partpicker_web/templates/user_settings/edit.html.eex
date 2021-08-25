@@ -58,6 +58,12 @@
         </div>
 
         <div class="w-full px-3">
+          <%= label f, :foot_size, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" %>
+          <%= error_tag f, :foot_size, class: "mr-2 mb-1 rounded font-lg text-red-100" %>
+          <%= number_input f, :foot_size, step: "0.01", class: "appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" %>
+        </div>
+
+        <div class="w-full px-3">
           <%= label f, :instagram_handle, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" %>
           <%= error_tag f, :instagram_handle, class: "mr-2 mb-1 rounded font-lg text-red-100" %>
           <%= text_input f, :instagram_handle, required: true, class: "appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" %>

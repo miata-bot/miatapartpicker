@@ -26,6 +26,12 @@
       <%= number_input f, :hand_size, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
     </div>
 
+    <div class="m-2">
+      <%= error_tag f, :foot_size, class: "font-bold" %>
+      <%= label f, :foot_size, class: "font-bold pr-2" %>
+      <%= number_input f, :foot_size, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+    </div>
+
     <%= submit "Save", phx_disable_with: "Saving..." %>
   </form>
 </div>
