@@ -103,5 +103,7 @@ defmodule PartpickerWeb.Router do
     live "/connectors", ConnectorLive.Index, :index
     get "/connectors/export", ConnectorExportController, :export
     live "/connectors/:id", ConnectorLive.Show, :show
+
+    live "/cards", CardLive.Index, :index
   end
 end
