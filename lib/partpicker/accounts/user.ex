@@ -12,6 +12,7 @@ defmodule Partpicker.Accounts.User do
     field :instagram_handle, :string
     field :prefered_unit, Ecto.Enum, values: [:km, :miles], default: :miles
     field :hand_size, :float
+    field :foot_size, :float
 
     field :roles, {:array, Ecto.Enum}, values: [:admin, :library], default: []
 
@@ -28,7 +29,7 @@ defmodule Partpicker.Accounts.User do
 
   def admin_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size, :roles])
+    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size, :foot_size, :roles])
   end
 
   def api_changeset(user, attrs) do
@@ -44,14 +45,15 @@ defmodule Partpicker.Accounts.User do
       :email,
       :discord_user_id,
       :prefered_unit,
-      :hand_size
+      :hand_size,
+      :foot_size
     ])
     |> validate_required([:discord_user_id])
   end
 
   def settings_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size])
+    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size, :foot_size])
     |> validate_required([])
   end
 
