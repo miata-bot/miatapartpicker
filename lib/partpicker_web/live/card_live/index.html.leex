@@ -1,37 +1,11 @@
-<div class="bg-gray-50 rounded" style="width: 476.22047244px; height: 665.1968504px">
-  <div class="p-2 bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 h-full rounded">
-    <div class="flex flex-col flex-none bg-gray-50 p-2 rounded">
-      <div class="flex justify-between pb-1">
-        <div class="flex flex-row whitespace-nowrap">
-          <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"> NA </p>
-          <p class="font-bold px-2"> Matg Speedrun </p>
-        </div>
-        <p class="font-bold px-2"> PressY4Pie </p>
+<div class="bg-gray-50 rounded" >
+  <div class="carddiv flex flex-row">
+    <%= for asset <- ["/images/cone-tcg.png", "/images/haz-tcg.png", "/images/john-tcg.png", "/images/threedia-tcg.png"] do %>
+      <div class="card3d">
+        <%= link to: "/fixme" do %>
+          <img ondragstart="return false;" ondrop="return false;" src="<%= Routes.static_path(@socket, asset) %>" width="180">
+        <% end %>
       </div>
-
-      <div class="px-2 flex justify-between rounded">
-        <div></div>
-        <img class="rounded shadow" src="<%= Routes.static_path(@socket, "/images/cone-na.jpg") %>" width="400">
-        <div></div>
-      </div>
-
-      <div class="my-2 px-1 py-2">
-        <span class="font-bold"> Lorem ipsum dolor sit amet </span>
-        <p class="px-2 text-sm"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore  </p>
-      </div>
-
-      <div class="my-2 px-1 py-2">
-        <p class="px-2 text-sm"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore  </p>
-      </div>
-
-      <div class="my-2 px-1 py-2">
-        <p class="px-2 text-sm"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore  </p>
-      </div>
-    </div>
-    <div class="flex justify-between">
-      <div></div>
-      <span class="font-italic text-sm text-white"> asdfasdf </span>
-      <div></div>
-    </div>
+    <% end %>
   </div>
 </div>
