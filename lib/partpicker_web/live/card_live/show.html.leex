@@ -1,0 +1,9 @@
+<div class="bg-gray-50 rounded" >
+  <div class="carddiv flex flex-row">
+    <div class="card3d card3d-xl">
+      <%= link to: Routes.card_index_path(@socket, :index) do %>
+        <img ondragstart="return false;" ondrop="return false;" src="<%= Routes.static_path(@socket, "/images/" <> @card.printing_plate.filename) %>" width="250">
+      <% end %>
+    </div>
+  </div>
+</div>

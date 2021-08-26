@@ -1,9 +1,9 @@
 <div class="bg-gray-50 rounded" >
   <div class="carddiv flex flex-row">
-    <%= for asset <- ["/images/cone-tcg.png", "/images/haz-tcg.png", "/images/john-tcg.png", "/images/threedia-tcg.png"] do %>
+    <%= for card <- @cards do %>
       <div class="card3d">
-        <%= link to: "/fixme" do %>
-          <img ondragstart="return false;" ondrop="return false;" src="<%= Routes.static_path(@socket, asset) %>" width="180">
+        <%= link to: Routes.card_show_path(@socket, :show, card) do %>
+          <img ondragstart="return false;" ondrop="return false;" src="<%= Routes.static_path(@socket, "/images/" <> card.printing_plate.filename) %>" width="250">
         <% end %>
       </div>
     <% end %>

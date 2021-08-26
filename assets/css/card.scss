@@ -16,6 +16,10 @@
   perspective: 600px;
 }
 
+.card3d-xl {
+  transform: scale(2);
+}
+
 .card3d-adjacent-1 {
   z-index: 5;
   transform: scale(1.25) translate(0, -25px);

@@ -76,6 +76,9 @@ defmodule PartpickerWeb.Router do
     live "/connectors/new", ConnectorLive.Index, :new
     live "/connectors/:id/edit", ConnectorLive.Index, :edit
     live "/connectors/:id/show/edit", ConnectorLive.Show, :edit
+
+    live "/cards", CardLive.Index, :index
+    live "/cards/:id", CardLive.Show, :show
   end
 
   scope "/", PartpickerWeb do
@@ -103,8 +106,5 @@ defmodule PartpickerWeb.Router do
     live "/connectors", ConnectorLive.Index, :index
     get "/connectors/export", ConnectorExportController, :export
     live "/connectors/:id", ConnectorLive.Show, :show
-
-    live "/cards", CardLive.Index, :index
-    live "/cards/:id", CardLive.Show, :show
   end
 end

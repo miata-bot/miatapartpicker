@@ -13,6 +13,7 @@ defmodule Partpicker.Accounts.User do
     field :prefered_unit, Ecto.Enum, values: [:km, :miles], default: :miles
     field :hand_size, :float
     field :foot_size, :float
+    has_many :cards, Partpicker.TCG.VirtualCard
 
     field :roles, {:array, Ecto.Enum}, values: [:admin, :library], default: []
 
