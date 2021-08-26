@@ -20,6 +20,7 @@ defmodule Partpicker.Builds.Build do
     field :mileage, :integer
     has_many :parts, Partpicker.Builds.Part, on_delete: :delete_all
     has_many :photos, Partpicker.Builds.Photo, on_delete: :delete_all
+    has_many :printing_plates, Partpicker.TCG.PrintingPlate, on_delete: :nilify_all
     field :banner_photo_id, :binary_id
     field :spent_to_date, :float, virtual: true
     field :coilovers, :string

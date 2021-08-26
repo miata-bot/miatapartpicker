@@ -5,7 +5,11 @@ defmodule PartpickerWeb.UserController do
     case Partpicker.Accounts.api_register_user(user_attrs) do
       {:ok, user} ->
         user =
-          Partpicker.Repo.preload(user, builds: [:photos], featured_build: [build: [:photos]])
+          Partpicker.Repo.preload(user,
+            builds: [:photos],
+            featured_build: [build: [:photos]],
+            cards: [:printing_plate]
+          )
 
         conn
         |> put_status(:created)
@@ -24,7 +28,11 @@ defmodule PartpickerWeb.UserController do
     case Partpicker.Accounts.api_change_user(user, user_params) do
       {:ok, user} ->
         user =
-          Partpicker.Repo.preload(user, builds: [:photos], featured_build: [build: [:photos]])
+          Partpicker.Repo.preload(user,
+            builds: [:photos],
+            featured_build: [build: [:photos]],
+            cards: [:printing_plate]
+          )
 
         conn
         |> put_status(:accepted)
@@ -40,7 +48,11 @@ defmodule PartpickerWeb.UserController do
   def show(conn, %{"id" => discord_user_id}) do
     user =
       Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
-      |> Partpicker.Repo.preload(builds: [:photos], featured_build: [build: [:photos]])
+      |> Partpicker.Repo.preload(
+        builds: [:photos],
+        featured_build: [build: [:photos]],
+        cards: [:printing_plate]
+      )
 
     render(conn, "show.json", %{user: user})
   end
@@ -49,7 +61,13 @@ defmodule PartpickerWeb.UserController do
     user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
     build = Partpicker.Builds.get_build_by_uid!(user, build_uid)
     _featured_build = Partpicker.Builds.create_featured_build!(user, build)
-    user = Partpicker.Repo.preload(user, builds: [:photos], featured_build: [build: [:photos]])
+
+    user =
+      Partpicker.Repo.preload(user,
+        builds: [:photos],
+        featured_build: [build: [:photos]],
+        cards: [:printing_plate]
+      )
 
     conn
     |> put_status(:accepted)
