@@ -1,0 +1,44 @@
+.carddiv {
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: rgb(84,92,97);
+  background: radial-gradient(circle, rgba(84,92,97,1) 0%, rgba(23,41,48,1) 100%); 
+  flex-wrap: wrap;
+  overflow-x: hidden;
+}
+
+.card3d {
+  margin: 8px;
+  transform: scale(1);
+  perspective: 600px;
+}
+
+.card3d-adjacent-1 {
+  z-index: 5;
+  transform: scale(1.25) translate(0, -25px);
+  margin: 32px;
+}
+
+.card3d-adjacent-2 {
+  z-index: 5;
+  transform: scale(1.10) translate(0, -10px);
+  margin: 16px;
+}
+
+.card3d:hover {
+  z-index: 10;
+  transform: scale(1.5) translate(0, -50px);
+}
+
+.card3d,
+.card3d img {
+  transition: all 300ms ease-out;
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

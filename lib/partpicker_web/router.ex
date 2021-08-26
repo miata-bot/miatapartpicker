@@ -105,5 +105,6 @@ defmodule PartpickerWeb.Router do
     live "/connectors/:id", ConnectorLive.Show, :show
 
     live "/cards", CardLive.Index, :index
+    live "/cards/:id", CardLive.Show, :show
   end
 end
