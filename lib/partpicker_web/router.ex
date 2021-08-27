@@ -78,6 +78,7 @@ defmodule PartpickerWeb.Router do
     live "/connectors/:id/show/edit", ConnectorLive.Show, :edit
 
     live "/cards", CardLive.Index, :index
+    live "/cards/trades", CardLive.Trades, :trades
     live "/cards/:id", CardLive.Show, :show
   end
 

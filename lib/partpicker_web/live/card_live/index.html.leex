@@ -1,35 +1,52 @@
 <div class="bg-gray-50" >
   <div class="p-2">
     <div class="flex flex-row justify-between">
-      <button class="px-2 py-2 rounded bg-green-900" phx-click="create_trade"> Trade </button>
-      <div class="p-2 text-lg"> <%= @trade %> </div>
-      <button class="px-2 py-2 rounded bg-blue-900" phx-click="notifications"> Trade Requests </button>
+      <%= if @ready_to_submit do %>
+        <button class="px-2 py-2 rounded bg-green-800 text-white border shadow" phx-click="submit_trade_request"> Submit Request </button>
+      <% else %>
+        <button class="px-2 py-2 rounded bg-blue-900 text-white border shadow" phx-click="create_trade_request"> Trade </button>
+      <% end %>
+      <div class="p-2 text-lg"> <%= @banner %> </div>
+      <div class="p-2">
+        <%= link "Trade Offers", to: Routes.card_trades_path(@socket, :trades), class: "px-2 py-2 rounded bg-blue-900 text-white border shadow" %>
+        <%= link "Trade Requests", to: Routes.card_trades_path(@socket, :trades), class: "px-2 py-2 rounded bg-blue-900 text-white border shadow" %>
+      </div>
     </div>
   </div>
 
-  <%= if @trade_selection do %>
-    <%= f = form_for :trade, "#", phx_change: "validate", phx_submit: "save" %>
-      <%= label f, :search, class: "font-bold pr-2" %>
-      <%= text_input f, :search, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
+  <%= if @user_search do %>
+    <%= f = form_for :user_search, "#", phx_change: "user_search", class: "p-2" %>
+      <%= label f, :user_search, class: "font-bold pr-2" %>
+      <%= text_input f, :user_search, class: " border rounded p-2 focus:ring-2 focus:ring-blue-600" %>
     </form>
 
-    <%= for %{id: id, discord_user_id: discord_user_id} = user <- Enum.take(@users, 3) do %>
-        <%= if match?(%{discord_oauth_info: %{avatar: _avatar, username: _username}}, user) do %>
-          <button phx-click="user_select" phx-value-user_id="<%= id %>">
-          <%= user.discord_oauth_info.username %>
-            <img src="https://cdn.discordapp.com/avatars/<%= discord_user_id %>/<%= user.discord_oauth_info.avatar %>.png">
-          </button>
-        <% else %>
-          <div> Unknown user </div>
-        <% end %>
-    <% end %>
+    <div class="flex flex-row">
+      <%= for %{id: id, discord_user_id: discord_user_id, discord_oauth_info: %{avatar: avatar, username: username}} <- Enum.take(@users, 4) do %>
+        <button phx-click="user_select" phx-value-user_id="<%= id %>" class="p-2">
+          <%= username %>
+          <img
+            src="https://cdn.discordapp.com/avatars/<%= discord_user_id %>/<%= avatar %>.png"
+            alt="No avatar"
+            onerror=this.src="<%= Routes.static_path(@socket, "/images/discord-default-avatar.png") %>"
+            width="128px"
+            class="rounded rounded-full"
+          >
+        </button>
+      <% end %>
+    </div>
   <% end %>
 
   <div class="carddiv flex flex-row">
     <%= for card <- @cards do %>
-      <div class="card3d <%= if @trade, do: "card3d-highlighted" %>">
+      <div class="card3d">
         <a href="#">
-          <img phx-click="trade_select" phx-value-card_id="<%= card.id %>" ondragstart="return false;" ondrop="return false;" src="<%= Routes.static_path(@socket, "/images/" <> card.printing_plate.filename) %>" width="250">
+          <img phx-click="card_select"
+            phx-value-card_id="<%= card.id %>"
+            ondragstart="return false;"
+            ondrop="return false;"
+            src="<%= Routes.static_path(@socket, "/images/" <> card.printing_plate.filename) %>"
+            width="250"
+          >
         </a>
       </div>
     <% end %>

@@ -14,6 +14,7 @@ defmodule Partpicker.Accounts.User do
     field :hand_size, :float
     field :foot_size, :float
     has_many :cards, Partpicker.TCG.VirtualCard
+    has_many :trade_requests, Partpicker.TCG.TradeRequest, foreign_key: :sender_id
 
     field :roles, {:array, Ecto.Enum}, values: [:admin, :library], default: []
 

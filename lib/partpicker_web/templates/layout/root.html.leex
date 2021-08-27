@@ -75,7 +75,7 @@
           x-show.transition="true"
         >
           <ul
-            class="pt-6 lg:pt-0 list-reset lg:flex justify-between justify-end flex-1 items-center"
+            class="pt-6 lg:pt-0 list-reset lg:flex flex-1 justify-between items-center"
           >
             <%= if @current_user do %>
               <div class="flex justify-left">
@@ -97,25 +97,27 @@
                   </a>
                 </li>
               </div>
-              <li class="mr-3">
-                <a
-                  class="<%= if active?(@conn, Routes.user_settings_path(@conn, :edit)), do: active_class(), else: unactive_class() %>"
-                  href="<%= Routes.user_settings_path(@conn, :edit) %>"
-                  @click="isOpen = false"
-                  >Account
-                </a>
-              </li>
-
-              <%= if :admin in @current_user.roles do %>
+              <div class="flex justify-right">
                 <li class="mr-3">
                   <a
-                    class="<%= if active?(@conn, Routes.live_dashboard_path(@conn, :home)), do: active_class(), else: unactive_class() %>"
-                    href="<%= Routes.live_dashboard_path(@conn, :home) %>"
+                    class="<%= if active?(@conn, Routes.user_settings_path(@conn, :edit)), do: active_class(), else: unactive_class() %>"
+                    href="<%= Routes.user_settings_path(@conn, :edit) %>"
                     @click="isOpen = false"
-                    >Admin Dashboard
+                    >Account
                   </a>
                 </li>
-              <% end %>
+
+                <%= if :admin in @current_user.roles do %>
+                  <li class="mr-3">
+                    <a
+                      class="<%= if active?(@conn, Routes.live_dashboard_path(@conn, :home)), do: active_class(), else: unactive_class() %>"
+                      href="<%= Routes.live_dashboard_path(@conn, :home) %>"
+                      @click="isOpen = false"
+                      >Admin Dashboard
+                    </a>
+                  </li>
+                <% end %>
+              </div>
             <% end %>
           </ul>
         </div>
