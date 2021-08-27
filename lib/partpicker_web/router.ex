@@ -5,11 +5,6 @@ defmodule PartpickerWeb.Router do
   import Phoenix.LiveDashboard.Router
   require Logger
 
-  def log_ip(conn, _) do
-    Logger.info("Client ip: #{inspect(conn)}")
-    conn
-  end
-
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -18,7 +13,6 @@ defmodule PartpickerWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
-    plug :log_ip
   end
 
   pipeline :api do
@@ -43,14 +37,8 @@ defmodule PartpickerWeb.Router do
   scope "/", PartpickerWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    get "/users/register", UserRegistrationController, :new
-    post "/users/register", UserRegistrationController, :create
     get "/users/log_in", UserSessionController, :new
     post "/users/log_in", UserSessionController, :create
-    get "/users/reset_password", UserResetPasswordController, :new
-    post "/users/reset_password", UserResetPasswordController, :create
-    get "/users/reset_password/:token", UserResetPasswordController, :edit
-    put "/users/reset_password/:token", UserResetPasswordController, :update
   end
 
   scope "/", PartpickerWeb do
@@ -96,9 +84,6 @@ defmodule PartpickerWeb.Router do
     pipe_through [:browser]
 
     delete "/users/log_out", UserSessionController, :delete
-    get "/users/confirm", UserConfirmationController, :new
-    post "/users/confirm", UserConfirmationController, :create
-    get "/users/confirm/:token", UserConfirmationController, :confirm
     get "/media/:uuid", MediaController, :show
     live "/car/:uid", CarLive.Show, :show
 

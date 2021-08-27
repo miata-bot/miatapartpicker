@@ -48,7 +48,7 @@ defmodule PartpickerWeb.CardLive.Trades do
   end
 
   def get_request(user, trade_request_id) do
-    Partpicker.Repo.get_by!(TCG.TradeRequest, sender_id: user.id, id: trade_request_id)
+    Partpicker.Repo.get_by!(TCG.TradeRequest, receiver_id: user.id, id: trade_request_id)
     |> Partpicker.Repo.preload([
       :sender,
       :receiver,

@@ -4,8 +4,8 @@ defmodule Partpicker.TCG.PrintingPlate do
 
   schema "tcg_printing_plates" do
     belongs_to :build, Partpicker.Builds.Build
-    has_many :physical_cards, Partpicker.TCG.PhysicalCard
-    has_many :virtual_cards, Partpicker.TCG.VirtualCard
+    has_many :physical_cards, Partpicker.TCG.PhysicalCard, on_delete: :delete_all
+    has_many :virtual_cards, Partpicker.TCG.VirtualCard, on_delete: :delete_all
     field :filename, :string, null: false
     timestamps()
   end

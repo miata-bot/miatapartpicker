@@ -66,6 +66,16 @@
 }
 .phx-disconnected *{
   pointer-events: none;
+  border: #a94442;
+}
+
+.phx-error {
+  opacity: .25;
+  cursor: not-allowed;
+}
+
+.phx-error * {
+  pointer-events: none;
 }
 
 .phx-modal {
