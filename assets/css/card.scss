@@ -32,6 +32,10 @@
   margin: 16px;
 }
 
+.card3d-highlighted {
+  filter: brightness(50%) saturate(50%);
+}
+
 .card3d:hover {
   z-index: 10;
   transform: scale(1.5) translate(0, -50px);
