@@ -10,7 +10,8 @@ defmodule PartpickerWeb.AdminLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign(:changeset, changeset)
+     |> assign(:roles, Ecto.Enum.values(Partpicker.Accounts.User, :roles))}
   end
 
   @impl true

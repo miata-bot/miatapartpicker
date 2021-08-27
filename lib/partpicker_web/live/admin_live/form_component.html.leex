@@ -11,7 +11,7 @@
     <div class="m-2">
       <%= error_tag f, :roles, class: "font-bold" %>
       <%= label f, :roles, class: "font-bold pr-2" %>
-      <%= multiple_select f, :roles, Ecto.Enum.values(Partpicker.Accounts.User, :roles) %>
+      <%= multiple_select f, :roles, @roles %>
     </div>
 
     <div class="m-2">

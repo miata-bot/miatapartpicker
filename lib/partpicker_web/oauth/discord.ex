@@ -48,6 +48,7 @@ defmodule PartpickerWeb.OAuth.Discord do
     Tesla.client(middleware)
   end
 
+  @dialyzer {:no_match, exchange_code: 1}
   def exchange_code(code) do
     response =
       post!("/oauth2/token", %{
@@ -72,6 +73,7 @@ defmodule PartpickerWeb.OAuth.Discord do
     end
   end
 
+  @dialyzer {:no_match, refresh_token: 1}
   def refresh_token(%{"refresh_token" => refresh_token} = body) do
     response =
       post!(client(body), "/oauth2/token", %{
