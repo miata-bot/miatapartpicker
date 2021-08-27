@@ -13,7 +13,7 @@ defmodule PartpickerWeb.CardLive.Index do
          |> assign(:cards, list_cards(user))
          |> assign(:user, user)
          |> assign(:users, Partpicker.Accounts.list_users())
-         |> assign(:trade, false)
+         |> assign(:trade, "")
          |> assign(:trade_selection, nil)}
     end
   end
@@ -38,7 +38,7 @@ defmodule PartpickerWeb.CardLive.Index do
 
     {:noreply,
      socket
-     |> assign(:trads, "Select a card to trade")
+     |> assign(:trade, "Select a card to trade for")
      |> assign(:cards, list_cards(user))}
   end
 
@@ -52,7 +52,11 @@ defmodule PartpickerWeb.CardLive.Index do
     users =
       Enum.sort(socket.assigns.users, fn
         %{discord_oauth_info: %{username: a}}, %{discord_oauth_info: %{username: b}} ->
-          String.jaro_distance(a, input) >= String.jaro_distance(b, input)
+          String.jaro_distance(to_string(a), to_string(input)) >=
+            String.jaro_distance(to_string(b), to_string(input))
+
+        _, _ ->
+          false
       end)
 
     {:noreply,

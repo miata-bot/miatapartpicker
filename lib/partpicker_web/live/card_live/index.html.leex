@@ -1,10 +1,9 @@
 <div class="bg-gray-50" >
   <div class="p-2">
-    <div class="flex flex-row">
+    <div class="flex flex-row justify-between">
       <button class="px-2 py-2 rounded bg-green-900" phx-click="create_trade"> Trade </button>
-      <%= if @trade do %>
-        <div class="p-2 text-lg"> <%= @trade %> </div>
-      <% end %>
+      <div class="p-2 text-lg"> <%= @trade %> </div>
+      <button class="px-2 py-2 rounded bg-blue-900" phx-click="notifications"> Trade Requests </button>
     </div>
   </div>
 
@@ -14,10 +13,15 @@
       <%= text_input f, :search, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
     </form>
 
-    <%= for %{id: id, discord_user_id: discord_user_id, discord_oauth_info: %{avatar: avatar}} <- Enum.take(@users, 3) do %>
-      <button phx-click="user_select" phx-value-user_id="<%= id %>">
-        <img src="https://cdn.discordapp.com/avatars/<%= discord_user_id %>/<%= avatar %>.png">
-      </button>
+    <%= for %{id: id, discord_user_id: discord_user_id} = user <- Enum.take(@users, 3) do %>
+        <%= if match?(%{discord_oauth_info: %{avatar: _avatar, username: _username}}, user) do %>
+          <button phx-click="user_select" phx-value-user_id="<%= id %>">
+          <%= user.discord_oauth_info.username %>
+            <img src="https://cdn.discordapp.com/avatars/<%= discord_user_id %>/<%= user.discord_oauth_info.avatar %>.png">
+          </button>
+        <% else %>
+          <div> Unknown user </div>
+        <% end %>
     <% end %>
   <% end %>
 
