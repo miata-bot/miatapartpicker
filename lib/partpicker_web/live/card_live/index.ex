@@ -1,6 +1,5 @@
 defmodule PartpickerWeb.CardLive.Index do
   use PartpickerWeb, :live_view
-  alias Partpicker.{TCG, TCG.TradeRequest}
 
   @impl true
   def mount(_, %{"user_token" => token}, socket) do

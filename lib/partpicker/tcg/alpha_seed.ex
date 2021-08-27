@@ -18,4 +18,9 @@ defmodule Partpicker.TCG.AlphaSeed do
       end
     end
   end
+
+  def cleanup do
+    for tr <- Partpicker.Repo.all(Partpicker.TCG.TradeRequest), do: Partpicker.Repo.delete!(tr)
+    for pp <- Partpicker.Repo.all(Partpicker.TCG.PrintingPlate), do: Partpicker.Repo.delete!(pp)
+  end
 end

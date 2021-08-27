@@ -1,20 +1,20 @@
 use Mix.Config
 # Configure your database
-# config :partpicker, Partpicker.Repo,
-#   username: "postgres",
-#   password: "postgres",
-#   database: "partpicker_dev",
-#   hostname: "localhost",
-#   show_sensitive_data_on_connection_error: true,
-#   pool_size: 10
-
 config :partpicker, Partpicker.Repo,
-  username: "partpicker",
-  password: "qDL96dk6S4quv2",
-  database: "partpicker",
-  hostname: "sixtyeightplus.one",
+  username: "postgres",
+  password: "postgres",
+  database: "partpicker_dev",
+  hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
+
+# config :partpicker, Partpicker.Repo,
+#   username: "partpicker",
+#   password: "qDL96dk6S4quv2",
+#   database: "partpicker",
+#   hostname: "sixtyeightplus.one",
+#   show_sensitive_data_on_connection_error: true,
+#   pool_size: 10
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
