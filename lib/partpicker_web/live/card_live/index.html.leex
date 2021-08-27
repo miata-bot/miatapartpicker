@@ -1,15 +1,18 @@
 <div class="bg-gray-50" >
-  <div class="p-2">
+  <div class="">
     <div class="flex flex-row justify-between">
       <%= if @ready_to_submit do %>
         <button class="px-2 py-2 rounded bg-green-800 text-white border shadow" phx-click="submit_trade_request"> Submit Request </button>
       <% else %>
-        <button class="px-2 py-2 rounded bg-blue-900 text-white border shadow" phx-click="create_trade_request"> Trade </button>
+        <div class="">
+          <button class="px-2 py-2 my-2 rounded bg-blue-900 text-white border shadow" phx-click="create_trade_request"> Trade </button>
+          <button class="px-4 py-2 rounded bg-blue-900 text-white border shadow" phx-click="create_gift_request"> Gift </button>
+        </div>
       <% end %>
       <div class="p-2 text-lg"> <%= @banner %> </div>
-      <div class="p-2">
-        <%= link "Trade Offers", to: Routes.card_trades_path(@socket, :trades), class: "px-2 py-2 rounded bg-blue-900 text-white border shadow" %>
-        <%= link "Trade Requests", to: Routes.card_trades_path(@socket, :trades), class: "px-2 py-2 rounded bg-blue-900 text-white border shadow" %>
+      <div class="p-2 flex flex-row">
+        <%= live_patch "Trade Offers", to: Routes.card_offers_path(@socket, :offers), class: "px-2 py-2 rounded bg-blue-900 text-white border shadow" %>
+        <%= live_patch "Trade Requests", to: Routes.card_requests_path(@socket, :requests), class: "px-2 py-2 rounded bg-blue-900 text-white border shadow" %>
       </div>
     </div>
   </div>
