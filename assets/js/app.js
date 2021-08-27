@@ -73,6 +73,7 @@ var cards = document.querySelectorAll('.card3d');
 cards.forEach((card) => {
   card.addEventListener('mousemove', (ev) => {
     Card3D(card, ev);
+    card.classList.remove("card3d-highlighted")
     adjacent(card, 'add');
   });
 
@@ -81,6 +82,7 @@ cards.forEach((card) => {
 
     img.style.transform = 'rotateX(0deg) rotateY(0deg)';
     img.style.filter = 'brightness(1)';
+    card.classList.add("card3d-highlighted")
     adjacent(card, 'remove');
   });
 })

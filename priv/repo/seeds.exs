@@ -63,12 +63,12 @@ _ = Partpicker.Repo.insert!(data)
 
 IO.inspect(token, label: "TOKEN")
 
-plate1 = %Partpicker.TCG.PrintingPlate{filename: "cone-tcg.png"} |> Repo.insert!()
-plate2 = %Partpicker.TCG.PrintingPlate{filename: "haz-tcg.png"} |> Repo.insert!()
+# plate1 = %Partpicker.TCG.PrintingPlate{filename: "cone-tcg.png"} |> Repo.insert!()
+# plate2 = %Partpicker.TCG.PrintingPlate{filename: "haz-tcg.png"} |> Repo.insert!()
 
-{:ok, virtual1} = Partpicker.TCG.print_virtual(plate1, user1)
-{:ok, virtual2} = Partpicker.TCG.print_virtual(plate2, user2)
+# {:ok, virtual1} = Partpicker.TCG.print_virtual(plate1, user1)
+# {:ok, virtual2} = Partpicker.TCG.print_virtual(plate2, user2)
 
-{:ok, trade} = Partpicker.TCG.initiate_trade(virtual1, virtual2)
-{:ok, accepted} = Partpicker.TCG.accept_trade(trade)
-IO.inspect(accepted, label: "ACCEPTED TRADE")
+# {:ok, trade} = Partpicker.TCG.initiate_trade(virtual1, virtual2)
+# {:ok, accepted} = Partpicker.TCG.accept_trade(trade)
+# IO.inspect(accepted, label: "ACCEPTED TRADE")
