@@ -1,4 +1,4 @@
-defmodule PartpickerWeb.CardLive.Trades do
+defmodule PartpickerWeb.CardLive.Requests do
   use PartpickerWeb, :live_view
   alias Partpicker.TCG
 
@@ -17,38 +17,23 @@ defmodule PartpickerWeb.CardLive.Trades do
   end
 
   @impl true
-  def handle_event("trade_accept", %{"trade_request_id" => trade_request_id}, socket) do
-    request = get_request(socket.assigns.user, trade_request_id)
-
-    case TCG.accept_trade(request) do
+  def handle_event("trade_cancel", %{"trade_request_id" => id}, socket) do
+    case Partpicker.Repo.delete(get_request(socket.assigns.user, id)) do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Request accepted")
-         |> assign(:user, load_user(socket.assigns.user))
          |> assign(:trade_requests, list_trade_requests(socket.assigns.user))}
 
       _error ->
         {:noreply,
          socket
-         |> put_flash(:error, "Failed to accept request")
-         |> assign(:user, load_user(socket.assigns.user))
+         |> put_flash(:error, "Failed to cancel request")
          |> assign(:trade_requests, list_trade_requests(socket.assigns.user))}
     end
   end
 
-  def handle_event("trade_decline", %{"trade_request_id" => trade_request_id}, socket) do
-    get_request(socket.assigns.user, trade_request_id)
-
-    {:noreply,
-     socket
-     |> put_flash(:error, "no")
-     |> assign(:user, load_user(socket.assigns.user))
-     |> assign(:trade_requests, list_trade_requests(socket.assigns.user))}
-  end
-
   def get_request(user, trade_request_id) do
-    Partpicker.Repo.get_by!(TCG.TradeRequest, receiver_id: user.id, id: trade_request_id)
+    Partpicker.Repo.get_by!(TCG.TradeRequest, sender_id: user.id, id: trade_request_id)
     |> Partpicker.Repo.preload([
       :sender,
       :receiver,
@@ -71,7 +56,7 @@ defmodule PartpickerWeb.CardLive.Trades do
   def list_trade_requests(user) do
     import Ecto.Query
 
-    Partpicker.Repo.all(from tr in Partpicker.TCG.TradeRequest, where: tr.receiver_id == ^user.id)
+    Partpicker.Repo.all(from tr in Partpicker.TCG.TradeRequest, where: tr.sender_id == ^user.id)
     |> Partpicker.Repo.preload([
       :sender,
       :receiver,

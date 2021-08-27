@@ -25,11 +25,15 @@ defmodule PartpickerWeb.CardLive.Index do
      |> assign(:changeset, changeset)}
   end
 
+  def handle_event("create_gift_request", _, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:error, "That doesn't work yet")}
+  end
+
   def handle_event("submit_trade_request", _, socket) do
     case Partpicker.Repo.insert(socket.assigns.changeset) do
-      {:ok, request} ->
-        IO.inspect(request, label: "REQUEST")
-
+      {:ok, _request} ->
         {:noreply,
          socket
          |> reset_assigns(socket.assigns.user)
