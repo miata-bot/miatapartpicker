@@ -1,5 +1,6 @@
 defmodule PartpickerWeb.CardLive.Index do
   use PartpickerWeb, :live_view
+  alias Partpicker.TCG
 
   @impl true
   def mount(_, %{"user_token" => token}, socket) do
@@ -14,10 +15,7 @@ defmodule PartpickerWeb.CardLive.Index do
 
   @impl true
   def handle_event("create_trade_request", _, socket) do
-    changeset =
-      socket.assigns.user
-      |> Ecto.build_assoc(:trade_requests)
-      |> Ecto.Changeset.cast(%{}, [])
+    changeset = TCG.new_request(socket.assigns.user)
 
     {:noreply,
      socket
@@ -32,7 +30,7 @@ defmodule PartpickerWeb.CardLive.Index do
   end
 
   def handle_event("submit_trade_request", _, socket) do
-    case Partpicker.Repo.insert(socket.assigns.changeset) do
+    case TCG.create_request(socket.assigns.changeset) do
       {:ok, _request} ->
         {:noreply,
          socket
@@ -53,7 +51,7 @@ defmodule PartpickerWeb.CardLive.Index do
         %{assigns: %{receiver_selected: false}} = socket
       ) do
     selected_card = get_card(socket.assigns.user, id)
-    changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, :offer, selected_card)
+    changeset = TCG.offer_card(socket.assigns.changeset, selected_card)
 
     {:noreply,
      socket
@@ -69,17 +67,15 @@ defmodule PartpickerWeb.CardLive.Index do
         %{"card_id" => id},
         %{assigns: %{receiver_selected: true}} = socket
       ) do
-    receiver = Ecto.Changeset.get_field(socket.assigns.changeset, :receiver)
-    selected_card = get_card(receiver, id)
-
-    offer = Ecto.Changeset.get_field(socket.assigns.changeset, :offer)
-    changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, :trade, selected_card)
+    changeset = TCG.receive_card(socket.assigns.changeset, id)
+    offer = TCG.get_offer(changeset)
+    trade = TCG.get_trade(changeset)
 
     {:noreply,
      socket
      |> assign(:banner, "Review trade")
      |> assign(:changeset, changeset)
-     |> assign(:cards, [offer, selected_card])
+     |> assign(:cards, [offer, trade])
      |> assign(:ready_to_submit, true)}
   end
 
@@ -113,7 +109,7 @@ defmodule PartpickerWeb.CardLive.Index do
 
   def handle_event("user_select", %{"user_id" => user_id}, socket) do
     receiver = Partpicker.Accounts.get_user!(user_id)
-    changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, :receiver, receiver)
+    changeset = TCG.select_receiver(socket.assigns.changeset, receiver)
 
     {:noreply,
      socket
