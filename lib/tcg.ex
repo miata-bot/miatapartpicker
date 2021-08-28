@@ -13,6 +13,52 @@ defmodule Partpicker.TCG do
 
   alias Partpicker.Accounts.User
 
+  @endpoint PartpickerWeb.Endpoint
+
+  def new_request(user) do
+    user
+    |> Ecto.build_assoc(:trade_requests)
+    |> Ecto.Changeset.cast(%{}, [])
+  end
+
+  def offer_card(changeset, selected_card) do
+    Ecto.Changeset.put_assoc(changeset, :offer, selected_card)
+  end
+
+  def select_receiver(changeset, receiver) do
+    Ecto.Changeset.put_assoc(changeset, :receiver, receiver)
+  end
+
+  def receive_card(changeset, card_id) do
+    receiver = Ecto.Changeset.get_field(changeset, :receiver)
+    selected_card = get_card(receiver, card_id)
+    Ecto.Changeset.put_assoc(changeset, :trade, selected_card)
+  end
+
+  def get_offer(changeset) do
+    Ecto.Changeset.get_field(changeset, :offer)
+  end
+
+  def get_trade(changeset) do
+    Ecto.Changeset.get_field(changeset, :trade)
+  end
+
+  def create_request(changeset) do
+    with {:ok, request} <- Repo.insert(changeset) do
+      request =
+        Repo.preload(request, [
+          :sender,
+          :receiver,
+          offer: [:printing_plate],
+          trade: [:printing_plate]
+        ])
+
+      data = PartpickerWeb.TradeRequestView.render("show.json", %{trade_request: request})
+      @endpoint.broadcast!("tcg", "CREATE_TRADE_REQUEST", data)
+      {:ok, request}
+    end
+  end
+
   def print_virtual(%PrintingPlate{} = plate, %User{} = owner) do
     uuid = :crypto.strong_rand_bytes(4)
 
@@ -69,5 +115,10 @@ defmodule Partpicker.TCG do
     trade_request
     |> TradeRequest.reject()
     |> Repo.update()
+  end
+
+  def get_card(user, id) do
+    Partpicker.Repo.get_by!(Partpicker.TCG.VirtualCard, user_id: user.id, id: id)
+    |> Partpicker.Repo.preload([:printing_plate])
   end
 end

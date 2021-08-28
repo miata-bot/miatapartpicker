@@ -10,13 +10,23 @@ use Mix.Config
 config :partpicker,
   ecto_repos: [Partpicker.Repo]
 
+dispatch_config = [
+  _: [
+    {"/api/gateway", PartpickerWeb.Gateway, []},
+    {:_, Phoenix.Endpoint.Cowboy2Handler, {PartpickerWeb.Endpoint, []}}
+  ]
+]
+
 # Configures the endpoint
 config :partpicker, PartpickerWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "x3wRvqMtQDBXFi7gPktFmxJY85ert441I1cL/lMIrJTsrvLhWXWRmxB1iH6fPJMD",
   render_errors: [view: PartpickerWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Partpicker.PubSub,
-  live_view: [signing_salt: "0f1mUI2o"]
+  live_view: [signing_salt: "0f1mUI2o"],
+  http: [dispatch: dispatch_config]
+
+# https: [dispatch: dispatch_config]
 
 # Configures Elixir's Logger
 config :logger, :console,
