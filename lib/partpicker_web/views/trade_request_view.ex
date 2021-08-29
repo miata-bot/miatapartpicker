@@ -4,11 +4,11 @@ defmodule PartpickerWeb.TradeRequestView do
   def render("show.json", %{trade_request: trade_request}) do
     %{
       offer: %{
-        uuid: trade_request.offer.uuid,
+        uuid: Base.encode16(trade_request.offer.uuid, case: :upper),
         asset_url: asset_url(trade_request.offer)
       },
       trade: %{
-        uuid: trade_request.trade.uuid,
+        uuid: Base.encode16(trade_request.trade.uuid, case: :upper),
         asset_url: asset_url(trade_request.trade)
       },
       sender: trade_request.sender.discord_user_id,
