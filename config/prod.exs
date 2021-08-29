@@ -36,12 +36,20 @@ discord_client_secret =
     environment variable DISCORD_CLIENT_SECRET is missing.
     """
 
+dispatch_config = [
+  _: [
+    {"/api/gateway", PartpickerWeb.Gateway, []},
+    {:_, Phoenix.Endpoint.Cowboy2Handler, {PartpickerWeb.Endpoint, []}}
+  ]
+]
+
 config :partpicker, PartpickerWeb.Endpoint,
   url: [scheme: "https", host: "miatapartpicker.gay", port: 443],
   http: [
     :inet6,
     port: String.to_integer(System.get_env("PORT") || 4000),
-    transport_options: [socket_opts: [:inet6]]
+    transport_options: [socket_opts: [:inet6]],
+    dispatch: dispatch_config
   ],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: secret_key_base,

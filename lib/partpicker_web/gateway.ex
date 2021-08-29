@@ -26,8 +26,7 @@ defmodule PartpickerWeb.Gateway do
 
   @impl :cowboy_websocket
   def websocket_info(%Broadcast{event: "CREATE_TRADE_REQUEST", payload: payload}, state) do
-    message = {:CREATE_TRADE_REQUEST, payload} |> :erlang.term_to_binary()
-    {:reply, {:text, message}, state}
+    {:reply, {:text, Jason.encode!(["CREATE_TRADE_REQUEST", payload])}, state}
   end
 
   @impl :cowboy_websocket

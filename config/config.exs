@@ -26,8 +26,6 @@ config :partpicker, PartpickerWeb.Endpoint,
   live_view: [signing_salt: "0f1mUI2o"],
   http: [dispatch: dispatch_config]
 
-# https: [dispatch: dispatch_config]
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
