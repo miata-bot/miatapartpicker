@@ -14,12 +14,55 @@ import "../css/card.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
+import Alpine from 'alpinejs'
+import Clipboard from "@ryangjchandler/alpine-clipboard"
 import { Socket } from "phoenix"
 import topbar from "topbar"
 import { LiveSocket } from "phoenix_live_view"
 
+Alpine.plugin(Clipboard)
+window.Alpine = Alpine
+window.Alpine.start()
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, { params: { _csrf_token: csrfToken } })
+let Hooks = {}
+Hooks.PushEvent = {
+  mounted() {
+    window.pushEventHook = this
+  }
+}
+Hooks.ClipboardHook = {
+  mounted() {
+    window.clipboardHook = this
+  },
+  clipboard() {
+    console.dir(document.getElementById("token").innerHTML);
+    var copyText = document.getElementById("token")
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+
+    /* Alert the copied text */
+    alert("Copied the text: " + copyText.value);
+  }
+}
+let liveSocket = new LiveSocket('/live', Socket, {
+  dom: {
+    onBeforeElUpdated(from, to){
+      if(from._x_dataStack){ 
+        window.Alpine.clone(from, to); 
+      }
+    }
+  },
+  params: {
+    _csrf_token: csrfToken
+  },
+  hooks: Hooks
+})
 
 // Show progress bar on live navigation and form submits
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })
