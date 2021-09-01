@@ -15,6 +15,8 @@ defmodule Partpicker.Application do
       PartpickerWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Partpicker.PubSub},
+      # Start the RandomCardGenerator
+      {Partpicker.TCG.RandomCardGenerator, :partpicker_random_cards},
       # Start the Endpoint (http/https)
       PartpickerWeb.Endpoint
       # Start a worker by calling: Partpicker.Worker.start_link(arg)

@@ -1,5 +1,6 @@
 defmodule Partpicker.TCG do
   alias Ecto.Multi
+  import Ecto.Query
 
   alias Partpicker.Repo
 
@@ -72,6 +73,25 @@ defmodule Partpicker.TCG do
     |> Repo.insert()
   end
 
+  def new_virtual_card(%PrintingPlate{} = plate) do
+    uuid = :crypto.strong_rand_bytes(4)
+
+    %VirtualCard{
+      printing_plate_id: plate.id,
+      printing_plate: plate,
+      uuid: uuid
+    }
+  end
+
+  def give_virtual_card(%VirtualCard{} = card, %User{} = owner) do
+    %VirtualCard{
+      card
+      | user: owner,
+        user_id: owner.id
+    }
+    |> Repo.insert()
+  end
+
   def initiate_trade(
         %VirtualCard{user: %User{} = owner} = offer,
         %VirtualCard{user: %User{} = receiver} = trade
@@ -120,5 +140,9 @@ defmodule Partpicker.TCG do
   def get_card(user, id) do
     Partpicker.Repo.get_by!(Partpicker.TCG.VirtualCard, user_id: user.id, id: id)
     |> Partpicker.Repo.preload([:printing_plate])
+  end
+
+  def random_plate do
+    Repo.one(from plate in PrintingPlate, order_by: fragment("RANDOM()"), limit: 1)
   end
 end

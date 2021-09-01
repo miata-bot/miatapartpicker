@@ -30,6 +30,9 @@ defmodule PartpickerWeb.Router do
         post "/banner", BuildController, :banner
       end
     end
+
+    get "/cards/generate_random_offer", CardController, :generate_random_offer
+    post "/cards/claim_random_offer", CardController, :claim_random_offer
   end
 
   ## Authentication routes
