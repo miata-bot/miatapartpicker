@@ -41,12 +41,12 @@ defmodule Partpicker.TCG.RandomCardGenerator do
     {:reply, random_card, state}
   end
 
-  def handle_call({:claim, uuid, user}, state) do
+  def handle_call({:claim, uuid, _user}, _, state) do
     case :ets.lookup(state.table, uuid) do
       [{_uuid, timer, card}] ->
         :ets.delete(state.table, uuid)
         _ = Process.cancel_timer(timer)
-        {:reply, TCG.give_virtual_card(card, user), state}
+        {:reply, {:ok, card}, state}
 
       [] ->
         {:reply, {:error, :not_found}, state}
