@@ -55,8 +55,21 @@ defmodule Partpicker.TCG.RandomCardGenerator do
 
   @impl GenServer
   def handle_info({:expire, uuid}, state) do
+    case :ets.lookup(state.table, uuid) do
+      [{_uuid, _timer, card}] ->
+        Logger.info("Card expired: #{inspect(card)}")
+        :ets.delete(state.table, uuid)
+        data = PartpickerWeb.CardView.render("show.json", %{card: card})
+        @endpoint.broadcast!("tcg", "RANDOM_CARD_EXPIRE", data)
+
+        {:noreply, state}
+
+      [] ->
+        Logger.error("Card expired but wasn't in cache?")
+        {:reply, {:error, :not_found}, state}
+    end
+
     :ets.delete(state.table, uuid)
-    @endpoint.broadcast!("tcg", "RANDOM_CARD_EXPIRE", %{id: uuid})
     {:noreply, state}
   end
 end
