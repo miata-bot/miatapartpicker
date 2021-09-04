@@ -7,7 +7,7 @@ defmodule Partpicker.TCG.RandomCardGenerator do
 
   @table_name :partpicker_random_cards
   @endpoint PartpickerWeb.Endpoint
-  @expire_timeout_ms 30_000
+  @expire_timeout_ms 60000
   alias Partpicker.TCG
 
   def generate(generator \\ __MODULE__) do
