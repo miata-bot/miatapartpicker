@@ -17,12 +17,18 @@ defmodule PartpickerWeb.Gateway do
   def websocket_init(state) do
     Logger.info("New Gateway connection")
     @endpoint.subscribe("tcg")
+    send(self(), :send_ping)
     {:ok, state}
   end
 
   @impl :cowboy_websocket
   def websocket_handle({:text, message}, state) do
     {:reply, {:text, message}, state}
+  end
+
+  def websocket_handle(:pong, state) do
+    Process.send_after(self(), :send_ping, 5000)
+    {:ok, state}
   end
 
   @impl :cowboy_websocket
@@ -32,6 +38,10 @@ defmodule PartpickerWeb.Gateway do
 
   def websocket_info(%Broadcast{event: "RANDOM_CARD_EXPIRE", payload: payload}, state) do
     {:reply, {:text, Jason.encode!(["RANDOM_CARD_EXPIRE", payload])}, state}
+  end
+
+  def websocket_info(:send_ping, state) do
+    {:reply, :ping, state}
   end
 
   @impl :cowboy_websocket
