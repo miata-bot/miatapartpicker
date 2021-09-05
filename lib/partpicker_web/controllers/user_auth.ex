@@ -12,7 +12,7 @@ defmodule PartpickerWeb.UserAuth do
   @remember_me_cookie "_partpicker_web_user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
 
-  def check_api_token(conn, _opts) do
+  def check_api_token(%Plug.Conn{} = conn, _opts) do
     case get_req_header(conn, "authorization") do
       [] ->
         conn
@@ -30,6 +30,30 @@ defmodule PartpickerWeb.UserAuth do
             conn
             |> assign(:api_token, token)
         end
+    end
+  end
+
+  def check_api_token(%{headers: headers}, _opts) do
+    authorization_header =
+      Enum.find(headers, fn
+        {"authorization", _} -> true
+        {_, _} -> false
+      end)
+
+    case authorization_header do
+      {"authorization", "Bearer " <> token} ->
+        {:ok, q} = Partpicker.Accounts.APIToken.verify_api_token_query(token)
+
+        case Partpicker.Repo.one(q) do
+          nil ->
+            {:error, "{\"error\": \"not authorized\"}"}
+
+          token ->
+            {:ok, token}
+        end
+
+      _ ->
+        {:error, "{\"error\": \"not authorized\"}"}
     end
   end
 

@@ -6,11 +6,19 @@ defmodule PartpickerWeb.Gateway do
   require Logger
   @behaviour :cowboy_websocket
   @endpoint PartpickerWeb.Endpoint
+  alias PartpickerWeb.UserAuth
   alias Phoenix.Socket.Broadcast
 
   @impl :cowboy_websocket
-  def init(req, _opts) do
-    {:cowboy_websocket, req, %{}, %{idle_timeout: :infinity}}
+  def init(req, opts) do
+    case UserAuth.check_api_token(req, opts) do
+      {:ok, token} ->
+        {:cowboy_websocket, req, %{token: token}, %{idle_timeout: :infinity}}
+
+      {:error, reason} ->
+        :cowboy_req.reply(401, %{}, reason, req)
+        {:ok, req, %{token: nil}}
+    end
   end
 
   @impl :cowboy_websocket
