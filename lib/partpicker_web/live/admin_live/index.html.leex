@@ -40,7 +40,7 @@
           <tr class="border-b border-gray-200 hover:bg-gray-300">
             <td class="text-left pl-2"> <%= user.id %> </td>
             <td class="text-center">
-              <%= if user.discord_oauth_info, do: user.discord_oauth_info.username %>
+              <%= if user.username, do: user.username %>
             </td>
             <td class="text-center"> <%= user.discord_user_id %> </td>
             <td class="text-center"> <%= Enum.join(user.roles, ", ") %> </td>

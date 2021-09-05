@@ -7,6 +7,18 @@ defmodule Partpicker.Accounts do
   alias Partpicker.Repo
   alias Partpicker.Accounts.{User, UserToken}
 
+  def search_users(search_phrase) do
+    start_character = String.slice(search_phrase, 0..1)
+
+    from(
+      u in User,
+      where: ilike(u.username, ^"#{start_character}%"),
+      where: fragment("SIMILARITY(?, ?) > 0", u.username, ^search_phrase),
+      order_by: fragment("LEVENSHTEIN(?, ?)", u.username, ^search_phrase)
+    )
+    |> Repo.all()
+  end
+
   ## Database getters
 
   def list_users do
@@ -53,32 +65,14 @@ defmodule Partpicker.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  ## User registration
-
-  @doc """
-  Registers a user.
-
-  ## Examples
-
-      iex> register_user(%{field: value})
-      {:ok, %User{}}
-
-      iex> register_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def register_user(attrs) do
-    %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
-  end
-
   def oauth_discord_register_user(%{"id" => discord_user_id, "email" => email} = me) do
     %User{}
     |> User.oauth_registration_changeset(%{
       discord_user_id: discord_user_id,
       email: email,
-      discord_oauth_info: me
+      username: me["username"],
+      avatar: me["avatar"],
+      discriminator: me["discriminator"]
     })
     |> Repo.insert()
   end
@@ -91,24 +85,11 @@ defmodule Partpicker.Accounts do
 
   def update_discord_oauth_info(user, me) do
     user
-    |> User.oauth_registration_changeset(%{discord_oauth_info: me})
+    |> User.oauth_registration_changeset(me)
     |> Repo.update()
   end
 
   ## Settings
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for changing the user email.
-
-  ## Examples
-
-      iex> change_user_email(user)
-      %Ecto.Changeset{data: %User{}}
-
-  """
-  def change_user_email(user, attrs \\ %{}) do
-    User.email_changeset(user, attrs)
-  end
 
   def change_settings(user, attrs \\ %{}) do
     User.settings_changeset(user, attrs)
@@ -177,5 +158,15 @@ defmodule Partpicker.Accounts do
     user
     |> change_user(attrs)
     |> Repo.update()
+  end
+
+  def migrate do
+    {:ok, %{rows: rows}} = Repo.query("SELECT id,discord_oauth_info from users")
+
+    Enum.map(rows, fn [id, oauth_info] ->
+      get_user!(id)
+      |> User.oauth_registration_changeset(oauth_info || %{})
+      |> Repo.update!()
+    end)
   end
 end

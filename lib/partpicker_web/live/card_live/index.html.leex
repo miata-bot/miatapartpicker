@@ -24,7 +24,7 @@
     </form>
 
     <div class="flex flex-row">
-      <%= for %{id: id, discord_user_id: discord_user_id, discord_oauth_info: %{avatar: avatar, username: username}} <- Enum.take(@users, 4) do %>
+      <%= for %{id: id, discord_user_id: discord_user_id, avatar: avatar, username: username} <- Enum.take(@users, 4) do %>
         <button phx-click="user_select" phx-value-user_id="<%= id %>" class="p-2">
           <%= username %>
           <img

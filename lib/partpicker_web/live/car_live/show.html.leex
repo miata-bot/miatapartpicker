@@ -32,9 +32,9 @@
     </div>
   </div>
 
-  <%= if info = @build.user.discord_oauth_info do %>
+  <%= if @build.user.username do %>
     <span class="font-bold"> Owner: </span>
-    @<%= info.username %>#<%= info.discriminator %>
+    @<%= @build.user.username %>#<%= @build.user.descriminator %>
   <% end %>
 
   <ul>

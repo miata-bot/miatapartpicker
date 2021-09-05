@@ -18,8 +18,8 @@
     <% end %>
 
     <%= for %{id: trade_request_id, offer: offer, trade: trade, status: status,
-              sender: %{discord_user_id: s_discord_user_id, discord_oauth_info: %{avatar: s_avatar, username: s_username}},
-              receiver: %{discord_user_id: r_discord_user_id, discord_oauth_info: %{avatar: r_avatar, username: r_username}},
+              sender: %{discord_user_id: s_discord_user_id, avatar: s_avatar, username: s_username},
+              receiver: %{discord_user_id: r_discord_user_id, avatar: r_avatar, username: r_username},
       } <- @trade_requests do %>
       <div class="bg-gray-900 flex justify-between p-2 rounded shadow">
         <span class="text-xl p-2 text-white"> <%= status %> </span>
