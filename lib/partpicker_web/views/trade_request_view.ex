@@ -3,14 +3,8 @@ defmodule PartpickerWeb.TradeRequestView do
 
   def render("show.json", %{trade_request: trade_request}) do
     %{
-      offer: %{
-        uuid: Base.encode16(trade_request.offer.uuid, case: :upper),
-        asset_url: asset_url(trade_request.offer)
-      },
-      trade: %{
-        uuid: Base.encode16(trade_request.trade.uuid, case: :upper),
-        asset_url: asset_url(trade_request.trade)
-      },
+      offer: PartpickerWeb.CardView.render("show.json", %{card: trade_request.offer}),
+      trade: PartpickerWeb.CardView.render("show.json", %{card: trade_request.trade}),
       sender: trade_request.sender.discord_user_id,
       receiver: trade_request.receiver.discord_user_id,
       status: trade_request.status,
