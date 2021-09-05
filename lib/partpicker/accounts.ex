@@ -12,6 +12,7 @@ defmodule Partpicker.Accounts do
 
     from(
       u in User,
+      where: not is_nil(u.username),
       where: ilike(u.username, ^"#{start_character}%"),
       where: fragment("SIMILARITY(?, ?) > 0", u.username, ^search_phrase),
       order_by: fragment("LEVENSHTEIN(?, ?)", u.username, ^search_phrase)
@@ -23,22 +24,6 @@ defmodule Partpicker.Accounts do
 
   def list_users do
     Repo.all(User)
-  end
-
-  @doc """
-  Gets a user by email.
-
-  ## Examples
-
-      iex> get_user_by_email("foo@example.com")
-      %User{}
-
-      iex> get_user_by_email("unknown@example.com")
-      nil
-
-  """
-  def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
   end
 
   def get_user_by_discord_id(discord_id) do

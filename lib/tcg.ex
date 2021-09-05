@@ -119,11 +119,14 @@ defmodule Partpicker.TCG do
           status: :pending
         } = trade_request
       ) do
+    delete_offers_query = from(tr in TradeRequest, where: tr.offer_id == ^trade.id)
+
     multi =
       Multi.new()
       |> Multi.update(:trade_request, TradeRequest.accept(trade_request))
       |> Multi.update(:offer, VirtualCard.exchange(offer, offer_new_owner))
       |> Multi.update(:trade, VirtualCard.exchange(trade, offer_old_owner))
+      |> Multi.delete_all(:delete_offers, delete_offers_query)
 
     case Repo.transaction(multi) do
       {:ok, %{trade_request: trade_request}} -> {:ok, trade_request}

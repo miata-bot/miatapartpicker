@@ -92,15 +92,7 @@ defmodule PartpickerWeb.CardLive.Index do
   end
 
   def handle_event("user_search", %{"user_search" => %{"user_search" => input}}, socket) do
-    users =
-      Enum.sort(socket.assigns.users, fn
-        %{username: a}, %{username: b} ->
-          String.jaro_distance(to_string(a), to_string(input)) >=
-            String.jaro_distance(to_string(b), to_string(input))
-
-        _, _ ->
-          false
-      end)
+    users = Partpicker.Accounts.search_users(input)
 
     {:noreply,
      socket
