@@ -60,8 +60,10 @@ Ecto.Changeset.change(user2, %{prefered_unit: :miles})
 
 {token, data} = Partpicker.Accounts.APIToken.build_api_token()
 _ = Partpicker.Repo.insert!(data)
-
 IO.inspect(token, label: "TOKEN")
+
+for path <- Path.wildcard("assets/static/images/plates/*"),
+    do: %Partpicker.TCG.PrintingPlate{filename: Path.basename(path)} |> Repo.insert!()
 
 # plate1 = %Partpicker.TCG.PrintingPlate{filename: "cone-tcg.png"} |> Repo.insert!()
 # plate2 = %Partpicker.TCG.PrintingPlate{filename: "haz-tcg.png"} |> Repo.insert!()

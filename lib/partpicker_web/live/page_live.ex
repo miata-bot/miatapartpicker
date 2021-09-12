@@ -1,6 +1,7 @@
 defmodule PartpickerWeb.PageLive do
   # use PartpickerWeb, :live_view
   use Surface.LiveView
+  require Logger
 
   data current_user, :map
 
@@ -8,7 +9,11 @@ defmodule PartpickerWeb.PageLive do
   def mount(_, %{"user_token" => token}, socket) do
     case Partpicker.Accounts.get_user_by_session_token(token) do
       nil ->
-        {:error, socket}
+        Logger.error("Unknown token")
+
+        {:ok,
+         socket
+         |> redirect(external: PartpickerWeb.OAuth.Discord.authorization_url())}
 
       user ->
         {:ok,
@@ -18,6 +23,8 @@ defmodule PartpickerWeb.PageLive do
   end
 
   def mount(_params, _, socket) do
-    {:ok, socket}
+    {:ok,
+     socket
+     |> redirect(external: PartpickerWeb.OAuth.Discord.authorization_url())}
   end
 end

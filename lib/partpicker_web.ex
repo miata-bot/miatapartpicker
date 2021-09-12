@@ -59,6 +59,14 @@ defmodule PartpickerWeb do
     end
   end
 
+  def surface_live_view do
+    quote do
+      use Surface.LiveView
+
+      unquote(surface_view_helpers())
+    end
+  end
+
   def router do
     quote do
       use Phoenix.Router
@@ -87,6 +95,31 @@ defmodule PartpickerWeb do
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
+
+      import PartpickerWeb.ErrorHelpers
+      import PartpickerWeb.Gettext
+      alias PartpickerWeb.Router.Helpers, as: Routes
+      import Enum, only: [count: 1]
+      @endpoint PartpickerWeb.Endpoint
+    end
+  end
+
+  defp surface_view_helpers do
+    quote do
+      alias Surface.Components.Form, warn: false
+
+      alias Surface.Components.Form.{
+              Field,
+              Label,
+              EmailInput,
+              PasswordInput,
+              ErrorTag,
+              Select,
+              NumberInput,
+              Label,
+              TextInput
+            },
+            warn: false
 
       import PartpickerWeb.ErrorHelpers
       import PartpickerWeb.Gettext
