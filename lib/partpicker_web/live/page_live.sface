@@ -1,3 +1,4 @@
+<PartpickerWeb.NavComponent current_user={@current_user} />
 <div class="m-4 p-4 rounded bg-gray-600">
   This page will have some useful info and stats about your build(s)
 </div>

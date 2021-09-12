@@ -66,7 +66,9 @@ defmodule Partpicker.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:tesla, "~> 1.4"},
-      {:timex, "~> 3.6"}
+      {:timex, "~> 3.6"},
+      {:surface, "~> 0.5.0"},
+      {:surface_formatter, "~> 0.5.4"}
     ]
   end
 

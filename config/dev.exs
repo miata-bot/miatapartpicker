@@ -61,7 +61,8 @@ config :partpicker, PartpickerWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/partpicker_web/(live|views)/.*(ex)$",
-      ~r"lib/partpicker_web/templates/.*(eex)$"
+      ~r"lib/partpicker_web/templates/.*(eex)$",
+      ~r"lib/partpicker_web/live/.*(sface)$"
     ]
   ]
 
