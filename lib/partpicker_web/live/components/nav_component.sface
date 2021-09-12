@@ -1,41 +1,35 @@
 <nav class="flex text-white h-12">
   <div class="bg-gray-875 w-56 flex-none flex items-center justify-between px-3 py-2 border-b border-gray-900" style="border-top-left-radius: 5px;">
-    <div class="text-sm">Miata Part Picker</div>
+    <Surface.Components.LiveRedirect to="/">
+      <div class="text-sm">Miata Part Picker</div>
+    </Surface.Components.LiveRedirect>
   </div>
 
   <div class="flex-1 bg-gray-775 flex items-center justify-between border-b border-gray-900 px-4">
-
-    <Surface.Components.Link
-      label="Login with Discord"
-      to={ PartpickerWeb.OAuth.Discord.authorization_url() }
-      :if={ is_nil(@current_user) }
-      class="block text-sm mx-1 px-1 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-pink-500 hover:bg-white lg:mt-0"
-    />
-
     <div class="flex items-center">
-      <div class="text-gray-500 text-2xl">#</div>
-      <div class="ml-2 text-sm text-white">general</div>
-      <a href="#"><div class="border-l pl-3 ml-3 border-gray-600 text-xs text-gray-400">general discussion of discord ui remade in tailwindcss</div></a>
+      <div class="ml-2 text-sm text-white">Current Page Title</div>
+      <a href="#"><div class="border-l pl-3 ml-3 border-gray-600 text-xs text-gray-400">some useful information about the current page</div></a>
     </div>
 
     <div class="flex items-center">
       <div class="bg-gray-925 py-2 px-2 flex items-center justify-between">
         <div class="flex items-center">
-          <a href="#"><img 
-            src={ "https://cdn.discordapp.com/avatars/#{@current_user.discord_user_id}/#{@current_user.avatar}.webp" }
-            alt="avatar" class="w-8 h-8 rounded-full"></a>
+          <Surface.Components.LiveRedirect to={Routes.user_settings_path(@socket, :edit)}>
+            <img 
+              src={ "https://cdn.discordapp.com/avatars/#{@current_user.discord_user_id}/#{@current_user.avatar}.webp" }
+              alt="avatar" class="w-8 h-8 rounded-full">
+          </Surface.Components.LiveRedirect>
           <div class="text-xs ml-2 flex items-center">
             <div class="text-white">{ @current_user.username }</div>
             <div class="text-gray-500 text-xxs">#{ @current_user.discriminator }</div>
           </div>
         </div>
         <div class="flex items-center text-gray-300">
-          <a href="#" class="hover:text-white">
+          <a href={Routes.user_settings_path(@socket, :edit)} class="hover:text-white">
             <svg fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui w-5 h-5" d="M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z"></path></svg>
           </a>
         </div>
       </div>
     </div>
-
   </div>
 </nav>
