@@ -62,7 +62,13 @@ defmodule PartpickerWeb do
   def surface_live_view do
     quote do
       use Surface.LiveView
+      unquote(surface_view_helpers())
+    end
+  end
 
+  def surface_component do
+    quote do
+      use Surface.Component
       unquote(surface_view_helpers())
     end
   end
@@ -106,7 +112,7 @@ defmodule PartpickerWeb do
 
   defp surface_view_helpers do
     quote do
-      alias Surface.Components.Form, warn: false
+      alias Surface.Components.{Form, Link, LivePatch, LiveRedirect}, warn: false
 
       alias Surface.Components.Form.{
               Field,
@@ -126,6 +132,7 @@ defmodule PartpickerWeb do
       alias PartpickerWeb.Router.Helpers, as: Routes
       import Enum, only: [count: 1]
       @endpoint PartpickerWeb.Endpoint
+      alias PartpickerWeb.ActiveLink
     end
   end
 
