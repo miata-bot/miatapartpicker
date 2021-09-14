@@ -1,6 +1,5 @@
 defmodule PartpickerWeb.NavComponent do
-  use Surface.Component
-  alias PartpickerWeb.Router.Helpers, as: Routes
+  use PartpickerWeb, :surface_component
 
   prop current_user, :map
 end
