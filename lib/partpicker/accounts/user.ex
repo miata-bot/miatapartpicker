@@ -3,6 +3,7 @@ defmodule Partpicker.Accounts.User do
   import Ecto.Changeset
 
   @derive {Inspect, except: [:password, :hashed_password]}
+
   schema "users" do
     field :email, :string
     field :discord_user_id, Snowflake
@@ -15,9 +16,13 @@ defmodule Partpicker.Accounts.User do
 
     field :roles, {:array, Ecto.Enum}, values: [:admin, :library], default: []
 
+    # discord fields
     field :username, :string
     field :avatar, :string
     field :discriminator, :string
+
+    # steam fields
+    field :steam_id, :string
 
     has_many :builds, Partpicker.Builds.Build
     has_one :featured_build, Partpicker.Builds.FeaturedBuild
@@ -66,5 +71,16 @@ defmodule Partpicker.Accounts.User do
     |> cast(attrs, [:email, :discord_user_id, :username, :avatar, :discriminator])
     |> validate_required([:discord_user_id])
     |> unique_constraint(:discord_user_id)
+  end
+
+  def connections_changeset(user, connections) do
+    attrs =
+      Enum.find_value(connections, fn
+        %{"type" => "steam", "id" => steam_id} -> %{"steam_id" => steam_id}
+        _ -> false
+      end)
+
+    user
+    |> cast(attrs || %{}, [:steam_id])
   end
 end

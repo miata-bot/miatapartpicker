@@ -50,14 +50,21 @@ defmodule Partpicker.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  def oauth_discord_register_user(%{"id" => discord_user_id, "email" => email} = me) do
+  def oauth_discord_register_user(%{"id" => discord_user_id, "email" => email} = me, connections) do
+    steam_info =
+      Enum.find(connections, fn
+        %{"type" => "stream"} -> true
+        _ -> false
+      end)
+
     %User{}
     |> User.oauth_registration_changeset(%{
       discord_user_id: discord_user_id,
       email: email,
       username: me["username"],
       avatar: me["avatar"],
-      discriminator: me["discriminator"]
+      discriminator: me["discriminator"],
+      steam_id: steam_info["id"]
     })
     |> Repo.insert()
   end
@@ -68,9 +75,10 @@ defmodule Partpicker.Accounts do
     |> Repo.insert()
   end
 
-  def update_discord_oauth_info(user, me) do
+  def update_discord_oauth_info(user, me, connections) do
     user
     |> User.oauth_registration_changeset(me)
+    |> User.connections_changeset(connections)
     |> Repo.update()
   end
 

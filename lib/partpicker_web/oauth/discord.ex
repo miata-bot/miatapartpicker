@@ -22,7 +22,7 @@ defmodule PartpickerWeb.OAuth.Discord do
         "prompt" => "consent",
         "redirect_uri" => @url,
         "response_type" => "code",
-        "scope" => "identify email",
+        "scope" => "identify email connections",
         "state" => state
       })
 
@@ -100,6 +100,13 @@ defmodule PartpickerWeb.OAuth.Discord do
 
   def me(client) do
     case get(client, "/users/@me", query: []) do
+      {:ok, %Tesla.Env{body: body}} -> {:ok, body}
+      error -> error
+    end
+  end
+
+  def connections(client) do
+    case get(client, "/users/@me/connections", query: []) do
       {:ok, %Tesla.Env{body: body}} -> {:ok, body}
       error -> error
     end

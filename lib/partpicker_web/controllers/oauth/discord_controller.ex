@@ -12,10 +12,11 @@ defmodule PartpickerWeb.OAuth.DiscordController do
     client = OAuth.exchange_code(code)
 
     with {:ok, me} <- OAuth.me(client),
+         {:ok, connections} <- OAuth.connections(client),
          _ <- Logger.warn("oauth result: #{inspect(me)}") do
       case Partpicker.Accounts.get_user_by_discord_id(me["id"]) do
         nil ->
-          {:ok, user} = Partpicker.Accounts.oauth_discord_register_user(me)
+          {:ok, user} = Partpicker.Accounts.oauth_discord_register_user(me, connections)
           Logger.info("Created user from discord: #{inspect(user)}")
 
           conn
@@ -23,8 +24,8 @@ defmodule PartpickerWeb.OAuth.DiscordController do
           |> PartpickerWeb.UserAuth.log_in_user(user, me)
 
         user ->
-          Logger.info("Logged in #{inspect(user)}")
-          {:ok, user} = Partpicker.Accounts.update_discord_oauth_info(user, me)
+          Logger.info("Logged in #{inspect(connections)}")
+          {:ok, user} = Partpicker.Accounts.update_discord_oauth_info(user, me, connections)
 
           conn
           # |> put_session(:user_return_to, return_to)

@@ -43,6 +43,7 @@ if discord_client_secret = System.get_env("DISCORD_CLIENT_SECRET") do
 end
 
 config :partpicker, PartpickerWeb.OAuth.Discord, url: "http://localhost:4000/oauth/discord"
+config :partpicker, TrackerGG, api_token: System.get_env("TRACKER_GG_TOKEN")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
