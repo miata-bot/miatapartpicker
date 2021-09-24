@@ -47,7 +47,6 @@ defmodule Partpicker.Accounts.User do
       :prefered_unit,
       :email,
       :discord_user_id,
-      :prefered_unit,
       :hand_size,
       :foot_size,
       :preferred_timezone
