@@ -11,6 +11,7 @@ defmodule Partpicker.Accounts.User do
     field :prefered_unit, Ecto.Enum, values: [:km, :miles], default: :miles
     field :hand_size, :float
     field :foot_size, :float
+    field :preferred_timezone, :string
     has_many :cards, Partpicker.TCG.VirtualCard
     has_many :trade_requests, Partpicker.TCG.TradeRequest, foreign_key: :sender_id
 
@@ -55,7 +56,7 @@ defmodule Partpicker.Accounts.User do
 
   def settings_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size, :foot_size])
+    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size, :foot_size, :preferred_timezone])
     |> validate_required([])
   end
 
