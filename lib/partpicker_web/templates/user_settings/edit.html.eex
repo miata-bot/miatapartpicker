@@ -44,7 +44,7 @@
         <div class="w-full px-3">
           <%= label f, :preferred_timezone, class: "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" %>
           <%= error_tag f, :preferred_timezone, class: "mr-2 mb-1 rounded font-lg text-red-100" %>
-          <%= select f, :preferred_timezone, Tzdata.zone_lists_grouped(), class: "appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500", prompt: [key: "No preference", value: "None"] %>
+          <%= select f, :preferred_timezone, Tzdata.zone_lists_grouped(), class: "appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500", prompt: [key: "No preference", value: ""] %>
         </div>
       </div>
       <%= submit "Save", class: "bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-l-0 border-blue-500 rounded-l-lg rounded-r-lg px-3 py-2 mx-2 outline-none focus:shadow-outline" %>
