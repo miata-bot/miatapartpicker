@@ -49,14 +49,23 @@ defmodule Partpicker.Accounts.User do
       :discord_user_id,
       :prefered_unit,
       :hand_size,
-      :foot_size
+      :foot_size,
+      :preferred_timezone
     ])
+    |> validate_timezone()
     |> validate_required([:discord_user_id])
   end
 
   def settings_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle, :prefered_unit, :hand_size, :foot_size, :preferred_timezone])
+    |> cast(attrs, [
+      :instagram_handle,
+      :prefered_unit,
+      :hand_size,
+      :foot_size,
+      :preferred_timezone
+    ])
+    |> validate_timezone()
     |> validate_required([])
   end
 
@@ -83,5 +92,17 @@ defmodule Partpicker.Accounts.User do
 
     user
     |> cast(attrs || %{}, [:steam_id])
+  end
+
+  def validate_timezone(changeset) do
+    if tz = get_change(changeset, :preferred_timezone) do
+      if tz in Tzdata.zone_list() do
+        changeset
+      else
+        add_error(changeset, :preferred_timezone, "Not a known timezone sorry")
+      end
+    else
+      changeset
+    end
   end
 end
