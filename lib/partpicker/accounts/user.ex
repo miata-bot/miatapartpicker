@@ -37,7 +37,7 @@ defmodule Partpicker.Accounts.User do
 
   def api_changeset(user, attrs) do
     user
-    |> cast(attrs, [:instagram_handle, :prefered_unit])
+    |> cast(attrs, [:instagram_handle, :prefered_unit, :preferred_timezone])
   end
 
   def api_register_changeset(user, attrs) do
