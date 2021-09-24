@@ -6,6 +6,7 @@ defmodule PartpickerWeb.UserView do
       discord_user_id: user.discord_user_id,
       instagram_handle: user.instagram_handle,
       prefered_unit: user.prefered_unit,
+      preferred_timezone: user.preferred_timezone,
       hand_size: user.hand_size,
       foot_size: user.foot_size,
       steam_id: user.steam_id,
@@ -24,6 +25,7 @@ defmodule PartpickerWeb.UserView do
       hand_size: user.hand_size,
       foot_size: user.foot_size,
       steam_id: user.steam_id,
+      preferred_timezone: user.preferred_timezone,
       builds: render_many(user.builds, PartpickerWeb.BuildView, "show.json"),
       cards: render_many(user.cards, PartpickerWeb.CardView, "show.json")
     }
