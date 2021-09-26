@@ -3,7 +3,7 @@ defmodule PartpickerWeb.PageLive do
   use Surface.LiveView
   require Logger
 
-  data current_user, :map
+  data current_user, :map, default: %Partpicker.Accounts.User{}
 
   @impl true
   def mount(_, %{"user_token" => token}, socket) do
@@ -23,15 +23,6 @@ defmodule PartpickerWeb.PageLive do
   end
 
   def mount(_params, _, socket) do
-    {:ok,
-     socket
-     |> redirect(external: PartpickerWeb.OAuth.Discord.authorization_url())}
-  end
-
-  @impl true
-  def handle_params(_params, uri, socket) do
-    {:noreply,
-     socket
-     |> assign(:current_path, URI.parse(uri).path)}
+    {:ok, socket}
   end
 end
