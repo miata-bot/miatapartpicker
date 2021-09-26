@@ -7,7 +7,7 @@ defmodule PartpickerWeb.ActiveLink do
 
   def render(assigns) do
     ~F"""
-    <LiveRedirect to={@to} class={"px-2", "py-2", "font-medium", active_class(@current_uri, @to)}>
+    <LiveRedirect to={@to} class={"px-2", "py-2", "font-medium", "text-gray-400"}>
       <#slot />
     </LiveRedirect>
     """

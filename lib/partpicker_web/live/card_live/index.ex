@@ -4,6 +4,8 @@ defmodule PartpickerWeb.CardLive.Index do
 
   @impl true
   def mount(_, %{"user_token" => token}, socket) do
+    socket = Surface.init(socket)
+
     case Partpicker.Accounts.get_user_by_session_token(token) do
       nil ->
         {:error, socket}

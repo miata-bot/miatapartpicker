@@ -1,3 +1,4 @@
+<%= live_component @socket, PartpickerWeb.NavComponent, current_user: @user %>
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, PartpickerWeb.BuildLive.FormComponent,
     id: @build.id || :new,
