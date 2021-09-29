@@ -6,7 +6,25 @@ defmodule Partpicker.Builds do
   import Ecto.Query, warn: false
   alias Partpicker.Repo
 
-  alias Partpicker.Builds.{Build, FeaturedBuild}
+  alias Partpicker.Accounts.User
+  alias Partpicker.Builds.{Build, FeaturedBuild, Photo}
+
+  def random_photo(discord_user_ids) do
+    user_query =
+      from a in User,
+        where: a.discord_user_id in ^discord_user_ids,
+        join: p in Build,
+        on: a.id == p.user_id,
+        select: p.id
+
+    query =
+      from p in Photo,
+        where: p.build_id in subquery(user_query),
+        order_by: fragment("RANDOM()"),
+        limit: 1
+
+    Partpicker.Repo.one!(query)
+  end
 
   @doc """
   Returns the list of builds.
