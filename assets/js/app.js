@@ -31,6 +31,11 @@ Hooks.PushEvent = {
     window.pushEventHook = this
   }
 }
+Hooks.PhotoPicker = {
+  mounted() {
+    console.log("picker init")
+  }
+}
 Hooks.ClipboardHook = {
   mounted() {
     window.clipboardHook = this

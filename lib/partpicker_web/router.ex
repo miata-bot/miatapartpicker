@@ -70,10 +70,12 @@ defmodule PartpickerWeb.Router do
     pipe_through [:browser, :require_authenticated_user, :require_admin_user]
     live_dashboard "/dashboard", metrics: PartpickerWeb.Telemetry
     live "/api_tokens", APITokenLive.Index, :index
+    live "/admin/photo_picker", AdminLive.PhotoPicker, :index
     live "/admin", AdminLive.Index, :index
     live "/admin/:id/edit", AdminLive.Index, :edit
     live "/admin/:id", AdminLive.Show, :show
     live "/admin/:id/show/edit", AdminLive.Show, :edit
+
   end
 
   scope "/", PartpickerWeb do
