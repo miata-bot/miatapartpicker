@@ -15,7 +15,6 @@ defmodule PartpickerWeb.AdminLive.PhotoPicker do
          |> redirect(external: PartpickerWeb.OAuth.Discord.authorization_url())}
 
       user ->
-
         {:ok,
          socket
          |> assign(:current_user, user)}

@@ -8,7 +8,7 @@
 use Mix.Config
 
 config :partpicker,
-  ecto_repos: [Partpicker.Repo]
+  ecto_repos: [Partpicker.Repo, Partpicker.Library.Repo]
 
 dispatch_config = [
   _: [
@@ -49,6 +49,10 @@ end
 
 config :partpicker, PartpickerWeb.OAuth.Discord, url: "http://localhost:4000/oauth/discord"
 config :partpicker, TrackerGG, api_token: System.get_env("TRACKER_GG_TOKEN")
+
+config :partpicker, Partpicker.Library.Repo,
+  priv: "priv/library/",
+  database: "library.db"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

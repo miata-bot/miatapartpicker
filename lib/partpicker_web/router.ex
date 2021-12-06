@@ -56,9 +56,9 @@ defmodule PartpickerWeb.Router do
 
     live "/builds/:id/photos/upload", BuildLive.PhotoUpload, :upload
 
-    live "/connectors/new", ConnectorLive.Index, :new
-    live "/connectors/:id/edit", ConnectorLive.Index, :edit
-    live "/connectors/:id/show/edit", ConnectorLive.Show, :edit
+    live "/library/:chassis/connectors/new", ConnectorLive.Index, :new
+    live "/library/:chassis/connectors/:id/edit", ConnectorLive.Index, :edit
+    live "/library/:chassis/connectors/:id/show/edit", ConnectorLive.Show, :edit
 
     live "/cards", CardLive.Index, :index
     live "/cards/offers", CardLive.Offers, :offers
@@ -75,7 +75,6 @@ defmodule PartpickerWeb.Router do
     live "/admin/:id/edit", AdminLive.Index, :edit
     live "/admin/:id", AdminLive.Show, :show
     live "/admin/:id/show/edit", AdminLive.Show, :edit
-
   end
 
   scope "/", PartpickerWeb do
@@ -87,8 +86,9 @@ defmodule PartpickerWeb.Router do
 
     live "/", PageLive, :index
     get "/oauth/discord", OAuth.DiscordController, :oauth
-    live "/connectors", ConnectorLive.Index, :index
-    get "/connectors/export", ConnectorExportController, :export
-    live "/connectors/:id", ConnectorLive.Show, :show
+    live "/library/:chassis/connectors", ConnectorLive.Index, :index
+    get "/library", LibraryController, :index
+    get "/library/:chassis/connectors/export", ConnectorExportController, :export
+    live "/library/:chassis/connectors/:id", ConnectorLive.Show, :show
   end
 end

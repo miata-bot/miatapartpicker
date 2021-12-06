@@ -20,26 +20,6 @@
       <%= text_input f, :description %>
     </div>
 
-    <div class="m-2">
-      <%= error_tag f, :manufacturer, class: "font-bold" %>
-      <%= label f, :manufacturer, class: "font-bold pr-2" %>
-      <%= text_input f, :manufacturer, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
-    </div>
-
-    <div class="m-2">
-      <%= error_tag f, :pn, class: "font-bold" %>
-      <%= label f, :pn, class: "font-bold pr-2" %>
-      <%= text_input f, :pn, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
-    </div>
-
-    <div class="m-2">
-      <%= label f, :links, class: "font-bold pr-2" %>
-      <%= inputs_for f, :links, fn fp -> %>
-        <%= url_input fp, :url, class: "rounded p-2 focus:ring-2 focus:ring-blue-600" %>
-        <%= error_tag fp, :url, class: "font-bold" %>
-      <% end %>
-    </div>
-
     <%= submit "Save", phx_disable_with: "Saving..." %>
   </form>
 </div>

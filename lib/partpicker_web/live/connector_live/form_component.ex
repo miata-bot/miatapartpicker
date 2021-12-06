@@ -8,13 +8,6 @@ defmodule PartpickerWeb.ConnectorLive.FormComponent do
   def update(%{connector: connector} = assigns, socket) do
     changeset = Library.change_connector(connector)
 
-    changeset =
-      if Ecto.Changeset.get_field(changeset, :links) == [] do
-        Ecto.Changeset.put_embed(changeset, :links, [%Connector.Link{}])
-      else
-        changeset
-      end
-
     {:ok,
      socket
      |> assign(assigns)

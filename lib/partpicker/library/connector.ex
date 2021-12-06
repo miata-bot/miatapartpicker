@@ -1,32 +1,26 @@
 defmodule Partpicker.Library.Connector do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Partpicker.Library.Chassis
+  alias Partpicker.Library.ConnectorPurchaseLink
+  alias Partpicker.Library.ConnectorManufacturerData
 
   schema "connectors" do
-    field :description, :string
-
-    embeds_many :links, Link, on_replace: :delete do
-      field :url, :string
-    end
-
-    field :manufacturer, :string
+    belongs_to :chassis, Chassis
     field :name, :string
-    field :pn, :string
-
+    field :description, :string
+    has_many :connector_purchase_links, ConnectorPurchaseLink
+    has_many :purchase_links, through: [:connector_purchase_links, :purchase_link]
+    has_one :connector_manufacturer, ConnectorManufacturerData
+    has_one :manufacturer_data, through: [:connector_manufacturer, :manufacturer_data]
     timestamps()
   end
 
   @doc false
   def changeset(connector, attrs) do
     connector
-    |> cast(attrs, [:name, :description, :manufacturer, :pn])
-    |> validate_required([:name, :description, :manufacturer, :pn])
-    |> cast_embed(:links, with: &link_changeset/2)
-  end
-
-  def link_changeset(link, attrs \\ %{}) do
-    link
-    |> cast(attrs, [:url])
-    |> validate_required([:url])
+    |> cast(attrs, [:name, :description])
+    |> validate_required([:name, :description])
+    |> unique_constraint([:chassis_id, :name])
   end
 end

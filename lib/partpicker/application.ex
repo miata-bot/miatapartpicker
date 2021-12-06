@@ -11,6 +11,7 @@ defmodule Partpicker.Application do
     children = [
       # Start the Ecto repository
       Partpicker.Repo,
+      Partpicker.Library.Repo,
       # Start the Telemetry supervisor
       PartpickerWeb.Telemetry,
       # Start the PubSub system

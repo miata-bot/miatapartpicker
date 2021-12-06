@@ -5,7 +5,7 @@
     title: @page_title,
     action: @live_action,
     connector: @connector,
-    return_to: Routes.connector_show_path(@socket, :show, @connector) %>
+    return_to: Routes.connector_show_path(@socket, :show, @chassis, @connector) %>
 <% end %>
 
 <div class="lg:p-4 lg:m-4 bg-gray-600 rounded">
@@ -13,12 +13,12 @@
     <%= if @user do %>
       <%= if :library in @user.roles do %>
         <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-r-0 border-blue-500 rounded-l-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
-          <%= live_patch "Edit", to: Routes.connector_show_path(@socket, :edit, @connector) %>
+          <%= live_patch "Edit", to: Routes.connector_show_path(@socket, :edit, @chassis, @connector) %>
         </button>
       <% end %>
     <% end %>
     <button class="bg-gray-800 text-blue-500 hover:bg-blue-500 hover:text-white border border-l-0 border-blue-500 rounded-r-lg px-2 py-2 mx-0 outline-none focus:shadow-outline">
-      <%= live_redirect "Back", to: Routes.connector_index_path(@socket, :index) %>
+      <%= live_redirect "Back", to: Routes.connector_index_path(@socket, :index, @chassis) %>
     </button>
   </div>
 
@@ -37,17 +37,17 @@
 
     <li>
       <strong>Manufacturer:</strong>
-      <%= @connector.manufacturer %>
+      <%= if @connector.manufacturer_data, do: @connector.manufacturer_data.manufacturer %>
     </li>
 
     <li>
       <strong>Pn:</strong>
-      <%= @connector.pn %>
+      <%= if @connector.manufacturer_data, do: @connector.manufacturer_data.part_number %>
     </li>
 
     <li>
       <strong>Link:</strong>
-      <%= for link <- @connector.links do %>
+      <%= for link <- @connector.purchase_links do %>
       <%= link link.url, to: link.url %>
       <% end %>
     </li>

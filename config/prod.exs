@@ -70,3 +70,5 @@ config :partpicker, PartpickerWeb.OAuth.Discord,
   client_secret: discord_client_secret
 
 config :partpicker, Partpicker.Builds.Photo, root_path: "/photos"
+
+config :partpicker, Partpicker.Library.Repo, database: "/library/library.db"

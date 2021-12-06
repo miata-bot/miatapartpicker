@@ -5,23 +5,29 @@ defmodule PartpickerWeb.ConnectorLive.Index do
   alias Partpicker.Library.Connector
 
   @impl true
-  def mount(_, %{"user_token" => token}, socket) do
+  def mount(%{"chassis" => chassis_id}, %{"user_token" => token}, socket) do
     case Partpicker.Accounts.get_user_by_session_token(token) do
       nil ->
         {:error, socket}
 
       user ->
+        chassis = Partpicker.Library.get_chassis(chassis_id)
+
         {:ok,
          socket
+         |> assign(:chassis, chassis)
          |> assign(:connectors, list_connectors())
          |> assign(:user, user)
          |> assign_meta()}
     end
   end
 
-  def mount(_, _, socket) do
+  def mount(%{"chassis" => chassis_id}, _, socket) do
+    chassis = Partpicker.Library.get_chassis(chassis_id)
+
     {:ok,
      socket
+     |> assign(:chassis, chassis)
      |> assign(:connectors, list_connectors())
      |> assign(:user, nil)
      |> assign_meta()}

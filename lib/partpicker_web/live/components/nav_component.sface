@@ -17,7 +17,7 @@
         <LiveRedirect to={Routes.card_index_path(@socket, :index)} class="text-gray-400 px-2 py-2 font-medium">
           Trading Cards
         </LiveRedirect>
-        <LiveRedirect to={Routes.connector_index_path(@socket, :index)} class="text-gray-400 px-2 py-2 font-medium">
+        <LiveRedirect to={Routes.library_path(@socket, :index)} class="text-gray-400 px-2 py-2 font-medium">
           Library
         </LiveRedirect>
       {/if}

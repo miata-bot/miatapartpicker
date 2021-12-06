@@ -48,6 +48,7 @@ defmodule Partpicker.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:cowlib, "~> 2.10", override: true},
       {:ecto_sql, "~> 3.4"},
+      {:ecto_sqlite3, "~> 0.7.2"},
       {:floki, ">= 0.27.0", only: :test},
       {:gettext, "~> 0.11"},
       {:gun, "~> 1.3", override: true},
