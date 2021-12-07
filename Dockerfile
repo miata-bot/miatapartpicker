@@ -1,8 +1,6 @@
 FROM alpine:3.14 AS app_base
 WORKDIR /app
-RUN apk add --no-cache openssl ncurses-libs bash chromium-chromedriver chromium python3 py3-pip
-RUN pip3 install -U selenium
-RUN pip3 install -U erlang-py
+RUN apk add --no-cache libstdc++ openssl ncurses-libs bash
 
 FROM erlang:24.0.3-alpine as build
 ENV ELIXIR_VERSION="v1.12.2-otp-24"
