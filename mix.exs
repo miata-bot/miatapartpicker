@@ -10,7 +10,7 @@ defmodule Partpicker.MixProject do
       elixir: "~> 1.7",
       commit: commit(),
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       releases: [{@app, release()}],
       aliases: aliases(),
@@ -56,20 +56,16 @@ defmodule Partpicker.MixProject do
       {:nimble_csv, "~> 1.1"},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_html, "~> 3.0"},
-      {:phoenix_live_dashboard, "~> 0.5"},
+      {:phoenix_live_dashboard, "~> 0.6"},
       {:phoenix_live_reload, "~> 1.3", only: :dev},
-      {:phoenix_live_view, "~> 0.16"},
-      {:phoenix, "~> 1.5"},
-      {:phx_gen_auth, "~> 0.7", only: :dev},
+      {:phoenix, "~> 1.6"},
       {:plug_cowboy, "~> 2.1"},
       {:postgrex, ">= 0.0.0"},
       {:ring_logger, "~> 0.8"},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_poller, "~> 1.0"},
       {:tesla, "~> 1.4"},
       {:timex, "~> 3.6"},
-      {:surface, "~> 0.5.0"},
-      {:surface_formatter, "~> 0.5.4"}
     ]
   end
 

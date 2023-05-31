@@ -1,6 +1,10 @@
 defmodule PartpickerWeb.UserView do
   use PartpickerWeb, :view
 
+  def render("index.json", %{users: users}) do
+    render_many(users, __MODULE__, "show.json")
+  end
+
   def render("show.json", %{user: %{featured_build: %{build: featured_build}} = user}) do
     %{
       discord_user_id: user.discord_user_id,

@@ -33,45 +33,12 @@ defmodule PartpickerWeb do
         root: "lib/partpicker_web/templates",
         namespace: PartpickerWeb
 
-      import Surface
-
       # Import convenience functions from controllers
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
-    end
-  end
-
-  def live_view do
-    quote do
-      use Phoenix.LiveView,
-        layout: {PartpickerWeb.LayoutView, "live.html"}
-
-      unquote(view_helpers())
-    end
-  end
-
-  def live_component do
-    quote do
-      use Phoenix.LiveComponent
-
-      unquote(view_helpers())
-    end
-  end
-
-  def surface_live_view do
-    quote do
-      use Surface.LiveView
-      unquote(surface_view_helpers())
-    end
-  end
-
-  def surface_component do
-    quote do
-      use Surface.Component
-      unquote(surface_view_helpers())
     end
   end
 
@@ -97,10 +64,6 @@ defmodule PartpickerWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.LiveView.Helpers
-      import PartpickerWeb.LiveHelpers
-
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
@@ -109,32 +72,6 @@ defmodule PartpickerWeb do
       alias PartpickerWeb.Router.Helpers, as: Routes
       import Enum, only: [count: 1]
       @endpoint PartpickerWeb.Endpoint
-    end
-  end
-
-  defp surface_view_helpers do
-    quote do
-      alias Surface.Components.{Form, Link, LivePatch, LiveRedirect}, warn: false
-
-      alias Surface.Components.Form.{
-              Field,
-              Label,
-              EmailInput,
-              PasswordInput,
-              ErrorTag,
-              Select,
-              NumberInput,
-              Label,
-              TextInput
-            },
-            warn: false
-
-      import PartpickerWeb.ErrorHelpers
-      import PartpickerWeb.Gettext
-      alias PartpickerWeb.Router.Helpers, as: Routes
-      import Enum, only: [count: 1]
-      @endpoint PartpickerWeb.Endpoint
-      alias PartpickerWeb.ActiveLink
     end
   end
 

@@ -3,7 +3,7 @@ defmodule Partpicker.Library.PurchaseLink do
   import Ecto.Changeset
 
   schema "purchase_links" do
-    field :url, :string, null: false
+    field :url, :string
     timestamps()
   end
 

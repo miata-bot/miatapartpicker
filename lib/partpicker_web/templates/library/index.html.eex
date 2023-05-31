@@ -1,5 +1,0 @@
-<div>
-  <%= for chassis <- @chassis do %>
-    <%= link("#{chassis.year} #{chassis.make} #{chassis.model}", to: Routes.connector_index_path(@conn, :index, chassis)) %>
-  <% end %>
-</div>

@@ -4,7 +4,7 @@ defmodule Partpicker.TCG.PhysicalCard do
 
   schema "tcg_physical_cards" do
     belongs_to :printing_plate, Partpicker.TCG.PrintingPlate
-    field :uuid, :binary, null: false
+    field :uuid, :binary
     timestamps()
   end
 

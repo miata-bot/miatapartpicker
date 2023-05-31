@@ -3,7 +3,6 @@ defmodule PartpickerWeb.UserAuth do
   import Phoenix.Controller
 
   alias Partpicker.Accounts
-  alias PartpickerWeb.Router.Helpers, as: Routes
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -180,18 +179,6 @@ defmodule PartpickerWeb.UserAuth do
       # |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
       |> redirect(external: PartpickerWeb.OAuth.Discord.authorization_url())
-      |> halt()
-    end
-  end
-
-  def require_admin_user(conn, _opts) do
-    if conn.assigns[:current_user] && :admin in conn.assigns[:current_user].roles do
-      conn
-    else
-      conn
-      |> put_flash(:error, "You must be an admin to access this page.")
-      |> maybe_store_return_to()
-      |> redirect(to: Routes.page_path(conn, :index))
       |> halt()
     end
   end

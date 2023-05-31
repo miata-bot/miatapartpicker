@@ -5,7 +5,7 @@ defmodule Partpicker.TCG.VirtualCard do
   schema "tcg_virtual_cards" do
     belongs_to :printing_plate, Partpicker.TCG.PrintingPlate
     belongs_to :user, Partpicker.Accounts.User
-    field :uuid, :binary, null: false
+    field :uuid, :binary
     timestamps()
   end
 

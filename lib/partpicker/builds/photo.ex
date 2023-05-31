@@ -7,7 +7,7 @@ defmodule Partpicker.Builds.Photo do
 
   schema "photos" do
     belongs_to :build, Partpicker.Builds.Build
-    field :path, :string, null: false
+    field :path, :string
     field :filename, :string
     field :mime, :string
     timestamps()

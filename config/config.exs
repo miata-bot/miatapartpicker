@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :partpicker,
   ecto_repos: [Partpicker.Repo, Partpicker.Library.Repo]
@@ -25,11 +25,6 @@ config :partpicker, PartpickerWeb.Endpoint,
   pubsub_server: Partpicker.PubSub,
   live_view: [signing_salt: "0f1mUI2o"],
   http: [dispatch: dispatch_config]
-
-config :surface, :components, [
-  {Surface.Components.Form.ErrorTag,
-   default_translator: {PartpickerWeb.ErrorHelpers, :translate_error}}
-]
 
 # Configures Elixir's Logger
 config :logger, :console,

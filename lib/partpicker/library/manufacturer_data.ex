@@ -3,8 +3,8 @@ defmodule Partpicker.Library.ManufacturerData do
   import Ecto.Changeset
 
   schema "manufacturer_data" do
-    field :manufacturer, :string, null: false
-    field :part_number, :string, null: false
+    field :manufacturer, :string
+    field :part_number, :string
     timestamps()
   end
 

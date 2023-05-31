@@ -1,16 +1,14 @@
 defmodule PartpickerWeb.UserController do
   use PartpickerWeb, :controller
 
+  def index(conn, _params) do
+    users = Partpicker.Accounts.list_users()
+    render(conn, "index.json", %{users: users})
+  end
+
   def create(conn, %{"user" => user_attrs}) do
     case Partpicker.Accounts.api_register_user(user_attrs) do
       {:ok, user} ->
-        user =
-          Partpicker.Repo.preload(user,
-            builds: [:photos],
-            featured_build: [build: [:photos]],
-            cards: [:printing_plate]
-          )
-
         conn
         |> put_status(:created)
         |> render("show.json", %{user: user})

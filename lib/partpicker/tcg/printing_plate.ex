@@ -6,7 +6,7 @@ defmodule Partpicker.TCG.PrintingPlate do
     belongs_to :build, Partpicker.Builds.Build
     has_many :physical_cards, Partpicker.TCG.PhysicalCard, on_delete: :delete_all
     has_many :virtual_cards, Partpicker.TCG.VirtualCard, on_delete: :delete_all
-    field :filename, :string, null: false
+    field :filename, :string
     timestamps()
   end
 

@@ -24,6 +24,7 @@ defmodule Partpicker.Accounts do
 
   def list_users do
     Repo.all(User)
+    |> Repo.preload(builds: [:photos], featured_build: [:build, [:photos]], cards: [:printing_plate])
   end
 
   def get_user_by_discord_id(discord_id) do
@@ -70,9 +71,15 @@ defmodule Partpicker.Accounts do
   end
 
   def api_register_user(attrs \\ %{}) do
-    %User{}
+    with {:ok, user} <- %User{}
     |> User.api_register_changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert() do
+        {:ok, Partpicker.Repo.preload(user,
+          builds: [:photos],
+          featured_build: [build: [:photos]],
+          cards: [:printing_plate]
+        )}
+      end
   end
 
   def update_discord_oauth_info(user, me, connections) do

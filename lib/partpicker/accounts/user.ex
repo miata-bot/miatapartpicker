@@ -2,8 +2,6 @@ defmodule Partpicker.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Inspect, except: [:password, :hashed_password]}
-
   schema "users" do
     field :email, :string
     field :discord_user_id, Snowflake
@@ -53,6 +51,7 @@ defmodule Partpicker.Accounts.User do
     ])
     |> validate_timezone()
     |> validate_required([:discord_user_id])
+    |> unique_constraint(:discord_user_id)
   end
 
   def settings_changeset(user, attrs) do
