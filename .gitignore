@@ -38,3 +38,4 @@ npm-debug.log
 *.sql
 *.db*
 token
+backup
