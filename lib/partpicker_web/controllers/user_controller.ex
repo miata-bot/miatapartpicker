@@ -71,4 +71,57 @@ defmodule PartpickerWeb.UserController do
     |> put_status(:accepted)
     |> render("show.json", %{user: user})
   end
+
+  use PhoenixSwagger
+
+  def swagger_definitions do
+    %{
+      Build:
+        swagger_schema do
+          title("Build")
+          description("describes a car ig")
+        end,
+      Builds:
+        swagger_schema do
+          type(:array)
+          items(Schema.ref(:Build))
+        end,
+      Cards:
+        swagger_schema do
+          title("Card")
+          description("please just ignore this")
+        end,
+      User:
+        swagger_schema do
+          title("User")
+          description("A user of the application")
+
+          properties do
+            discord_user_id(:string, "Users Discord ID", required: true)
+            instagram_handle(:string, "Users Instagram Handle")
+            builds(Schema.ref(:Builds), "list of all builds")
+            cards(Schema.ref(:Cards), "dead feature")
+            featured_build(Schema.ref(:Build), "users build")
+            foot_size(:integer, "foot size")
+            hand_size(:integer, "hand size")
+            preferred_unit(:string, "miles or km")
+            preferred_timezone(:string, "timezone")
+            steam_id(:string, "dead feature")
+          end
+        end,
+      Users:
+        swagger_schema do
+          title("Users")
+          type(:array)
+          items(Schema.ref(:User))
+        end
+    }
+  end
+
+  swagger_path :index do
+    get("/api/users")
+    security([%{Bearer: []}])
+    description("List users")
+    response(200, "OK", Schema.ref(:Users))
+  end
 end

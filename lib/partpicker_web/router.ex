@@ -35,8 +35,28 @@ defmodule PartpickerWeb.Router do
     post "/cards/claim_random_offer", CardController, :claim_random_offer
   end
 
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :partpicker, swagger_file: "swagger.json"
+  end
+
   scope "/", PartpickerWeb do
     pipe_through [:browser]
     get "/media/:uuid", MediaController, :show
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "PartPicker"
+      },
+      securityDefinitions: %{
+        Bearer: %{
+          type: "apiKey",
+          name: "Authorization",
+          in: "header"
+        }
+      }
+    }
   end
 end

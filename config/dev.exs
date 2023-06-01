@@ -49,13 +49,14 @@ config :partpicker, PartpickerWeb.Endpoint,
 config :partpicker, PartpickerWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg|json)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/partpicker_web/(live|views)/.*(ex)$",
       ~r"lib/partpicker_web/templates/.*(eex)$",
       ~r"lib/partpicker_web/live/.*(sface)$"
     ]
-  ]
+  ],
+  reloadable_compilers: [:phoenix, :elixir, :phoenix_swagger]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

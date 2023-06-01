@@ -49,6 +49,18 @@ config :partpicker, Partpicker.Library.Repo,
   priv: "priv/library/",
   database: "library.db"
 
+config :partpicker, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      # phoenix routes will be converted to swagger paths
+      router: PartpickerWeb.Router,
+      # (optional) endpoint config used to set host, port and https schemes.
+      endpoint: PartpickerWeb.Endpoint
+    ]
+  }
+
+config :phoenix_swagger, json_library: Jason
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

@@ -56,6 +56,7 @@ defmodule PartpickerWeb.BuildController do
   def delete(conn, %{"user_id" => discord_user_id, "id" => build_uid}) do
     user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
     build = Partpicker.Builds.get_build_by_uid!(user, build_uid)
+
     case Partpicker.Builds.delete_build(build) do
       {:ok, _build} ->
         conn

@@ -10,12 +10,19 @@ defmodule Partpicker.MixProject do
       elixir: "~> 1.7",
       commit: commit(),
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers(),
+      compilers: [:phoenix, :phoenix_swagger] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       releases: [{@app, release()}],
       aliases: aliases(),
       deps: deps()
     ]
+  end
+
+  def compilers(:dev) do
+  end
+
+  def compilers(_) do
+    [:phoenix] ++ Mix.compilers()
   end
 
   defp commit do
@@ -66,6 +73,8 @@ defmodule Partpicker.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:tesla, "~> 1.4"},
       {:timex, "~> 3.6"},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.0"}
     ]
   end
 
