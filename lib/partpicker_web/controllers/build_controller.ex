@@ -88,4 +88,126 @@ defmodule PartpickerWeb.BuildController do
       "build" => %{"banner_photo_id" => photo.id}
     })
   end
+
+  use PhoenixSwagger
+
+  def swagger_definitions do
+    %{
+      Build:
+        swagger_schema do
+          title("Build object")
+          description("contains info about a build")
+
+          properties do
+            description(:string, "user supplied info about a build")
+            color(:string, "color")
+            year(:integer, "year")
+            make(:string, "vehicle make")
+            model(:string, "vehicle model")
+            tires(:string, "tire type or name")
+            banner_photo_id(:string, "photo id for featured photo")
+            coilovers(:string, "part name of coilovers")
+            mileage(:integer, "number of miles")
+            ride_height(:float, "ground clearance")
+            uid(:string, "internal unique id used to reference this specific build")
+            vin(:number, "vehicle id")
+          end
+        end,
+      Builds:
+        swagger_schema do
+          title("Builds")
+          type(:array)
+          items(Schema.ref(:Build))
+        end,
+      BuildCreate:
+        swagger_schema do
+          title("Build create or update object")
+          description("contains info about a build")
+
+          properties do
+            description(:string, "user supplied info about a build")
+            color(:string, "color")
+            year(:integer, "year")
+            make(:string, "vehicle make")
+            model(:string, "vehicle model")
+            tires(:string, "tire type or name")
+            banner_photo_id(:string, "photo id for featured photo")
+            coilovers(:string, "part name of coilovers")
+            mileage(:integer, "number of miles")
+            ride_height(:float, "ground clearance")
+            vin(:number, "vehicle id")
+          end
+        end
+    }
+  end
+
+  swagger_path :index do
+    tag("Builds")
+    get("/api/users/:user_id/builds")
+    security([%{Bearer: []}])
+    description("list builds for a user")
+
+    parameters do
+      user_id(:path, :string, "discord id")
+    end
+
+    response(200, "OK", Schema.ref(:Builds))
+  end
+
+  swagger_path :show do
+    tag("Builds")
+    get("/api/users/:user_id/builds/:build_id")
+    security([%{Bearer: []}])
+    description("list builds for a user")
+
+    parameters do
+      user_id(:path, :string, "discord id")
+      build_id(:path, :string, "build id")
+    end
+
+    response(200, "OK", Schema.ref(:Build))
+  end
+
+  swagger_path :delete do
+    tag("Builds")
+    PhoenixSwagger.Path.delete("/api/users/:user_id/builds/:build_id")
+    security([%{Bearer: []}])
+    description("delete a build")
+
+    parameters do
+      user_id(:path, :string, "discord id")
+      build_id(:path, :string, "build id")
+    end
+
+    response(204, "OK")
+  end
+
+  swagger_path :create do
+    tag("Builds")
+    post("/api/users/:user_id/builds/")
+    security([%{Bearer: []}])
+    description("create a build")
+
+    parameters do
+      user_id(:path, :string, "discord id")
+      build(:body, Schema.ref(:BuildCreate), "Build creation params")
+    end
+
+    response(200, "OK", Schema.ref(:Build))
+  end
+
+  swagger_path :update do
+    tag("Builds")
+    put("/api/users/:user_id/builds/:build_id")
+    security([%{Bearer: []}])
+    description("create a build")
+
+    parameters do
+      user_id(:path, :string, "discord id")
+      build_id(:path, :string, "build id")
+      build(:body, Schema.ref(:BuildCreate), "Build update params")
+    end
+
+    response(200, "OK", Schema.ref(:Build))
+  end
 end
