@@ -1,5 +1,6 @@
 defmodule PartpickerWeb.UserController do
   use PartpickerWeb, :controller
+  require Logger
 
   def index(conn, _params) do
     users = Partpicker.Accounts.list_users()
@@ -17,6 +18,44 @@ defmodule PartpickerWeb.UserController do
         conn
         |> put_status(422)
         |> render("error.json", %{error: changeset})
+    end
+  end
+
+  def oauth(conn, %{"user" => me} = params) do
+    case Partpicker.Accounts.get_user_by_discord_id(me["id"]) do
+      nil ->
+        with {:ok, user} <-
+               Partpicker.Accounts.oauth_discord_register_user(me, params["connections"] || []) do
+          Logger.info("Created user from discord: #{inspect(user)}")
+
+          conn
+          |> put_status(:created)
+          |> render("show.json", %{user: user})
+        else
+          {:error, changeset} ->
+            conn
+            |> put_status(422)
+            |> render("error.json", %{error: changeset})
+        end
+
+      user ->
+        with {:ok, user} <-
+               Partpicker.Accounts.update_discord_oauth_info(
+                 user,
+                 me,
+                 params["connections"] || []
+               ) do
+          Logger.info("Logged in #{inspect(params["connections"] || [])}")
+
+          conn
+          |> put_status(:accepted)
+          |> render("show.json", %{user: user})
+        else
+          {:error, changeset} ->
+            conn
+            |> put_status(422)
+            |> render("error.json", %{error: changeset})
+        end
     end
   end
 
@@ -114,14 +153,114 @@ defmodule PartpickerWeb.UserController do
           title("Users")
           type(:array)
           items(Schema.ref(:User))
+        end,
+      UserCreate:
+        swagger_schema do
+          title("User create")
+          description("called internally by miatabot, only necessary for testing/hacking")
+
+          properties do
+            discord_user_id(:string, "Users Discord ID", required: true)
+            instagram_handle(:string, "Users Instagram Handle")
+            foot_size(:integer, "foot size")
+            hand_size(:integer, "hand size")
+            preferred_unit(:string, "miles or km")
+            preferred_timezone(:string, "timezone")
+          end
+        end,
+      UserDiscordOauth:
+        swagger_schema do
+          title("discord user oauth")
+          description("call with the `me` payload from discord oauth")
+
+          properties do
+            id(:string, "discord id")
+          end
+        end,
+      UserDiscordOauthConnections:
+        swagger_schema do
+          title("discord user oauth connections")
+          description("call with the `me` payload from discord oauth")
+
+          properties do
+          end
         end
     }
   end
 
   swagger_path :index do
+    tag("Users")
     get("/api/users")
     security([%{Bearer: []}])
     description("List users")
     response(200, "OK", Schema.ref(:Users))
+  end
+
+  swagger_path :create do
+    tag("Users")
+    post("/api/users")
+    security([%{Bearer: []}])
+    description("create a user")
+
+    parameters do
+      user(:body, Schema.ref(:UserCreate), "user attributes")
+    end
+
+    response(200, "OK", Schema.ref(:User))
+  end
+
+  swagger_path :oauth do
+    tag("Users")
+    post("/api/users/oauth")
+    security([%{Bearer: []}])
+    description("create a user by oauthing")
+
+    parameters do
+      me(:body, Schema.ref(:UserDiscordOauth), "user attributes", required: true)
+      connections(:body, Schema.ref(:UserDiscordOauthConnections), "user attributes")
+    end
+
+    response(200, "OK", Schema.ref(:User))
+  end
+
+  swagger_path :show do
+    tag("Users")
+    get("/api/users/:user_id")
+    security([%{Bearer: []}])
+    description("update a user")
+
+    parameters do
+      user_id(:path, :string, "user discord id", required: true)
+    end
+
+    response(200, "OK", Schema.ref(:User))
+  end
+
+  swagger_path :update do
+    tag("Users")
+    put("/api/users/:user_id")
+    security([%{Bearer: []}])
+    description("update a user")
+
+    parameters do
+      user_id(:path, :string, "user discord id", required: true)
+      user(:body, Schema.ref(:UserCreate), "user attributes", required: true)
+    end
+
+    response(200, "OK", Schema.ref(:User))
+  end
+
+  swagger_path :featured_build do
+    tag("Users")
+    put("/api/users/:user_id/featured_build")
+    security([%{Bearer: []}])
+    description("set a users featured build by it's id")
+
+    parameters do
+      user_id(:path, :string, "user discord id", required: true)
+      featured_build_id(:body, :string, "build id. Must be owned by the user", required: true)
+    end
+
+    response(200, "OK", Schema.ref(:User))
   end
 end

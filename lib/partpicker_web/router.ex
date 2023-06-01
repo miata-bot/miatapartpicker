@@ -30,6 +30,8 @@ defmodule PartpickerWeb.Router do
       end
     end
 
+    post "/users/oauth", UserController, :oauth
+
     post "/photos/random", PhotoController, :random
     get "/cards/generate_random_offer", CardController, :generate_random_offer
     post "/cards/claim_random_offer", CardController, :claim_random_offer
