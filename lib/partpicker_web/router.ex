@@ -22,6 +22,8 @@ defmodule PartpickerWeb.Router do
   scope "/api", PartpickerWeb do
     pipe_through :api
 
+    resources "/builds", BuildController, only: [:show]
+
     resources "/users", UserController, only: [:index, :show, :update, :create] do
       put "/featured_build", UserController, :featured_build
 

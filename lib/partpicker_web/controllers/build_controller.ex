@@ -36,6 +36,11 @@ defmodule PartpickerWeb.BuildController do
     render(conn, "show.json", %{build: build})
   end
 
+  def show(conn, %{"id" => build_uid}) do
+    build = Partpicker.Builds.get_build_by_uid!(build_uid)
+    render(conn, "show.json", %{build: build})
+  end
+
   def update(conn, %{"user_id" => discord_user_id, "id" => build_uid, "build" => attrs}) do
     user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
     build = Partpicker.Builds.get_build_by_uid!(user, build_uid)
