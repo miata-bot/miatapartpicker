@@ -116,6 +116,7 @@ defmodule PartpickerWeb.BuildController do
             ride_height(:float, "ground clearance")
             uid(:string, "internal unique id used to reference this specific build")
             vin(:number, "vehicle id")
+            user_id(:string, "build owner's ID")
           end
         end,
       Builds:

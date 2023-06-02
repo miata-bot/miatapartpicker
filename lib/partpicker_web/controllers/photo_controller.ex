@@ -10,6 +10,18 @@ defmodule PartpickerWeb.PhotoController do
 
   def swagger_definitions do
     %{
+      PhotoMeta:
+        swagger_schema do
+          title("hoto metadata")
+
+          properties do
+            format(:string, "file format", required: true)
+            width(:number, "photo width in pixels", required: true)
+            height(:number, "photo height in pixels", required: true)
+            animated(:boolean, "animation flag", required: true)
+            frame_count(:boolean, "number of frames in an animation ", required: true)
+          end
+        end,
       Photo:
         swagger_schema do
           title("Photo descriptor")
@@ -17,6 +29,7 @@ defmodule PartpickerWeb.PhotoController do
           properties do
             uuid(:string, "unique id for a photo", required: true)
             filename(:string, "unique id for a photo", required: true)
+            meta(Schema.ref(:PhotoMeta), "metadata for a photo", required: true)
           end
         end
     }
