@@ -74,7 +74,8 @@ defmodule Partpicker.MixProject do
       {:tesla, "~> 1.4"},
       {:timex, "~> 3.6"},
       {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.0"}
+      {:ex_json_schema, "~> 0.0"},
+      {:mogrify, "~> 0.9.3"}
     ]
   end
 

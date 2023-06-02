@@ -3,6 +3,6 @@ defmodule PartpickerWeb.PhotoView do
   alias PartpickerWeb.PhotoView, warn: false
 
   def render("show.json", %{photo: photo}) do
-    %{uuid: photo.id, filename: photo.filename}
+    %{uuid: photo.id, filename: photo.filename, meta: photo.meta}
   end
 end

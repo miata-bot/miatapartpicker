@@ -10,7 +10,22 @@ defmodule Partpicker.Builds.Photo do
     field :path, :string
     field :filename, :string
     field :mime, :string
+
+    field :meta, :map,
+      virtual: true,
+      default: %{
+        format: "unknown",
+        width: 0,
+        height: 0,
+        animated: false,
+        frame_count: 1
+      }
+
     timestamps()
+  end
+
+  def identify(photo) do
+    %{photo | meta: Mogrify.identify(photo.path)}
   end
 
   def changeset(photo, attrs) do

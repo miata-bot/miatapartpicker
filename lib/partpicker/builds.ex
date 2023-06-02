@@ -23,7 +23,9 @@ defmodule Partpicker.Builds do
         order_by: fragment("RANDOM()"),
         limit: 1
 
-    Partpicker.Repo.one!(query)
+    query
+    |> Partpicker.Repo.one!()
+    |> Photo.identify()
   end
 
   @doc """
@@ -56,15 +58,17 @@ defmodule Partpicker.Builds do
   def get_build!(user, id),
     do:
       Repo.one!(from b in Build, where: b.id == ^id and b.user_id == ^user.id)
-      |> Repo.preload([:parts, :photos])
+      |> Repo.preload([:parts, :photos, :user])
       |> Build.calculate_spent_to_date()
       |> Build.calculate_mileage()
+      |> identify_photos()
 
   def get_build_by_uid!(uid) do
     Repo.get_by!(Build, uid: uid)
     |> Repo.preload([:parts, :photos, :user])
     |> Build.calculate_spent_to_date()
     |> Build.calculate_mileage()
+    |> identify_photos()
   end
 
   def get_build_by_uid!(user, uid) do
@@ -72,6 +76,7 @@ defmodule Partpicker.Builds do
     |> Repo.preload([:parts, :photos, :user])
     |> Build.calculate_spent_to_date()
     |> Build.calculate_mileage()
+    |> identify_photos()
   end
 
   @doc """
@@ -292,5 +297,9 @@ defmodule Partpicker.Builds do
 
   def delete_part(part) do
     Repo.delete(part)
+  end
+
+  def identify_photos(%{photos: _photos} = build) do
+    Map.update(build, :photos, [], fn photos -> Enum.map(photos, &Photo.identify/1) end)
   end
 end
