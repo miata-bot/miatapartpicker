@@ -64,13 +64,6 @@ defmodule PartpickerWeb.UserController do
 
     case Partpicker.Accounts.api_change_user(user, user_params) do
       {:ok, user} ->
-        user =
-          Partpicker.Repo.preload(user,
-            builds: [:photos],
-            featured_build: [build: [:photos]],
-            cards: [:printing_plate]
-          )
-
         conn
         |> put_status(:accepted)
         |> render("show.json", %{user: user})
@@ -83,20 +76,7 @@ defmodule PartpickerWeb.UserController do
   end
 
   def show(conn, %{"id" => discord_user_id}) do
-    user =
-      Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
-      |> Partpicker.Repo.preload(
-        builds: [:photos],
-        featured_build: [build: [:photos]],
-        cards: [:printing_plate]
-      )
-      |> Map.update(:builds, [], fn builds ->
-        Enum.map(builds, &Partpicker.Builds.identify_photos/1)
-      end)
-      |> Map.update(:featured_build, nil, fn featured_build ->
-        %{featured_build | build: Partpicker.Builds.identify_photos(featured_build.build)}
-      end)
-
+    user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
     render(conn, "show.json", %{user: user})
   end
 
@@ -104,13 +84,7 @@ defmodule PartpickerWeb.UserController do
     user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
     build = Partpicker.Builds.get_build_by_uid!(user, build_uid)
     _featured_build = Partpicker.Builds.create_featured_build!(user, build)
-
-    user =
-      Partpicker.Repo.preload(user,
-        builds: [:photos],
-        featured_build: [build: [:photos]],
-        cards: [:printing_plate]
-      )
+    user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
 
     conn
     |> put_status(:accepted)
@@ -121,20 +95,10 @@ defmodule PartpickerWeb.UserController do
 
   def swagger_definitions do
     %{
-      Build:
+      BuildIDs:
         swagger_schema do
-          title("Build")
-          description("describes a car ig")
-        end,
-      Builds:
-        swagger_schema do
+          title("Build IDs")
           type(:array)
-          items(Schema.ref(:Build))
-        end,
-      Cards:
-        swagger_schema do
-          title("Card")
-          description("please just ignore this")
         end,
       User:
         swagger_schema do
@@ -144,8 +108,7 @@ defmodule PartpickerWeb.UserController do
           properties do
             discord_user_id(:string, "Users Discord ID", required: true)
             instagram_handle(:string, "Users Instagram Handle")
-            builds(Schema.ref(:Builds), "list of all builds")
-            cards(Schema.ref(:Cards), "dead feature")
+            builds(Schema.ref(:BuildIDs), "list of all builds")
             featured_build(Schema.ref(:Build), "users build")
             foot_size(:integer, "foot size")
             hand_size(:integer, "hand size")

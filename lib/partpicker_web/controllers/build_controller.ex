@@ -2,14 +2,9 @@ defmodule PartpickerWeb.BuildController do
   use PartpickerWeb, :controller
 
   def index(conn, %{"user_id" => discord_user_id}) do
-    user =
-      Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
-      |> Partpicker.Repo.preload(builds: [:photos, :user], featured_build: [:build])
-      |> Map.update!(:builds, fn builds ->
-        Enum.map(builds, &Partpicker.Builds.Build.calculate_mileage/1)
-      end)
-
-    render(conn, "index.json", %{builds: user.builds, user: user})
+    user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
+    builds = Partpicker.Builds.list_builds(user)
+    render(conn, "index.json", %{builds: builds})
   end
 
   def create(conn, %{"user_id" => discord_user_id, "build" => attrs}) do
@@ -17,11 +12,9 @@ defmodule PartpickerWeb.BuildController do
 
     case Partpicker.Builds.create_build(user, attrs) do
       {:ok, build} ->
-        build = Partpicker.Repo.preload(build, [:photos])
-
         conn
         |> put_status(:created)
-        |> render("show.json", %{build: build, user: user})
+        |> render("show.json", %{build: build})
 
       {:error, changeset} ->
         conn
@@ -30,16 +23,9 @@ defmodule PartpickerWeb.BuildController do
     end
   end
 
-  def show(conn, %{"user_id" => discord_user_id, "id" => build_uid}) do
-    user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
-    build = Partpicker.Builds.get_build_by_uid!(user, build_uid)
-    render(conn, "show.json", %{build: build, user: user})
-  end
-
   def show(conn, %{"id" => build_uid}) do
     build = Partpicker.Builds.get_build_by_uid!(build_uid)
-    user = Partpicker.Accounts.get_user!(build.user_id)
-    render(conn, "show.json", %{build: build, user: user})
+    render(conn, "show.json", %{build: build})
   end
 
   def update(conn, %{"user_id" => discord_user_id, "id" => build_uid, "build" => attrs}) do

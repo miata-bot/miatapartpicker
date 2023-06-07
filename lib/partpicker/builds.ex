@@ -39,6 +39,22 @@ defmodule Partpicker.Builds do
   """
   def list_builds(user) do
     Repo.all(from b in Build, where: b.user_id == ^user.id)
+    |> Repo.preload([:parts, :photos])
+    |> Enum.map(&normalize_build(&1, user))
+  end
+
+  def normalize_build(build, user) do
+    build
+    |> Map.put(:user, user)
+    |> Map.put(:user_id, user.discord_user_id)
+    |> normalize_build()
+  end
+
+  def normalize_build(build) do
+    build
+    |> Build.calculate_spent_to_date()
+    |> Build.calculate_mileage()
+    |> identify_photos()
   end
 
   @doc """
@@ -55,28 +71,32 @@ defmodule Partpicker.Builds do
       ** (Ecto.NoResultsError)
 
   """
-  def get_build!(user, id),
-    do:
-      Repo.one!(from b in Build, where: b.id == ^id and b.user_id == ^user.id)
-      |> Repo.preload([:parts, :photos, :user])
-      |> Build.calculate_spent_to_date()
-      |> Build.calculate_mileage()
-      |> identify_photos()
+  def get_build!(user, id) do
+    Repo.one!(from b in Build, where: b.id == ^id and b.user_id == ^user.id)
+    |> Repo.preload([:parts, :photos])
+    |> normalize_build(user)
+  end
 
   def get_build_by_uid!(uid) do
-    Repo.get_by!(Build, uid: uid)
-    |> Repo.preload([:parts, :photos, :user])
-    |> Build.calculate_spent_to_date()
-    |> Build.calculate_mileage()
-    |> identify_photos()
+    Repo.one!(
+      from b in Build,
+        join: u in assoc(b, :user),
+        where: b.uid == ^uid,
+        select: %{b | user: u, user_id: u.discord_user_id}
+    )
+    |> Repo.preload([:parts, :photos])
+    |> normalize_build()
   end
 
   def get_build_by_uid!(user, uid) do
-    Repo.one!(from b in Build, where: b.user_id == ^user.id and b.uid == ^uid)
-    |> Repo.preload([:parts, :photos, :user])
-    |> Build.calculate_spent_to_date()
-    |> Build.calculate_mileage()
-    |> identify_photos()
+    Repo.one!(
+      from b in Build,
+        join: u in assoc(b, :user),
+        where: b.uid == ^uid and u.id == ^user.id,
+        select: %{b | user: u, user_id: u.discord_user_id}
+    )
+    |> Repo.preload([:parts, :photos])
+    |> normalize_build(user)
   end
 
   @doc """

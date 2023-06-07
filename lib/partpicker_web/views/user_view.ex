@@ -5,7 +5,7 @@ defmodule PartpickerWeb.UserView do
     render_many(users, __MODULE__, "show.json")
   end
 
-  def render("show.json", %{user: %{featured_build: %{build: featured_build}} = user}) do
+  def render("show.json", %{user: user}) do
     %{
       discord_user_id: user.discord_user_id,
       instagram_handle: user.instagram_handle,
@@ -14,24 +14,8 @@ defmodule PartpickerWeb.UserView do
       hand_size: user.hand_size,
       foot_size: user.foot_size,
       steam_id: user.steam_id,
-      featured_build: render_one(featured_build, PartpickerWeb.BuildView, "show.json", user: user),
-      builds: render_many(user.builds, PartpickerWeb.BuildView, "show.json", user: user),
-      cards: render_many(user.cards, PartpickerWeb.CardView, "show.json")
-    }
-  end
-
-  def render("show.json", %{user: %{featured_build: nil} = user}) do
-    %{
-      discord_user_id: user.discord_user_id,
-      instagram_handle: user.instagram_handle,
-      prefered_unit: user.prefered_unit,
-      featured_build: nil,
-      hand_size: user.hand_size,
-      foot_size: user.foot_size,
-      steam_id: user.steam_id,
-      preferred_timezone: user.preferred_timezone,
-      builds: render_many(user.builds, PartpickerWeb.BuildView, "show.json"),
-      cards: render_many(user.cards, PartpickerWeb.CardView, "show.json")
+      featured_build: user.featured_build.build.uid,
+      builds: user.builds
     }
   end
 

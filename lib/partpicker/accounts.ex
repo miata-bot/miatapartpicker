@@ -6,6 +6,7 @@ defmodule Partpicker.Accounts do
   import Ecto.Query, warn: false
   alias Partpicker.Repo
   alias Partpicker.Accounts.{User, UserToken}
+  alias Partpicker.Builds.Build
 
   def search_users(search_phrase) do
     start_character = String.slice(search_phrase, 0..1)
@@ -22,21 +23,51 @@ defmodule Partpicker.Accounts do
 
   ## Database getters
 
+  # def featured_build_query do
+  #   from b in Build, group_by: b.user_id, select: %{user_id: b.user_id, build_ids: fragment("array_agg(?)", b.uid)}
+  # end
+
+  # def asdf() do
+  #   from b in Build,
+  #   join: fb in assoc(b, :featured_build),
+  #   # select: b,
+  #   group_by: b.id,
+  #   # group_by: b.user_id,
+  #   # join: fb in assoc(b, :featured_build),
+  #   select: %{user_id: b.user_id, build_id: b.id, featured_build_id: fragment("ARRAY_TO_STRING(array_agg(?), '')", b.uid)}
+  # end
+
+  # def select_users_query do
+  #   from u in User,
+  #   # left_join: fb in assoc(u, :featured_build),
+  #   left_join: fb in subquery(asdf()),
+  #   on: fb.user_id == u.id,
+  #   left_join: sq in subquery(featured_build_query()),
+  #   on: sq.user_id == u.id,
+  #   group_by: fb.build_id,
+  #   select: %{u | builds: sq.build_ids, featured_build: fb.featured_build_id}
+  # end
+
+  def select_users_query do
+    from u in User,
+      # join: fb in assoc(u, :featured_build),
+      # join: fbb in assoc(fb, :build),
+      join: b in assoc(u, :builds),
+      group_by: [u.id],
+      select: %{u | builds: fragment("array_agg(?)", b.uid)},
+      preload: [featured_build: :build]
+  end
+
   def list_users do
-    Repo.all(User)
-    |> Repo.preload(
-      featured_build: [build: [:photos]],
-      builds: [:photos],
-      cards: [:printing_plate]
-    )
+    Repo.all(from(u in select_users_query()))
   end
 
-  def get_user_by_discord_id(discord_id) do
-    Repo.get_by(User, discord_user_id: discord_id)
+  def get_user_by_discord_id(discord_user_id) do
+    Repo.one(from u in select_users_query(), where: u.discord_user_id == ^discord_user_id)
   end
 
-  def get_user_by_discord_id!(discord_id) do
-    Repo.one!(from u in User, where: u.discord_user_id == ^discord_id)
+  def get_user_by_discord_id!(discord_user_id) do
+    Repo.one!(from u in select_users_query(), where: u.discord_user_id == ^discord_user_id)
   end
 
   @doc """
@@ -53,7 +84,9 @@ defmodule Partpicker.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    Repo.one!(from u in select_users_query(), where: u.id == ^id)
+  end
 
   def oauth_discord_register_user(%{"id" => discord_user_id, "email" => email} = me, connections) do
     steam_info =
