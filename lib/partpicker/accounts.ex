@@ -62,8 +62,16 @@ defmodule Partpicker.Accounts do
     Repo.all(from(u in select_users_query()))
   end
 
+  def get_user_by_discord_id("<@" <> discord_user_id) do
+    get_user_by_discord_id(String.trim(discord_user_id, ">"))
+  end
+
   def get_user_by_discord_id(discord_user_id) do
     Repo.one(from u in select_users_query(), where: u.discord_user_id == ^discord_user_id)
+  end
+
+  def get_user_by_discord_id!("<@" <> discord_user_id) do
+    get_user_by_discord_id!(String.trim(discord_user_id, ">"))
   end
 
   def get_user_by_discord_id!(discord_user_id) do
