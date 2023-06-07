@@ -9,7 +9,7 @@ defmodule PartpickerWeb.BuildController do
         Enum.map(builds, &Partpicker.Builds.Build.calculate_mileage/1)
       end)
 
-    render(conn, "index.json", %{builds: user.builds})
+    render(conn, "index.json", %{builds: user.builds, user: user})
   end
 
   def create(conn, %{"user_id" => discord_user_id, "build" => attrs}) do
@@ -21,7 +21,7 @@ defmodule PartpickerWeb.BuildController do
 
         conn
         |> put_status(:created)
-        |> render("show.json", %{build: build})
+        |> render("show.json", %{build: build, user: user})
 
       {:error, changeset} ->
         conn
@@ -33,12 +33,13 @@ defmodule PartpickerWeb.BuildController do
   def show(conn, %{"user_id" => discord_user_id, "id" => build_uid}) do
     user = Partpicker.Accounts.get_user_by_discord_id!(discord_user_id)
     build = Partpicker.Builds.get_build_by_uid!(user, build_uid)
-    render(conn, "show.json", %{build: build})
+    render(conn, "show.json", %{build: build, user: user})
   end
 
   def show(conn, %{"id" => build_uid}) do
     build = Partpicker.Builds.get_build_by_uid!(build_uid)
-    render(conn, "show.json", %{build: build})
+    user = Partpicker.Accounts.get_user!(build.user_id)
+    render(conn, "show.json", %{build: build, user: user})
   end
 
   def update(conn, %{"user_id" => discord_user_id, "id" => build_uid, "build" => attrs}) do
@@ -49,7 +50,7 @@ defmodule PartpickerWeb.BuildController do
       {:ok, build} ->
         conn
         |> put_status(:accepted)
-        |> render("show.json", %{build: build})
+        |> render("show.json", %{build: build, user: user})
 
       {:error, changeset} ->
         conn

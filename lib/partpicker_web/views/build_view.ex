@@ -5,7 +5,7 @@ defmodule PartpickerWeb.BuildView do
     render_many(builds, PartpickerWeb.BuildView, "show.json")
   end
 
-  def render("show.json", %{build: build}) do
+  def render("show.json", %{build: build, user: user}) do
     %{
       uid: build.uid,
       color: build.color,
@@ -21,7 +21,7 @@ defmodule PartpickerWeb.BuildView do
       banner_photo_id: build.banner_photo_id,
       coilovers: build.coilovers,
       ride_height: build.ride_height,
-      user_id: build.user.discord_user_id
+      user_id: user.discord_user_id
     }
   end
 

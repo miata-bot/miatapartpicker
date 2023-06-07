@@ -90,6 +90,12 @@ defmodule PartpickerWeb.UserController do
         featured_build: [build: [:photos]],
         cards: [:printing_plate]
       )
+      |> Map.update(:builds, [], fn builds ->
+        Enum.map(builds, &Partpicker.Builds.identify_photos/1)
+      end)
+      |> Map.update(:featured_build, nil, fn featured_build ->
+        %{featured_build | build: Partpicker.Builds.identify_photos(featured_build.build)}
+      end)
 
     render(conn, "show.json", %{user: user})
   end

@@ -14,8 +14,8 @@ defmodule PartpickerWeb.UserView do
       hand_size: user.hand_size,
       foot_size: user.foot_size,
       steam_id: user.steam_id,
-      featured_build: render_one(featured_build, PartpickerWeb.BuildView, "show.json"),
-      builds: render_many(user.builds, PartpickerWeb.BuildView, "show.json"),
+      featured_build: render_one(featured_build, PartpickerWeb.BuildView, "show.json", user: user),
+      builds: render_many(user.builds, PartpickerWeb.BuildView, "show.json", user: user),
       cards: render_many(user.cards, PartpickerWeb.CardView, "show.json")
     }
   end
